@@ -13,15 +13,15 @@ export default function LoginPage() {
       <div className="w-[360px] bg-white rounded-3xl overflow-hidden">
         {/* Top Illustration */}
         <div className="relative w-full mt-5 h-52 flex items-center justify-center">
-      <Image
-        src="/Free Vector_ Flat Design Illustration of Customer Support-Photoroom.png"
-        alt="Logo"
-        width={310}   
-        height={100}
-        className="mb-4"
-      />
+          <Image
+            src="/Free Vector_ Flat Design Illustration of Customer Support-Photoroom.png"
+            alt="Logo"
+            width={310}
+            height={100}
+            className="mb-4"
+          />
         </div>
-          {/* Form Container */}
+        {/* Form Container */}
         <div className="px-6">
           {/* Title */}
           <h2 className="text-xl font-bold text-gray-900 text-center">
@@ -46,7 +46,7 @@ export default function LoginPage() {
             </button>
 
             {/* Facebook */}
-            <button className="flex-1 flex items-center bg-blue-600 justify-center gap-2 rounded-4xl py-2 text-white font-medium hover:bg-gray-50 transition shadow-lg">
+            <button className="flex-1 flex items-center bg-blue-600 justify-center gap-2 rounded-4xl py-2 text-white font-medium hover:bg-blue-600 transition shadow-lg">
               <Image
                 src="/facebook-logo.png"
                 alt="Facebook Logo"
@@ -96,7 +96,7 @@ export default function LoginPage() {
                   placeholder=""
                   className="mt-1 w-full rounded-lg border border-gray-400 px-3 py-2 text-black focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
-                
+
               </div>
             </div>
 
