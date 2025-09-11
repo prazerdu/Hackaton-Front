@@ -17,7 +17,7 @@ export default function SignUpPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-      
+
       {/* Botão Voltar */}
       <div className="absolute top-4 left-4">
         <a href="/login" className="text-green-600 text-2xl">
@@ -27,10 +27,13 @@ export default function SignUpPage() {
 
       {/* Logo */}
       <Image
-        src="/logo.png" 
-        alt="Logo" 
-        className="w-36 mb-8"
+        src="/logo.png"
+        alt="Logo"
+        width={144}   
+        height={144}
+        className="mb-8"
       />
+
 
       {/* Título */}
       <h1 className="text-black font-bold mb-6 text-center">
@@ -38,8 +41,8 @@ export default function SignUpPage() {
       </h1>
 
       {/* Formulário */}
-      <form 
-        onSubmit={handleSubmit} 
+      <form
+        onSubmit={handleSubmit}
         className="w-full max-w-xs flex flex-col gap-4"
       >
         {/* Nome */}
@@ -70,7 +73,7 @@ export default function SignUpPage() {
         />
 
         {/* Botão Criar */}
-        <button 
+        <button
           type="submit"
           className="w-full py-3 rounded-md bg-blue-700 text-white font-bold hover:bg-blue-800 transition"
         >
