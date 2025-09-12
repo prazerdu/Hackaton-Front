@@ -5,12 +5,12 @@ import Banner from "@/components/Banner";
 import DoctorCard from "@/components/DoctorCard";
 import { doctors } from "@/lib/doctors";
 import Categories from "@/components/Categories";
-import Dashboard from "@/components/Dashboard"; // 👈 importei
+import Dashboard from "@/components/Dashboard";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-100 pb-24">
-      {/* Se quiser manter o layout antigo no mobile */}
+      {/* Layout Mobile (até lg) */}
       <div className="block lg:hidden">
         <Header />
         <div className="px-4">
@@ -25,8 +25,9 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* E aqui o Dashboard no desktop */}
-      <Dashboard />
+      <div className="hidden lg:block">
+        <Dashboard />
+      </div>
     </div>
   );
 }

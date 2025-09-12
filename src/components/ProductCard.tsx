@@ -45,7 +45,7 @@ export default function ProductCard({ title }: Props) {
               type="text"
               value={newItem}
               onChange={(e) => setNewItem(e.target.value)}
-              className="w-full rounded-md px-2 py-1 text-black text-sm outline-none"
+              className="w-full rounded-md px-2 py-1 text-white text-sm outline-none"
               placeholder="Digite o título..."
               autoFocus
             />
