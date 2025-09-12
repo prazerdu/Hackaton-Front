@@ -84,8 +84,7 @@ export default function LoginPage() {
                 <span className="absolute right-3 top-3 text-green-500">✔</span>
               </div>
             </div>
-
-            {/* Password com toggle 👁 */}
+            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Password
@@ -94,7 +93,7 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder=""
-                  className="mt-1 w-full rounded-lg border border-gray-400 px-3 py-2 text-black focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 w-full rounded-lg border border-gray-400 px-3 py-2 text-black focus:border-blue-500 focus:ring-blue-500"
                 />
 
               </div>
