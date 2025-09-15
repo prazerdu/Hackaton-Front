@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Banner() {
   return (
     <section className="mt-2">
@@ -9,7 +11,9 @@ export default function Banner() {
             Search now
           </button>
         </div>
-        <img
+        <Image
+          width={200}
+          height={200}
           src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=400"
           alt="doctor"
           className="w-20 h-20 rounded-lg object-cover shadow-md"

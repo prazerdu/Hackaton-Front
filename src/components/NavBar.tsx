@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Navbar() {
   return (
     <header className="flex items-center justify-between bg-white rounded-2xl shadow-sm px-8 py-4">
@@ -20,7 +22,9 @@ export default function Navbar() {
         <button className="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
           Launch cPanel
         </button>
-        <img
+        <Image
+          width={200}
+          height={200}
           src="https://i.pravatar.cc/40"
           alt="avatar"
           className="w-9 h-9 rounded-full border border-gray-200"

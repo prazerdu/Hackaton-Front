@@ -1,8 +1,12 @@
+import Image from "next/image";
+
 export default function Header() {
   return (
     <header className="flex items-center justify-between px-4 py-3">
       <div className="flex items-center gap-3">
-        <img
+        <Image
+          width={200}
+          height={200}
           src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=80"
           alt="avatar"
           className="w-10 h-10 rounded-full object-cover"

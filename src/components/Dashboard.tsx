@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Navbar from "./NavBar";
 import ProductCard from "./ProductCard";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
 export default function Dashboard() {
   const [products, setProducts] = useState<{ id: string; title: string }[]>([]);
   const [newListTitle, setNewListTitle] = useState(""); 
   const [isAdding, setIsAdding] = useState(false); 
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     const reordered = Array.from(products);
