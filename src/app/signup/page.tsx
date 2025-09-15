@@ -8,7 +8,7 @@ export default function LoginPage() {
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 px-6 py-9 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
-          <a href="#" className="block sm:hidden md:hidden items-center font-medium">
+          <a href="https://ninnahub.com.br/" className="block sm:hidden md:hidden items-center font-medium">
             <Image
               className="dark:invert"
               src="/ninna-lightmode.png"
