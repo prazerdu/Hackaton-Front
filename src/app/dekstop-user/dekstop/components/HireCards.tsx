@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Contador from "@/app/visit/page";
+// import Contador from "@/app/visit/page";
 import Modal from "./Modal";
 import Image from "next/image";
 
