@@ -5,7 +5,8 @@ import Banner from "@/components/Banner";
 import DoctorCard from "@/components/DoctorCard";
 import { doctors } from "@/lib/doctors";
 import Categories from "@/components/Categories";
-import Dashboard from "@/components/Dashboard";
+import Dekstop from "../dekstop-user/dekstop/page";
+
 
 export default function HomePage() {
   return (
@@ -24,9 +25,8 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-
       <div className="hidden lg:block">
-        <Dashboard />
+        <Dekstop />
       </div>
     </div>
   );
