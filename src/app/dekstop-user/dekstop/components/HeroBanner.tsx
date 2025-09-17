@@ -2,13 +2,13 @@ import Carousel from "./Carrossel";
 
 export default function HeroBanner() {
   const images = [
-    "https://picsum.photos/800/400?1",
-    "https://picsum.photos/800/400?2",
-    "https://picsum.photos/800/400?3",
+    "https://i.pinimg.com/1200x/d3/32/ce/d332ce3a8d9abd5ce10ca29e445ba686.jpg",
+    "https://i.pinimg.com/1200x/96/80/03/96800303d257eb3dab691f0aea9b3bc6.jpg",
+    "https://i.pinimg.com/736x/c1/ff/9e/c1ff9eaf00a160c4724df31b42118b40.jpg",
   ];
 
   return (
-    <section className="relative w-full h-64 bg-gray-200 rounded-xl overflow-hidden">
+    <section className="relative w-full h-80 bg-gray-200 rounded-xl overflow-hidden">
       <Carousel images={images} />
 
       {/* Texto sobre o carrossel */}

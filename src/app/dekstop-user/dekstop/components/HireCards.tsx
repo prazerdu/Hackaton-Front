@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-// import Contador from "@/app/visit/page";
 import Modal from "./Modal";
 import Image from "next/image";
-
 
 const cards = [
   { id: 1, title: "Content designers", subtitle: "3 open", image: "https://i.pinimg.com/736x/23/50/47/235047224bc54f0f773b5c292de83de0.jpg" },
@@ -20,6 +18,8 @@ export default function HireCards() {
   const [page, setPage] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [clicks, setClicks] = useState<{ [key: number]: number }>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
   const cardsPerPage = 5;
   const totalPages = Math.ceil(cards.length / cardsPerPage);
@@ -44,18 +44,18 @@ export default function HireCards() {
     }
   };
 
-  const handleClick = async (id: number) => {
+  const handleDetailsClick = async (id: number) => {
+    // registra clique
     const res = await fetch(`/api/card/${id}`, { method: "POST" });
     const data = await res.json();
     setClicks((prev) => ({ ...prev, [id]: data.count }));
+
+    setSelectedCard(id);
+    setIsModalOpen(true);
   };
 
-  const visibleCards = cards.slice(
-    page * cardsPerPage,
-    page * cardsPerPage + cardsPerPage
-  );
+  const visibleCards = cards.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage);
 
-  // Carregar acessos iniciais de todos os cards visíveis
   useEffect(() => {
     visibleCards.forEach(async (c) => {
       const res = await fetch(`/api/card/${c.id}`);
@@ -70,50 +70,41 @@ export default function HireCards() {
         <h3 className="text-lg font-medium">You Need to Hire</h3>
         <div className="flex items-center gap-2">
           {page > 0 && (
-            <button
-              onClick={handlePrev}
-              className="bg-white shadow-md p-2 rounded-full hover:bg-gray-100"
-            >
+            <button onClick={handlePrev} className="bg-white shadow-md p-2 rounded-full hover:bg-gray-100">
               <ChevronLeft className="w-5 h-5 text-gray-600" />
             </button>
           )}
           <button className="text-sm text-indigo-600 cursor-pointer">View All</button>
           {page < totalPages - 1 && (
-            <button
-              onClick={handleNext}
-              className="bg-white shadow-md p-2 rounded-full cursor-pointer hover:bg-gray-100"
-            >
+            <button onClick={handleNext} className="bg-white shadow-md p-2 rounded-full cursor-pointer hover:bg-gray-100">
               <ChevronRight className="w-5 h-5 text-gray-600" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="grid grid-cols-5 cursor-pointer gap-4">
+      <div className="grid grid-cols-5 gap-4">
         {visibleCards.map((c) => (
           <div
             key={c.id}
-            onClick={() => handleClick(c.id)}
             className={`bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col items-start gap-2 transform transition-all duration-300 ${
-              animating
-                ? "-translate-x-4 opacity-0"
-                : "translate-x-0 opacity-100"
+              animating ? "-translate-x-4 opacity-0" : "translate-x-0 opacity-100"
             }`}
           >
             <div className="w-9 h-9 rounded-md overflow-hidden flex items-center justify-center bg-indigo-50">
-            <div className="w-9 h-9 rounded-md overflow-hidden relative bg-indigo-50">
-  <Image
-    src={c.image}
-    alt={c.title}
-    fill
-    className="object-cover"
-  />
-</div>
-
+              <div className="w-9 h-9 rounded-md overflow-hidden relative bg-indigo-50">
+                <Image src={c.image} alt={c.title} fill className="object-cover" />
+              </div>
             </div>
             <div className="text-sm font-medium">{c.title}</div>
             <div className="text-xs text-gray-400">{c.subtitle}</div>
-              {/* <Contador /> */}
+            {/* Botão Detalhes */}
+            <button
+              onClick={() => handleDetailsClick(c.id)}
+              className="mt-2 text-sm text-indigo-600 hover:underline"
+            >
+              <Modal/>
+            </button>
           </div>
         ))}
       </div>
