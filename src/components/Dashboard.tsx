@@ -1,14 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import Navbar from "./NavBar";
 import ProductCard from "./ProductCard";
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
 
 export default function Dashboard() {
   const [products, setProducts] = useState<{ id: string; title: string }[]>([]);
-  const [newListTitle, setNewListTitle] = useState(""); 
-  const [isAdding, setIsAdding] = useState(false); 
+  const [newListTitle, setNewListTitle] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -30,18 +40,16 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9ff] p-8">
-      <Navbar />
-
+    <div className="min-h-screen bg-background p-8">
       <div className="mt-10">
-        <h1 className="text-2xl font-bold text-gray-800">Hello Martin!</h1>
-        <p className="text-gray-500 text-sm">
+        <h1 className="text-2xl font-bold text-foreground">Hello Martin!</h1>
+        <p className="text-muted-foreground text-sm">
           Welcome to your overview of your account.
         </p>
       </div>
 
       <section className="mt-10">
-        <h2 className="text-base font-semibold text-gray-700 mb-4">
+        <h2 className="text-base font-semibold text-foreground mb-4">
           My Products
         </h2>
 
@@ -54,7 +62,11 @@ export default function Dashboard() {
                 ref={provided.innerRef}
               >
                 {products.map((product, index) => (
-                  <Draggable key={product.id} draggableId={product.id} index={index}>
+                  <Draggable
+                    key={product.id}
+                    draggableId={product.id}
+                    index={index}
+                  >
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
@@ -73,47 +85,51 @@ export default function Dashboard() {
                 {/* Botão de Add Card */}
                 <div className="flex-none">
                   {!isAdding ? (
-                    <button
+                    <Card
+                      className="bg-primary text-primary-foreground 
+                                 shadow-sm rounded-lg w-44 h-28 
+                                 flex items-center justify-center cursor-pointer 
+                                 hover:opacity-90 transition"
                       onClick={() => setIsAdding(true)}
-                      className="bg-gradient-to-tr from-blue-500 to-purple-500 
-                                 rounded-2xl p-6 flex flex-col items-center justify-center 
-                                 text-white shadow-md hover:scale-105 transition"
                     >
-                      <span className="text-lg font-semibold">
-                        {products.length === 0 ? "Adicionar uma lista" : "+ Add new"}
-                      </span>
-                    </button>
+                      <CardContent className="flex items-center justify-center p-0">
+                        <span className="text-sm font-semibold">
+                          {products.length === 0
+                            ? "Adicionar uma lista"
+                            : "+ Add new"}
+                        </span>
+                      </CardContent>
+                    </Card>
                   ) : (
-                    <div className="flex flex-col gap-2">
-                      <input
-                        type="text"
-                        placeholder="Nome da lista"
-                        value={newListTitle}
-                        onChange={(e) => setNewListTitle(e.target.value)}
-                        className="p-2 border rounded w-40"
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") addNewCard();
-                        }}
-                        autoFocus
-                      />
-                      <div className="flex gap-2">
-                        <button
-                          onClick={addNewCard}
-                          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
-                        >
-                          Adicionar
-                        </button>
-                        <button
-                          onClick={() => {
-                            setIsAdding(false);
-                            setNewListTitle("");
+                    <Card className="p-4 w-56">
+                      <div className="flex flex-col gap-2">
+                        <Input
+                          type="text"
+                          placeholder="Nome da lista"
+                          value={newListTitle}
+                          onChange={(e) => setNewListTitle(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") addNewCard();
                           }}
-                          className="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400 transition"
-                        >
-                          Cancelar
-                        </button>
+                          autoFocus
+                        />
+                        <div className="flex gap-2">
+                          <Button size="sm" onClick={addNewCard}>
+                            Adicionar
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => {
+                              setIsAdding(false);
+                              setNewListTitle("");
+                            }}
+                          >
+                            Cancelar
+                          </Button>
+                        </div>
                       </div>
-                    </div>
+                    </Card>
                   )}
                 </div>
               </div>

@@ -2,19 +2,15 @@
 
 import * as React from "react"
 import {
-  Users,
-  Briefcase,
-  FileText,
+  Lightbulb,
+  Rocket,
+  Layers,
+  ClipboardList,
   BarChart3,
-  Settings,
-  Building2,
-  PieChart,
-  ClipboardCheck,
-  CreditCard,
+  Network,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
 import {
@@ -25,7 +21,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// Dados corporativos
+// Sidebar para corporações
 const data = {
   user: {
     name: "Maria Silva",
@@ -35,88 +31,70 @@ const data = {
   teams: [
     {
       name: "Corporação X",
-      logo: Building2,
+      logo: Lightbulb,
       plan: "Enterprise",
     },
   ],
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: BarChart3,
       isActive: true,
       items: [
         { title: "Visão Geral", url: "#" },
-        { title: "Indicadores", url: "#" },
-        { title: "Performance", url: "#" },
+        { title: "Métricas Rápidas", url: "#" },
       ],
     },
     {
-      title: "Recursos Humanos",
+      title: "Funil de Inovação",
       url: "#",
-      icon: Users,
+      icon: Layers,
       items: [
-        { title: "Funcionários", url: "#" },
-        { title: "Folha de Pagamento", url: "#" },
-        { title: "Treinamentos", url: "#" },
+        { title: "Submissão de ideias", url: "/dashboard/submissao" },
+        { title: "Captura de Ideias", url: "/dashboard/ideias" },
+        { title: "Pré-Triagem", url: "/dashboard/triagem" },
+        { title: "Ideação", url: "/dashboard/ideacao" },
+        { title: "Triagem Detalhada", url: "/dashboard/triagem/detalhes" },
+        { title: "POCs", url: "/dashboard/pocs" },
       ],
     },
     {
-      title: "Finanças",
+      title: "Desafios",
       url: "#",
-      icon: CreditCard,
+      icon: ClipboardList,
       items: [
-        { title: "Contas a Pagar", url: "#" },
-        { title: "Contas a Receber", url: "#" },
-        { title: "Relatórios Financeiros", url: "#" },
+        { title: "Meus Desafios", url: "#" },
+        { title: "Abertos ao Público", url: "#" },
       ],
     },
     {
-      title: "Projetos",
+      title: "Startups",
       url: "#",
-      icon: Briefcase,
+      icon: Rocket,
       items: [
-        { title: "Ativos", url: "#" },
-        { title: "Concluídos", url: "#" },
-        { title: "Planejamento", url: "#" },
+        { title: "Base de Startups", url: "#" },
+        { title: "Recomendações", url: "#" },
+        { title: "Matches", url: "#" },
+      ],
+    },
+    {
+      title: "Conexões",
+      url: "#",
+      icon: Network,
+      items: [
+        { title: "Histórico de Interações", url: "#" },
+        { title: "POCs em Andamento", url: "#" },
       ],
     },
     {
       title: "Relatórios",
       url: "#",
-      icon: FileText,
+      icon: BarChart3,
       items: [
-        { title: "Mensais", url: "#" },
-        { title: "Trimestrais", url: "#" },
-        { title: "Customizados", url: "#" },
+        { title: "Indicadores por Etapa", url: "#" },
+        { title: "Relatórios Personalizados", url: "#" },
       ],
-    },
-    {
-      title: "Configurações",
-      url: "#",
-      icon: Settings,
-      items: [
-        { title: "Geral", url: "#" },
-        { title: "Usuários & Permissões", url: "#" },
-        { title: "Integrações", url: "#" },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Expansão LATAM",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Digitalização Interna",
-      url: "#",
-      icon: ClipboardCheck,
-    },
-    {
-      name: "Sustentabilidade",
-      url: "#",
-      icon: Briefcase,
     },
   ],
 }
@@ -129,7 +107,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
