@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import HireCards from "@/app/dekstop-user/dekstop/components/HireCards";
 
 type Doctor = {
   id: number;

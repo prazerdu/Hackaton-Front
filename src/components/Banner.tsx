@@ -1,7 +1,11 @@
+import HeroBanner from "@/app/dekstop-user/dekstop/components/HeroBanner";
+
 export default function Banner() {
   return (
-    <section className="mt-2">
-      <div className="relative rounded-xl bg-teal-600 text-white p-4 flex gap-3 items-center">
+    <section className="mt-6 mb-4 space-y-4">
+      <HeroBanner />
+      
+      {/* <div className="relative rounded-xl bg-teal-600 text-white p-4 flex gap-3 items-center">
         <div className="flex-1">
           <h3 className="text-sm font-semibold">Looking for</h3>
           <p className="text-base font-bold">desired doctor?</p>
@@ -14,7 +18,7 @@ export default function Banner() {
           alt="doctor"
           className="w-20 h-20 rounded-lg object-cover shadow-md"
         />
-      </div>
+      </div> */}
     </section>
   );
 }

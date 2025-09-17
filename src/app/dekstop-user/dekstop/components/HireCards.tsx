@@ -6,7 +6,7 @@ import Modal from "./Modal";
 import Image from "next/image";
 
 const cards = [
-  { id: 1, title: "Content designers", subtitle: "3 open", image: "https://i.pinimg.com/736x/23/50/47/235047224bc54f0f773b5c292de83de0.jpg" },
+  { id: 1, title: "Projeto X", subtitle: "Projeto que busca crescer na aréa da tecnologia aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", image: "https://i.pinimg.com/736x/23/50/47/235047224bc54f0f773b5c292de83de0.jpg" },
   { id: 2, title: "PHP Developers", subtitle: "2 open", image: "https://i.pinimg.com/736x/ed/ea/99/edea99df82606eeb70af589e2e198169.jpg" },
   { id: 3, title: "UI/UX Designer", subtitle: "5 open", image: "https://i.pinimg.com/1200x/17/6f/c2/176fc23f5418115658289ba07cd1d566.jpg" },
   { id: 4, title: "iOS Developer", subtitle: "1 open", image: "https://i.pinimg.com/1200x/e2/c9/18/e2c918fddd4fc517665b3ce9c73bb5f6.jpg" },
@@ -87,23 +87,25 @@ export default function HireCards() {
         {visibleCards.map((c) => (
           <div
             key={c.id}
-            className={`bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col items-start gap-2 transform transition-all duration-300 ${
-              animating ? "-translate-x-4 opacity-0" : "translate-x-0 opacity-100"
-            }`}
+            className={`bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col items-start gap-2 transform transition-all duration-300 ${animating ? "-translate-x-4 opacity-0" : "translate-x-0 opacity-100"
+              }`}
           >
-            <div className="w-9 h-9 rounded-md overflow-hidden flex items-center justify-center bg-indigo-50">
-              <div className="w-9 h-9 rounded-md overflow-hidden relative bg-indigo-50">
+            <div className="w-12 h-12 rounded-md mb-2 overflow-hidden flex items-center justify-center bg-indigo-50">
+              <div className="w-14 h-14 rounded-md overflow-hidden relative bg-indigo-50">
                 <Image src={c.image} alt={c.title} fill className="object-cover" />
               </div>
             </div>
             <div className="text-sm font-medium">{c.title}</div>
-            <div className="text-xs text-gray-400">{c.subtitle}</div>
+            <div className="text-xs text-gray-400 truncate w-40">
+              {c.subtitle}
+            </div>
+
             {/* Botão Detalhes */}
             <button
               onClick={() => handleDetailsClick(c.id)}
-              className="mt-2 text-sm text-indigo-600 hover:underline"
+              className="text-sm text-indigo-600 hover:underline"
             >
-              <Modal/>
+              <Modal />
             </button>
           </div>
         ))}
