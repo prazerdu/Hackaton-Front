@@ -1,18 +1,28 @@
 "use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
+import Image from "next/image";
 
-export default function Modal() {
+interface ModalProps {
+  card: {
+    id: number;
+    title: string;
+    subtitle: string;
+    image: string;
+  };
+}
+
+export default function Modal({ card }: ModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -24,52 +34,45 @@ export default function Modal() {
       <DialogContent
         className="
           flex flex-col p-0 gap-0
-          w-[95vw] h-[90vh]   /* quase tela cheia no celular */
-          sm:max-w-lg sm:max-h-[80vh]  /* limites para telas maiores */
-          rounded-2xl sm:rounded-lg    /* borda arredondada menor em mobile */
+          w-[95vw] h-[90vh]
+          sm:max-w-lg sm:max-h-[80vh]
+          rounded-2xl sm:rounded-lg
         "
       >
         <DialogHeader className="contents space-y-0 text-left">
           <DialogTitle className="border-b px-6 py-4 text-base">
-            Frequently Asked Questions (FAQ)
+            {card.title}
           </DialogTitle>
+
           <div className="overflow-y-auto flex-1">
             <DialogDescription asChild>
-              <div className="px-6 py-4">
-                <div className="[&_strong]:text-foreground space-y-4 [&_strong]:font-semibold">
-                  <div className="space-y-1">
-                    <p><strong>Account Management</strong></p>
-                    <p>
-                      Navigate to the registration page, provide required
-                      information, and verify your email address. You can sign
-                      up using your email or through social media platforms.
-                    </p>
-                  </div>
-                  <div className="space-y-1">
-                    <p><strong>Password Reset Process</strong></p>
-                    <p>
-                      Users can reset their password through the account
-                      settings page. Click &quot;Forgot Password&quot; and
-                      follow the email verification steps.
-                    </p>
-                  </div>
-                  {/* ... resto do conteúdo ... */}
+              <div className="px-6 py-4 space-y-4">
+                {/* Imagem do card */}
+                <div className="w-full h-48 relative rounded-md overflow-hidden">
+                  <Image src={card.image} alt={card.title} fill className="object-cover" />
                 </div>
+
+                {/* Subtítulo */}
+                <p className="text-gray-600">{card.subtitle}</p>
+
+                {/* Aqui você pode adicionar mais campos se quiser */}
               </div>
             </DialogDescription>
 
-            <DialogFooter className="px-6 pb-6">
+            <DialogFooter className="px-6 pb-6 flex gap-2">
               <DialogClose asChild>
-                <Button className="bg-blue-600 hover:bg-blue-800" type="button">Cancelar</Button>
+                <Button className="bg-blue-600 hover:bg-blue-800">Cancelar</Button>
               </DialogClose>
 
               <DialogClose asChild>
-                <Button className="bg-blue-600 hover:bg-blue-800 hover:text-white" type="button">Solicitar</Button>
+                <Button className="bg-blue-600 hover:bg-blue-800 hover:text-white">
+                  Solicitar
+                </Button>
               </DialogClose>
             </DialogFooter>
           </div>
         </DialogHeader>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

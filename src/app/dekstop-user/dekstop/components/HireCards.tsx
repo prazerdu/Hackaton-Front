@@ -105,7 +105,8 @@ export default function HireCards() {
               onClick={() => handleDetailsClick(c.id)}
               className="text-sm text-indigo-600 hover:underline"
             >
-              <Modal />
+             <Modal card={c} />
+
             </button>
           </div>
         ))}
