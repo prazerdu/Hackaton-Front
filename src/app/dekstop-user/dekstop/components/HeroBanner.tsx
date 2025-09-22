@@ -2,7 +2,7 @@ import Carousel from "./Carrossel";
 
 export default function HeroBanner() {
   const images = [
-    "https://i.pinimg.com/1200x/d3/32/ce/d332ce3a8d9abd5ce10ca29e445ba686.jpg",
+    "https://i.pinimg.com/736x/72/e2/0d/72e20dd3a0d3d1b28c5d8f3d874f6f16.jpg",
     "https://i.pinimg.com/1200x/96/80/03/96800303d257eb3dab691f0aea9b3bc6.jpg",
     "https://i.pinimg.com/736x/c1/ff/9e/c1ff9eaf00a160c4724df31b42118b40.jpg",
   ];

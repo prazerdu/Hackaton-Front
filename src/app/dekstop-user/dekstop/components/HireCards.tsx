@@ -6,12 +6,35 @@ import Modal from "./Modal";
 import Image from "next/image";
 
 const cards = [
-  { id: 1, title: "Projeto X", subtitle: "Projeto que busca crescer na aréa da tecnologia aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", image: "https://i.pinimg.com/736x/23/50/47/235047224bc54f0f773b5c292de83de0.jpg" },
-  { id: 2, title: "PHP Developers", subtitle: "2 open", image: "https://i.pinimg.com/736x/ed/ea/99/edea99df82606eeb70af589e2e198169.jpg" },
-  { id: 3, title: "UI/UX Designer", subtitle: "5 open", image: "https://i.pinimg.com/1200x/17/6f/c2/176fc23f5418115658289ba07cd1d566.jpg" },
-  { id: 4, title: "iOS Developer", subtitle: "1 open", image: "https://i.pinimg.com/1200x/e2/c9/18/e2c918fddd4fc517665b3ce9c73bb5f6.jpg" },
-  { id: 5, title: "Android Developer", subtitle: "4 open", image: "https://i.pinimg.com/1200x/8a/c5/c7/8ac5c7add186209c1cb2e1c9492d631c.jpg" },
-  { id: 6, title: "Backend Developer", subtitle: "2 open", image: "https://i.pinimg.com/1200x/41/ff/0b/41ff0baa0b40ab90801a3844b0210554.jpg" },
+  { id: 1, 
+    title: "Projeto X", 
+    subtitle: "Projeto que busca crescer na aréa da tecnologia aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
+    image: "https://i.pinimg.com/736x/35/31/74/3531741d5601c7ed9c1505d784db9b4b.jpg" },
+    
+  { id: 2, 
+    title: "PHP Developers", 
+    subtitle: "2 open", 
+    image: "https://i.pinimg.com/1200x/92/40/ef/9240ef093578c01b6f4e087ef9989b5a.jpg" },
+
+  { id: 3, 
+    title: "UI/UX Designer", 
+    subtitle: "5 open", 
+    image: "https://i.pinimg.com/736x/42/27/71/42277172780abf5043438989d49856e2.jpg" },
+    
+  { id: 4, 
+    title: "iOS Developer", 
+    subtitle: "1 open", 
+    image: "https://i.pinimg.com/1200x/a9/fb/fe/a9fbfec81940413f28fde608c3321101.jpg" },
+
+  { id: 5, 
+    title: "Android Developer", 
+    subtitle: "4 open", 
+    image: "https://i.pinimg.com/736x/0b/b4/17/0bb41713571ad487947c810ad18c73d4.jpg" },
+
+  { id: 6, 
+    title: "Backend Developer", 
+    subtitle: "2 open", 
+    image:"https://i.pinimg.com/1200x/fc/f0/eb/fcf0ebf1eb5e49b477ebd8ca0e74d3d4.jpg" },
 ];
 
 export default function HireCards() {

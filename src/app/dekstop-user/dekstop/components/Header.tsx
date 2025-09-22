@@ -10,7 +10,7 @@ export default function Header() {
             className="w-[420px] rounded-full border border-gray-200 px-4 py-2 pl-10 text-sm shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             placeholder="Search something..."
           />
-          <svg
+          {/* <svg
             className="w-5 h-5 absolute left-4 top-2 text-gray-400"
             viewBox="0 0 24 24"
             fill="none"
@@ -22,7 +22,7 @@ export default function Header() {
               strokeLinecap="round"
             />
             <circle cx="11" cy="11" r="6" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
+          </svg> */}
         </div>
 
         {/* Add New button */}

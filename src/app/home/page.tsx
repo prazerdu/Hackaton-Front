@@ -6,6 +6,7 @@ import DoctorCard from "@/components/DoctorCard";
 import { doctors } from "@/lib/doctors";
 import Dekstop from "../dekstop-user/dekstop/page";
 import HireCards from "../dekstop-user/dekstop/components/HireCards";
+import Rightbar from "../dekstop-user/dekstop/components/Rightbar";
 
 export default function HomePage() {
   return (
@@ -15,6 +16,10 @@ export default function HomePage() {
         <Header />
         <div className="px-4 flex-1 flex flex-col overflow-hidden">
           <Banner />
+          
+
+          <Rightbar />
+          {/* </div> */}
 
           {/* Hire Cards */}
           <div className="mt-4 flex-shrink-0">

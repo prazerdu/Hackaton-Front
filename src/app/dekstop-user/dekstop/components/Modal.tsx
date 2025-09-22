@@ -48,8 +48,8 @@ export default function Modal({ card }: ModalProps) {
             <DialogDescription asChild>
               <div className="px-6 py-4 space-y-4">
                 {/* Imagem do card */}
-                <div className="w-full h-48 relative rounded-md overflow-hidden">
-                  <Image src={card.image} alt={card.title} fill className="object-cover" />
+                <div className="h-52 relative rounded-md overflow-hidden">
+                  <Image src={card.image} alt={card.title} fill className="object-contain" />
                 </div>
 
                 {/* Subtítulo */}

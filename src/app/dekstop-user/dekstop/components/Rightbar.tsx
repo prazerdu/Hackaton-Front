@@ -1,66 +1,113 @@
+"use client";
 import Image from "next/image";
 
-const applicants = [
-  "Mike Tyson",
-  "Zara Thomas",
-  "Neeru Abraham",
-  "John Samuel",
-  "Zara Thomas",
-];
+interface ProgressProps {
+  value: number;
+}
 
-export default function Rightbar() {
+function Progress({ value }: ProgressProps) {
   return (
-    <aside className="w-72 bg-white/95 border-l border-gray-100 p-6 flex flex-col gap-6">
-      {/* Calendar */}
-      <div>
-        <div className="text-sm font-medium">Schedule Calendar</div>
-        <div className="mt-3 bg-gray-50 p-3 rounded-lg">
-          <div className="text-xs text-gray-400">May</div>
-          <div className="flex gap-1 mt-2">
-            <div className="px-2 py-1 rounded bg-white text-xs">Mon</div>
-            <div className="px-2 py-1 rounded bg-white text-xs">Tue</div>
-            <div className="px-2 py-1 rounded bg-indigo-600 text-white text-xs">Wed</div>
-            <div className="px-2 py-1 rounded bg-white text-xs">Thu</div>
-            <div className="px-2 py-1 rounded bg-white text-xs">Fri</div>
+    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+      <div
+        className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+        style={{ width: `${value}%` }}
+      ></div>
+    </div>
+  );
+}
+
+export default function ProjectCards() {
+  const projects = [
+    {
+      id: 1,
+      title: "Desafios Solicitados",
+      progress: 50,
+      icon: "",
+      highlight: true,
+      description: "Pedidos pendentes para serem concluídas.",
+      count: 12,
+      isImage: true, 
+    },
+    {
+      id: 2,
+      title: "Desafios Completos",
+      progress: 80,
+      icon: "/icons/checklist.png",
+      highlight: false,
+      description: "Quantidade de desafios já finalizados.",
+      count: 34,
+      isImage: true
+    },
+  ];
+
+  return (
+    <div className="flex lg:flex-col gap-8 max-w-lg mx-auto p-4">
+      {projects.map((project) => (
+        <div
+          key={project.id}
+          className={`p-5 rounded-2xl shadow-md flex flex-col justify-between lg:w-[200px] transition-transform duration-300 hover:scale-[1.02] ${
+            project.highlight
+              ? "bg-blue-900 text-white"
+              : "bg-white text-gray-900 border border-gray-200"
+          }`}
+        >
+          {/* Header */}
+          <div>
+            <div className="flex items-center justify-between">
+              {project.isImage ? (
+                <Image
+                  src={project.icon}
+                  alt={project.title}
+                  width={32}
+                  height={32}
+                  className="rounded-md object-contain"
+                />
+              ) : (
+                <span className="text-2xl">{project.icon}</span>
+              )}
+
+              <span
+                className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                  project.highlight
+                    ? "bg-blue-700 text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
+              >
+                {project.count}x
+              </span>
+            </div>
+            <h3 className="font-semibold text-base mt-3 leading-snug">
+              {project.title}
+            </h3>
+            <p
+              className={`text-sm mt-1 ${
+                project.highlight ? "text-blue-200" : "text-gray-500"
+              }`}
+            >
+              {project.description}
+            </p>
+          </div>
+
+          {/* Progresso */}
+          <div className="mt-4">
+            <p
+              className={`text-xs mb-1 ${
+                project.highlight ? "text-blue-200" : "text-gray-500"
+              }`}
+            >
+              Progresso
+            </p>
+            <Progress value={project.progress} />
+            <p
+              className={`mt-2 text-right text-xs font-semibold ${
+                project.highlight ? "text-blue-100" : "text-gray-700"
+              }`}
+            >
+              {project.progress}%
+            </p>
           </div>
         </div>
-      </div>
-
-      {/* Applicants */}
-      <div>
-        <div className="flex items-center justify-between">
-          <div className="text-sm font-medium">New Applicants</div>
-          <div className="text-xs text-indigo-600">View All</div>
-        </div>
-
-        <ul className="mt-3 space-y-3">
-          {applicants.map((a, i) => (
-            <li key={i} className="flex items-center gap-3">
-              <Image
-                src={`https://i.pravatar.cc/32?img=${i + 10}`}
-                alt={`Avatar ${i + 10}`}
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-
-              <div className="flex-1 text-sm">{a}</div>
-              <div className="text-xs text-gray-400">2m</div>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Training */}
-      <div>
-        <div className="text-sm font-medium">Ready For Training</div>
-        <div className="mt-3 grid grid-cols-2 gap-3">
-          <div className="bg-gray-50 p-2 rounded-lg text-center text-xs">Mike</div>
-          <div className="bg-gray-50 p-2 rounded-lg text-center text-xs">Anna</div>
-          <div className="bg-gray-50 p-2 rounded-lg text-center text-xs">John</div>
-          <div className="bg-gray-50 p-2 rounded-lg text-center text-xs">Sara</div>
-        </div>
-      </div>
-    </aside>
+      ))}
+    </div>
   );
 }

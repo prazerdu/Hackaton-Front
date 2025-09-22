@@ -33,7 +33,6 @@ export default function Carousel({ images }: CarouselProps) {
         />
       </AnimatePresence>
 
-      {/* Indicadores (bolinhas) */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
         {images.map((_, i) => (
           <button
