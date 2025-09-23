@@ -43,8 +43,8 @@ export default function Sidebar() {
         <div className="flex items-center gap-2 mb-6">
           <div className="w-8 h-8 rounded-lg bg-blue-500"></div>
           <div>
-            <h1 className="text-sm font-semibold">Untitled UI</h1>
-            <p className="text-xs text-gray-500">store.untitledui.com</p>
+            <h1 className="text-sm font-semibold">Usuario X</h1>
+            <p className="text-xs text-gray-500">ananan@gmail.com</p>
           </div>
         </div>
 

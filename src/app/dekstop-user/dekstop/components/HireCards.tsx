@@ -12,29 +12,29 @@ const cards = [
     image: "https://i.pinimg.com/736x/35/31/74/3531741d5601c7ed9c1505d784db9b4b.jpg" },
     
   { id: 2, 
-    title: "PHP Developers", 
-    subtitle: "2 open", 
+    title: "Desafio Design", 
+    subtitle: "2 acessos", 
     image: "https://i.pinimg.com/1200x/92/40/ef/9240ef093578c01b6f4e087ef9989b5a.jpg" },
 
   { id: 3, 
-    title: "UI/UX Designer", 
-    subtitle: "5 open", 
+    title: "Desafio Dekstop", 
+    subtitle: "5 acessos", 
     image: "https://i.pinimg.com/736x/42/27/71/42277172780abf5043438989d49856e2.jpg" },
     
   { id: 4, 
-    title: "iOS Developer", 
-    subtitle: "1 open", 
+    title: "Desafio Mobile", 
+    subtitle: "1 acesso", 
     image: "https://i.pinimg.com/1200x/a9/fb/fe/a9fbfec81940413f28fde608c3321101.jpg" },
 
   { id: 5, 
-    title: "Android Developer", 
-    subtitle: "4 open", 
+    title: "Desafio Frontend", 
+    subtitle: "4 acessos", 
     image: "https://i.pinimg.com/736x/0b/b4/17/0bb41713571ad487947c810ad18c73d4.jpg" },
 
-  { id: 6, 
-    title: "Backend Developer", 
-    subtitle: "2 open", 
-    image:"https://i.pinimg.com/1200x/fc/f0/eb/fcf0ebf1eb5e49b477ebd8ca0e74d3d4.jpg" },
+  // { id: 6, 
+  //   title: "Backend Developer", 
+  //   subtitle: "2 open", 
+  //   image:"https://i.pinimg.com/1200x/fc/f0/eb/fcf0ebf1eb5e49b477ebd8ca0e74d3d4.jpg" },
 ];
 
 export default function HireCards() {
@@ -68,7 +68,6 @@ export default function HireCards() {
   };
 
   const handleDetailsClick = async (id: number) => {
-    // registra clique
     const res = await fetch(`/api/card/${id}`, { method: "POST" });
     const data = await res.json();
     setClicks((prev) => ({ ...prev, [id]: data.count }));
@@ -88,9 +87,9 @@ export default function HireCards() {
   }, [page]);
 
   return (
-    <section className="mb-6">
+    <section className="mb-6 mt-2">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-medium">You Need to Hire</h3>
+        <h3 className="text-lg font-medium">Novos Desafios</h3>
         <div className="flex items-center gap-2">
           {page > 0 && (
             <button onClick={handlePrev} className="bg-white shadow-md p-2 rounded-full hover:bg-gray-100">

@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface ProgressProps {
   value: number;
@@ -11,22 +12,27 @@ function Progress({ value }: ProgressProps) {
       <div
         className="bg-blue-600 h-2 rounded-full transition-all duration-500"
         style={{ width: `${value}%` }}
-      ></div>
+      >
+
+      </div>
     </div>
   );
 }
 
 export default function ProjectCards() {
+  const router = useRouter();
+
   const projects = [
     {
       id: 1,
       title: "Desafios Solicitados",
       progress: 50,
-      icon: "",
+      icon: "/icons/interview.png",
       highlight: true,
-      description: "Pedidos pendentes para serem concluídas.",
+      description: "Solicitações pendentes para serem aceitas.",
       count: 12,
-      isImage: true, 
+      isImage: true,
+      route: "desafios-solicitados",
     },
     {
       id: 2,
@@ -36,16 +42,22 @@ export default function ProjectCards() {
       highlight: false,
       description: "Quantidade de desafios já finalizados.",
       count: 34,
-      isImage: true
+      isImage: true,
+      route: "/desafios-completos",
     },
   ];
+
+  const handleCardClick = (route: string) => {
+    router.push(route);
+  };
 
   return (
     <div className="flex lg:flex-col gap-8 max-w-lg mx-auto p-4">
       {projects.map((project) => (
         <div
           key={project.id}
-          className={`p-5 rounded-2xl shadow-md flex flex-col justify-between lg:w-[200px] transition-transform duration-300 hover:scale-[1.02] ${
+          onClick={() => handleCardClick(project.route)}
+          className={`p-5 rounded-2xl shadow-md flex flex-col justify-between lg:w-[250px] transition-transform duration-300 hover:scale-[1.02] cursor-pointer ${
             project.highlight
               ? "bg-blue-900 text-white"
               : "bg-white text-gray-900 border border-gray-200"
@@ -58,9 +70,9 @@ export default function ProjectCards() {
                 <Image
                   src={project.icon}
                   alt={project.title}
-                  width={32}
-                  height={32}
-                  className="rounded-md object-contain"
+                  width={30}
+                  height={30}
+                  className="object-contain"
                 />
               ) : (
                 <span className="text-2xl">{project.icon}</span>
@@ -88,7 +100,6 @@ export default function ProjectCards() {
             </p>
           </div>
 
-          {/* Progresso */}
           <div className="mt-4">
             <p
               className={`text-xs mb-1 ${

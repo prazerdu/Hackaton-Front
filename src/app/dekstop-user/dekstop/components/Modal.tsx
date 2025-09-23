@@ -48,18 +48,16 @@ export default function Modal({ card }: ModalProps) {
             <DialogDescription asChild>
               <div className="px-6 py-4 space-y-4">
                 {/* Imagem do card */}
-                <div className="h-52 relative rounded-md overflow-hidden">
-                  <Image src={card.image} alt={card.title} fill className="object-contain" />
+                <div className="lg:w-[300px] lg:ml-20 h-52 relative rounded-md overflow-hidden">
+                  <Image src={card.image} alt={card.title} fill className="object-cover" />
                 </div>
 
                 {/* Subtítulo */}
                 <p className="text-gray-600">{card.subtitle}</p>
-
-                {/* Aqui você pode adicionar mais campos se quiser */}
               </div>
             </DialogDescription>
 
-            <DialogFooter className="px-6 pb-6 flex gap-2">
+            <DialogFooter className="px-6 pb-4 flex mt-60 gap-4">
               <DialogClose asChild>
                 <Button className="bg-blue-600 hover:bg-blue-800">Cancelar</Button>
               </DialogClose>

@@ -11,18 +11,15 @@ export default function Dekstop() {
   return (
     <div className="bg-[#e9e7ff] flex items-center justify-center text-gray-700">
       <div className="w-full rounded-2xl bg-white/70 backdrop-blur-lg overflow-hidden flex">
-        {/* Sidebar */}
-        <Sidebar />
+        {/* <Sidebar /> */}
 
-        {/* Main */}
         <main className="flex-1 p-6">
           <Header />
           <HeroBanner />
           <HireCards />
-          <RecruitmentTable />
+          {/* <RecruitmentTable /> */}
         </main>
 
-        {/* Rightbar */}
         <Rightbar />
       </div>
     </div>
