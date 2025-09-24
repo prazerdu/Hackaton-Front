@@ -9,8 +9,8 @@ import Rightbar from "@/app/dekstop-user/dekstop/components/Rightbar";
 
 export default function Dekstop() {
   return (
-    <div className="bg-[#e9e7ff] flex items-center justify-center text-gray-700">
-      <div className="w-full rounded-2xl bg-white/70 backdrop-blur-lg overflow-hidden flex">
+    <div className="bg-[#e9e7ff] flex items-center text-gray-700">
+      <div className="w-full bg-white/70 backdrop-blur-lg overflow-hidden flex">
         {/* <Sidebar /> */}
 
         <main className="flex-1 p-6">

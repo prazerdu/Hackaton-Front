@@ -94,7 +94,7 @@ export default function ProjectCards() {
   };
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 max-w-md mx-auto lg:w-[250px] lg:h-[350px] p-2">
+    <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 max-w-md mx-auto lg:w-[250px] lg:h-[350px]">
       {projects.map((project) => (
         <Dialog key={project.id}>
           <DialogTrigger asChild>
