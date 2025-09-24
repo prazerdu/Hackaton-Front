@@ -1,26 +1,67 @@
-"use client";
-import { Search } from "lucide-react";
-import Usuario from "./Usuario";
+"use client"
+
+import { useEffect, useId, useState } from "react"
+import { LoaderCircleIcon, MicIcon, SearchIcon } from "lucide-react"
+import Usuario from "./Usuario"
+
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function Header() {
+  const id = useId()
+  const [inputValue, setInputValue] = useState("")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (inputValue) {
+      setIsLoading(true)
+      const timer = setTimeout(() => {
+        setIsLoading(false)
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+    setIsLoading(false)
+  }, [inputValue])
+
   return (
-    <header className="flex items-center justify-center p-4">
+    <header className="flex items-center justify-center p-4 bg-gray-50">
       <div className="flex items-center gap-3 w-full max-w-md">
         {/* Barra de pesquisa */}
         <div className="relative flex-1">
-          <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            size={18}
+          <Label htmlFor={id} className="sr-only">
+            Search input
+          </Label>
+          <Input
+            id={id}
+            className="peer ps-9 pe-9"
+            placeholder="Search..."
+            type="search"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
-          <input
-            type="text"
-            placeholder="Search something..."
-            className="w-full rounded-full border border-gray-200 px-10 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+          <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+            {isLoading ? (
+              <LoaderCircleIcon
+                className="animate-spin"
+                size={16}
+                role="status"
+                aria-label="Loading..."
+              />
+            ) : (
+              <SearchIcon size={16} aria-hidden="true" />
+            )}
+          </div>
+          <button
+            className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label="Press to speak"
+            type="submit"
+          >
+            <MicIcon size={16} aria-hidden="true" />
+          </button>
         </div>
-
+        {/* Usuário */}
         <Usuario />
       </div>
     </header>
-  );
+  )
 }
