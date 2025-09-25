@@ -1,15 +1,19 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import axios from "axios"
+"use client";
+import Link from "next/link"; 
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { BarChart3, Rocket, Lightbulb, Layers, PlusCircle, Search, Users, ClipboardList } from "lucide-react"
-import { Button } from "@/components/ui/button"
+  BarChart3,
+  Rocket,
+  Lightbulb,
+  Layers,
+  PlusCircle,
+  Search,
+  Users,
+  ClipboardList,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   AreaChart,
   Area,
@@ -20,14 +24,14 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-} from "recharts"
+} from "recharts";
 
 const mockKpis = {
   ideias: 128,
   desafios: 12,
   startups: 34,
   pocs: 5,
-}
+};
 
 const mockChart = [
   { etapa: "Captura", qtd: 128 },
@@ -35,20 +39,37 @@ const mockChart = [
   { etapa: "Ideação", qtd: 40 },
   { etapa: "Triagem Detalhada", qtd: 18 },
   { etapa: "POCs", qtd: 5 },
-]
+];
 
 const mockAtividades = [
-  { id: 1, titulo: "Novo desafio publicado", detalhe: "Sustentabilidade na cadeia de suprimentos", data: "15/09" },
-  { id: 2, titulo: "Startup conectada", detalhe: "GreenTech Solutions", data: "14/09" },
-  { id: 3, titulo: "POC iniciada", detalhe: "Automação de processos internos", data: "13/09" },
-]
+  {
+    id: 1,
+    titulo: "Novo desafio publicado",
+    detalhe: "Sustentabilidade na cadeia de suprimentos",
+    data: "15/09",
+  },
+  {
+    id: 2,
+    titulo: "Startup conectada",
+    detalhe: "GreenTech Solutions",
+    data: "14/09",
+  },
+  {
+    id: 3,
+    titulo: "POC iniciada",
+    detalhe: "Automação de processos internos",
+    data: "13/09",
+  },
+];
 
 function KPICards({ kpis }: { kpis: typeof mockKpis }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
       <Card className="shadow-sm hover:shadow-md transition">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Ideias Capturadas</CardTitle>
+          <CardTitle className="text-sm font-medium">
+            Ideias Capturadas
+          </CardTitle>
           <Lightbulb className="h-5 w-5 text-yellow-500" />
         </CardHeader>
         <CardContent>
@@ -68,7 +89,9 @@ function KPICards({ kpis }: { kpis: typeof mockKpis }) {
 
       <Card className="shadow-sm hover:shadow-md transition">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Startups Conectadas</CardTitle>
+          <CardTitle className="text-sm font-medium">
+            Startups Conectadas
+          </CardTitle>
           <Rocket className="h-5 w-5 text-green-500" />
         </CardHeader>
         <CardContent>
@@ -78,7 +101,9 @@ function KPICards({ kpis }: { kpis: typeof mockKpis }) {
 
       <Card className="shadow-sm hover:shadow-md transition">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">POCs em Andamento</CardTitle>
+          <CardTitle className="text-sm font-medium">
+            POCs em Andamento
+          </CardTitle>
           <BarChart3 className="h-5 w-5 text-purple-500" />
         </CardHeader>
         <CardContent>
@@ -86,7 +111,7 @@ function KPICards({ kpis }: { kpis: typeof mockKpis }) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 function QuickActions() {
@@ -97,10 +122,13 @@ function QuickActions() {
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-4">
-          <Button className="flex items-center gap-2">
+          <Link
+            href="/admin/desafio"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
             <PlusCircle className="h-4 w-4" />
             Criar Desafio
-          </Button>
+          </Link>
           <Button className="flex items-center gap-2">
             <ClipboardList className="h-4 w-4" />
             Lista de desafios
@@ -110,15 +138,15 @@ function QuickActions() {
             Explorar Startups
           </Button>
           <a href="">
-          <Button variant="secondary" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Usuários
-          </Button>
+            <Button variant="secondary" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Usuários
+            </Button>
           </a>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function FunnelEvolutionChart({ data }: { data: typeof mockChart }) {
@@ -133,8 +161,8 @@ function FunnelEvolutionChart({ data }: { data: typeof mockChart }) {
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="colorQtd" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -153,7 +181,7 @@ function FunnelEvolutionChart({ data }: { data: typeof mockChart }) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function FunnelStageChart({ data }: { data: typeof mockChart }) {
@@ -176,10 +204,14 @@ function FunnelStageChart({ data }: { data: typeof mockChart }) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
-function RecentActivities({ atividades }: { atividades: typeof mockAtividades }) {
+function RecentActivities({
+  atividades,
+}: {
+  atividades: typeof mockAtividades;
+}) {
   return (
     <Card className="shadow-sm">
       <CardHeader>
@@ -188,7 +220,10 @@ function RecentActivities({ atividades }: { atividades: typeof mockAtividades })
       <CardContent>
         <ul className="space-y-4">
           {atividades.map((item) => (
-            <li key={item.id} className="flex items-center justify-between border-b pb-2">
+            <li
+              key={item.id}
+              className="flex items-center justify-between border-b pb-2"
+            >
               <div>
                 <p className="font-medium">{item.titulo}</p>
                 <p className="text-sm text-muted-foreground">{item.detalhe}</p>
@@ -199,43 +234,46 @@ function RecentActivities({ atividades }: { atividades: typeof mockAtividades })
         </ul>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export default function DashboardPage() {
-  const [kpis, setKpis] = useState(mockKpis)
-  const [data, setData] = useState(mockChart)
-  const [atividadesRecentes, setAtividadesRecentes] = useState(mockAtividades)
+  const [kpis, setKpis] = useState(mockKpis);
+  const [data, setData] = useState(mockChart);
+  const [atividadesRecentes, setAtividadesRecentes] = useState(mockAtividades);
 
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            const adminURL = process.env.NEXT_PUBLIC_API_URL;
+      try {
+        const adminURL = process.env.NEXT_PUBLIC_API_URL;
 
-            const [kpiRes, chartRes, atividadesRes] = await Promise.all([
-            axios.get(`${adminURL}`),
-            axios.get(`${adminURL}`),
-            axios.get(`${adminURL}`),
-            ]);
+        const [kpiRes, chartRes, atividadesRes] = await Promise.all([
+          axios.get(`${adminURL}`),
+          axios.get(`${adminURL}`),
+          axios.get(`${adminURL}`),
+        ]);
 
-            setKpis(kpiRes.data);
-            setData(chartRes.data);
-            setAtividadesRecentes(atividadesRes.data);
-        } catch (error) {
-            console.warn("⚠️ Usando mocks, API não encontrada:", error);
-        }
-        };
+        setKpis(kpiRes.data);
+        setData(chartRes.data);
+        setAtividadesRecentes(atividadesRes.data);
+      } catch (error) {
+        console.warn("⚠️ Usando mocks, API não encontrada:", error);
+      }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   return (
     <div className="p-6 space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard de Inovação</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Dashboard de Inovação
+        </h1>
         <p className="text-muted-foreground">
-          Acompanhe o desempenho e engajamento geral da sua corporação na plataforma.
+          Acompanhe o desempenho e engajamento geral da sua corporação na
+          plataforma.
         </p>
       </div>
 
@@ -245,5 +283,5 @@ export default function DashboardPage() {
       <FunnelStageChart data={data} />
       <RecentActivities atividades={atividadesRecentes} />
     </div>
-  )
+  );
 }
