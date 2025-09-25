@@ -6,12 +6,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { jwtDecode } from "jwt-decode"
 import { useRouter } from "next/navigation"
 
 type JwtPayload = {
   exp: number
+  role?: "COMMON" | "EVALUATOR" | "MANAGER" | "HUB_ADMIN"
 }
 
 export function LoginForm({
@@ -25,54 +26,77 @@ export function LoginForm({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  // Verificação do token no localStorage ao montar
-  useEffect(() => {
-    setIsClient(true)
-
-    const token = localStorage.getItem("accessToken")
-    if (token) {
-      try {
-        const decoded = jwtDecode<JwtPayload>(token)
-        const now = Date.now() / 1000
-
-        if (decoded.exp > now) {
-          router.push("/")
-        } else {
-          localStorage.removeItem("accessToken")
-        }
-      } catch {
-        localStorage.removeItem("accessToken")
-      }
-    }
-  }, [router])
-
-  // Login manual
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
-
-    try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-        { email, password },
-        { headers: { "Content-Type": "application/json" } }
-      )
-
-      const token = res.data.token
-      if (token) {
-        localStorage.setItem("accessToken", token)
+  const redirectByRole = useCallback(
+  (role?: JwtPayload["role"]) => {
+    switch (role) {
+      case "COMMON":
+        router.push("/user")
+        break
+      case "EVALUATOR":
+        router.push("/evaluator")
+        break
+      case "MANAGER":
+        router.push("/admin")
+        break
+      case "HUB_ADMIN":
+        router.push("/hubadmin")
+        break
+      default:
         router.push("/")
+    }
+  },
+  [router]
+)
+
+useEffect(() => {
+  setIsClient(true)
+
+  const token = localStorage.getItem("access_token")
+  if (token) {
+    try {
+      const decoded = jwtDecode<JwtPayload>(token)
+      const now = Date.now() / 1000
+
+      if (decoded.exp > now) {
+        redirectByRole(decoded.role)
       } else {
-        setError("Token não retornado pela API")
+        localStorage.removeItem("access_token")
       }
-    } catch (err) {
-      console.error("Erro no login:", err)
-      setError("Credenciais inválidas")
-    } finally {
-      setLoading(false)
+    } catch {
+      localStorage.removeItem("access_token")
     }
   }
+}, [redirectByRole])
+
+  // Login manual
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault()
+  setError("")
+  setLoading(true)
+
+  try {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+      { email, password },
+      { headers: { "Content-Type": "application/json" } }
+    )
+
+    const token = res.data.access_token
+    if (token) {
+      localStorage.setItem("access_token", token)
+      const decoded = jwtDecode<JwtPayload>(token)
+      redirectByRole(decoded.role)
+    } else {
+      setError("Token não retornado pela API")
+    }
+  } catch (err) {
+    console.error("Erro no login:", err)
+    setError("Credenciais inválidas")
+  } finally {
+    setLoading(false)
+  }
+}
+
 
   // Login com Google
   const LoginSuccess = async (credentialResponse: CredentialResponse) => {
@@ -81,17 +105,16 @@ export function LoginForm({
         `${process.env.NEXT_PUBLIC_API_URL}/auth/google`,
         { credential: credentialResponse.credential },
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       )
 
       const token = res.data.token
       if (token) {
-        localStorage.setItem("accessToken", token)
-        router.push("/")
+        localStorage.setItem("access_token", token)
+        const decoded = jwtDecode<JwtPayload>(token)
+        redirectByRole(decoded.role)
       } else {
         console.error("Token ausente")
       }
@@ -156,7 +179,10 @@ export function LoginForm({
       </div>
       <div className="text-center text-sm">
         Não tem uma conta?{" "}
-        <a href="/signup" className="hover:underline underline-offset-4 text-blue-700">
+        <a
+          href="/signup"
+          className="hover:underline underline-offset-4 text-blue-700"
+        >
           Criar
         </a>
       </div>

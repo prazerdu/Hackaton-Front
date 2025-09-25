@@ -13,17 +13,14 @@ import {
 import { Rocket, Lightbulb, PlusCircle, Search, Users, ClipboardList } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
+  ResponsiveContainer,
   AreaChart,
   Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
 } from "recharts"
-import { Spinner } from "@/components/ui/shadcn-io/spinner"
 
 type JwtPayload = {
   exp: number
@@ -37,21 +34,31 @@ const mockKpis = {
   pocs: 5,
 }
 
-const mockChart = [
-  { etapa: "Captura", qtd: 128 },
-  { etapa: "Pré-Triagem", qtd: 64 },
-  { etapa: "Ideação", qtd: 40 },
-  { etapa: "Triagem Detalhada", qtd: 18 },
-  { etapa: "POCs", qtd: 5 },
-]
+const mockLoginData = {
+  daily: [
+    { date: "21/09", logins: 5 },
+    { date: "22/09", logins: 8 },
+    { date: "23/09", logins: 12 },
+    { date: "24/09", logins: 7 },
+    { date: "25/09", logins: 10 },
+  ],
+  weekly: [
+    { week: "Semana 36", logins: 32 },
+    { week: "Semana 37", logins: 41 },
+    { week: "Semana 38", logins: 50 },
+  ],
+  monthly: [
+    { month: "Julho", logins: 120 },
+    { month: "Agosto", logins: 150 },
+    { month: "Setembro", logins: 98 },
+  ],
+}
 
 const mockAtividades = [
   { id: 1, titulo: "Novo desafio publicado", detalhe: "Sustentabilidade na cadeia de suprimentos", data: "15/09" },
   { id: 2, titulo: "Startup conectada", detalhe: "GreenTech Solutions", data: "14/09" },
   { id: 3, titulo: "POC iniciada", detalhe: "Automação de processos internos", data: "13/09" },
 ]
-
-// --- Componentes auxiliares --- //
 
 function KPICards({ kpis }: { kpis: typeof mockKpis }) {
   return (
@@ -101,48 +108,41 @@ function QuickActions() {
   )
 }
 
-function FunnelEvolutionChart({ data }: { data: typeof mockChart }) {
+function LoginWaveChart() {
+  const [period, setPeriod] = useState<"daily" | "weekly" | "monthly">("daily")
+  const data = mockLoginData[period]
+
+  const getLabelKey = () => {
+    if (period === "daily") return "date"
+    if (period === "weekly") return "week"
+    return "month"
+  }
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Evolução do Funil</CardTitle>
+      <CardHeader className="flex justify-between items-center">
+        <CardTitle>Logins de Corporações</CardTitle>
+        <div className="flex gap-2">
+          <Button size="sm" variant={period === "daily" ? "default" : "outline"} onClick={() => setPeriod("daily")}>Dia</Button>
+          <Button size="sm" variant={period === "weekly" ? "default" : "outline"} onClick={() => setPeriod("weekly")}>Semana</Button>
+          <Button size="sm" variant={period === "monthly" ? "default" : "outline"} onClick={() => setPeriod("monthly")}>Mês</Button>
+        </div>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={data}>
             <defs>
-              <linearGradient id="colorQtd" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+              <linearGradient id="colorLogins" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.8}/>
+                <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="etapa" />
+            <XAxis dataKey={getLabelKey()} />
             <YAxis />
             <Tooltip />
-            <Area type="monotone" dataKey="qtd" stroke="#8884d8" fillOpacity={1} fill="url(#colorQtd)" />
+            <Area type="monotone" dataKey="logins" stroke="#4f46e5" fillOpacity={1} fill="url(#colorLogins)" />
           </AreaChart>
-        </ResponsiveContainer>
-      </CardContent>
-    </Card>
-  )
-}
-
-function FunnelStageChart({ data }: { data: typeof mockChart }) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Distribuição por Etapas</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="etapa" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="qtd" fill="#8884d8" />
-          </BarChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>
@@ -179,7 +179,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
 
   const [kpis, setKpis] = useState(mockKpis)
-  const [data, setData] = useState(mockChart)
   const [atividadesRecentes, setAtividadesRecentes] = useState(mockAtividades)
 
   useEffect(() => {
@@ -194,7 +193,7 @@ export default function DashboardPage() {
         const decoded = jwtDecode<JwtPayload>(token)
         const now = Date.now() / 1000
 
-        if (decoded.exp < now || decoded.role !== "MANAGER") {
+        if (decoded.exp < now || decoded.role !== "HUB_ADMIN") {
           localStorage.removeItem("access_token")
           router.push("/login")
           return
@@ -219,17 +218,15 @@ export default function DashboardPage() {
       try {
         const adminURL = process.env.NEXT_PUBLIC_API_URL
 
-        const [kpiRes, chartRes, atividadesRes] = await Promise.all([
-          axios.get(`${adminURL}`),
-          axios.get(`${adminURL}`),
-          axios.get(`${adminURL}`),
+        const [kpiRes, atividadesRes] = await Promise.all([
+          axios.get(`${adminURL}/kpis`),
+          axios.get(`${adminURL}/atividades`),
         ])
 
         setKpis(kpiRes.data)
-        setData(chartRes.data)
         setAtividadesRecentes(atividadesRes.data)
       } catch (error) {
-        console.warn("⚠️ Usando mocks, API não encontrada:", error)
+        console.warn("⚠️ Usando mocks, API não conectada:", error)
       }
     }
 
@@ -237,11 +234,7 @@ export default function DashboardPage() {
   }, [authorized])
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center mt-80">
-        <Spinner className="text-[#8884d8]" variant="bars"/>
-      </div>
-    )
+    return <div className="p-6">Carregando...</div>
   }
 
   if (!authorized) {
@@ -259,8 +252,7 @@ export default function DashboardPage() {
 
       <KPICards kpis={kpis} />
       <QuickActions />
-      <FunnelEvolutionChart data={data} />
-      <FunnelStageChart data={data} />
+      <LoginWaveChart />
       <RecentActivities atividades={atividadesRecentes} />
     </div>
   )

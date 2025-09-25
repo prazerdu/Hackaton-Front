@@ -1,6 +1,7 @@
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar" 
+import { LogoutButton } from "@/components/log-out"
 import { ModeToggle } from "@/components/theme-toggle"
 import {
   SidebarProvider,
@@ -21,6 +22,7 @@ export default function DashboardLayout({
           <div className="p-2 flex justify-between gap-16">
             <SidebarTrigger />
             <ModeToggle/>
+            <LogoutButton/>
           </div>
           <div className="p-4">{children}</div>
         </main>
