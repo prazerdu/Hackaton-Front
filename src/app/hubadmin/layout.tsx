@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
-import { AppSidebar } from "@/components/admin/app-sidebar" 
+import { AppSidebar } from "@/components/hubadmin/app-sidebar" 
 import { LogoutButton } from "@/components/log-out"
 import { ModeToggle } from "@/components/theme-toggle"
 import {
@@ -38,8 +38,8 @@ export default function DashboardLayout({
         const decoded = jwtDecode<JwtPayload>(token)
         const now = Date.now() / 1000
 
-        if (decoded.exp < now || decoded.role !== "MANAGER") {
-          localStorage.removeItem("access_token") 
+        if (decoded.exp < now || decoded.role !== "HUB_ADMIN") {
+          localStorage.removeItem("access_token")
           router.push("/login")
           return
         }

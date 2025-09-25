@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Moon, Sun, Laptop } from "lucide-react"
+import { Moon, Sun, Settings } from "lucide-react"
 import { useTheme } from "next-themes"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -66,7 +66,7 @@ export function ModeToggle() {
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.25 }}
               >
-                <Laptop className="h-[1.2rem] w-[1.2rem]" />
+                <Settings className="h-[1.2rem] w-[1.2rem]" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -93,7 +93,7 @@ export function ModeToggle() {
           onClick={() => setTheme("system")}
           className={theme === "system" ? "bg-muted" : ""}
         >
-          <Laptop className="mr-2 h-4 w-4" /> System
+          <Settings className="mr-2 h-4 w-4" /> System
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
