@@ -7,7 +7,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-import { SessionProvider } from "next-auth/react"
 
 export default function DashboardLayout({
   children,
@@ -15,7 +14,6 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <SessionProvider>
       <SidebarProvider>
         <div className="flex min-h-screen w-full">
           <AppSidebar />
@@ -29,6 +27,5 @@ export default function DashboardLayout({
           </main>
         </div>
       </SidebarProvider>
-    </SessionProvider>
   )
 }
