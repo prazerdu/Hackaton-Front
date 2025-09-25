@@ -1,5 +1,6 @@
 
 import Image from "next/image";
+import HeroBanner from "@/app/dekstop-user/dekstop/components/HeroBanner";
 
 export default function Banner() {
   return (

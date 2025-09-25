@@ -14,11 +14,9 @@ export default function HomePage() {
 
         <div className="px-4 flex-1 flex flex-col overflow-hidden">
           <Banner />
-
-
           <Rightbar />
           {/* </div> */}
-
+          
           {/* Hire Cards */}
           <div className="mt-4 flex-shrink-0">
             <HireCards />
