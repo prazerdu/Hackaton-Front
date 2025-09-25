@@ -1,131 +1,113 @@
 "use client"
 
 import * as React from "react"
-import {
-  Users,
-  BarChart3,
-  Settings,
-  ClipboardList,
-  Network,
-  Rocket,
-} from "lucide-react"
+import { Users, BarChart3, Settings, ClipboardList, Network, Rocket } from "lucide-react"
 
-import { NavMain } from "@/components/admin/nav-main"
+import { NavMain } from "./nav-main"
 import { NavProjects } from "@/components/admin/nav-projects"
 import { NavUser } from "@/components/admin/nav-user"
 import { TeamSwitcher } from "@/components/admin/team-switcher"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarRail,
-} from "@/components/ui/sidebar"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
 
-import { useSession } from "next-auth/react"
-
-// Dados corporativos
-const data = {
-  user: {
-    name: "Maria Silva",
-    email: "maria.silva@corporacao.com",
-    avatar: "/avatars/maria.jpg",
-  },
-  teams: [],
-  navMain: [],
-  projects: [],
+const currentUser = {
+  name: "Maria Silva",
+  email: "maria.silva@corporacao.com",
+  avatar: "/avatars/maria.jpg",
+  role: "manager", // apenas manager
 }
 
+const navMain = [
+  {
+    title: "Dashboard",
+    url: "/admin",
+    icon: BarChart3,
+    roles: "manager",
+    items: [{ title: "Visão Geral", url: "/admin" }],
+  },
+  {
+    title: "Funil de Inovação",
+    url: "/admin/kanbam",
+    icon: Users,
+    roles: ["manager", "evaluator"],
+    items: [
+      { title: "Kanbam", url: "/admin/kanbam" },
+      { title: "Pré-Triagem", url: "/admin/funil/pre-triagem" },
+      { title: "Ideação", url: "/admin/funil/ideacao" },
+      { title: "Triagem Detalhada", url: "/admin/funil/triagem" },
+      { title: "Experimentação (POCs)", url: "/admin/funil/pocs" },
+    ],
+  },
+  {
+    title: "Desafios",
+    url: "/admin/desafios",
+    icon: ClipboardList,
+    roles: ["manager", "user"],
+    items: [
+      { title: "Meus Desafios", url: "/admin/desafios/meus" },
+      { title: "Criar Desafio", url: "/admin/desafios/novo" },
+      { title: "Abertos ao Público", url: "/desafios/abertos" },
+    ],
+  },
+  {
+    title: "Startups",
+    url: "/admin/startups",
+    icon: Rocket,
+    roles: ["manager"],
+    items: [
+      { title: "Base de Startups", url: "/admin/startups" },
+      { title: "Recomendações", url: "/admin/startups/recomendacoes" },
+      { title: "Matches", url: "/admin/startups/matches" },
+    ],
+  },
+  {
+    title: "Conexões",
+    url: "/admin/conexoes",
+    icon: Network,
+    roles: ["manager", "evaluator"],
+    items: [
+      { title: "Histórico de Interações", url: "/admin/conexoes/historico" },
+      { title: "POCs em Andamento", url: "/admin/conexoes/pocs" },
+    ],
+  },
+  {
+    title: "Relatórios",
+    url: "/admin/relatorios",
+    icon: BarChart3,
+    roles: ["manager"],
+    items: [
+      { title: "Indicadores por Etapa", url: "/admin/relatorios/etapas" },
+      { title: "Relatórios Personalizados", url: "/admin/relatorios/personalizados" },
+    ],
+  },
+  {
+    title: "Configurações",
+    url: "/admin/config",
+    icon: Settings,
+    roles: ["manager"],
+    items: [{ title: "Usuários & Permissões", url: "/admin/config/usuarios" }],
+  },
+]
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: session } = useSession()
-
-  const userWithRole = session?.user as { role?: string } | undefined
-  const isAdmin = userWithRole?.role === "admin"
-
-  const navMain = isAdmin ? data.navMain: [
-        {
-          title: "Dashboard",
-          url: "#",
-          icon: BarChart3,
-          isActive: true,
-          items: [
-            { title: "Visão Geral", url: "#" },
-            { title: "Métricas Rápidas", url: "#" },
-          ],
-        },
-        {
-          title: "Funil de Inovação",
-          url: "#",
-          icon: Users,
-          items: [
-            { title: "Captura de Ideias", url: "#" },
-            { title: "Pré-Triagem", url: "#" },
-            { title: "Ideação", url: "#" },
-            { title: "Triagem Detalhada", url: "#" },
-            { title: "POCs", url: "#" },
-          ],
-        },
-        {
-          title: "Desafios",
-          url: "#",
-          icon: ClipboardList,
-          items: [
-            { title: "Meus Desafios", url: "#" },
-            { title: "Criar Desafio", url: "#" },
-            { title: "Abertos ao Público", url: "#" },
-          ],
-        },
-        {
-          title: "Startups",
-          url: "#",
-          icon: Rocket,
-          items: [
-            { title: "Base de Startups", url: "#" },
-            { title: "Recomendações", url: "#" },
-            { title: "Matches", url: "#" },
-          ],
-        },
-        {
-          title: "Conexões",
-          url: "#",
-          icon: Network,
-          items: [
-            { title: "Histórico de Interações", url: "#" },
-            { title: "POCs em Andamento", url: "#" },
-          ],
-        },
-        {
-          title: "Relatórios",
-          url: "#",
-          icon: BarChart3,
-          items: [
-            { title: "Indicadores por Etapa", url: "#" },
-            { title: "Relatórios Personalizados", url: "#" },
-          ],
-        },
-        {
-          title: "Configurações",
-          url: "#",
-          icon: Settings,
-          items: [
-            { title: "Usuários & Permissões", url: "#" },
-          ],
-        },
-      ]
-
-  const projects = isAdmin ? data.projects : []
+  const filteredNav = navMain
+    .map((item) => {
+      if (!item.roles.includes(currentUser.role)) return null
+      const filteredItems = item.items?.filter(Boolean)
+      return { ...item, items: filteredItems }
+    })
+    .filter(Boolean) as typeof navMain
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher teams={[]} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navMain} />
-        {isAdmin && <NavProjects projects={projects} />}
+        <NavMain items={filteredNav}/>
+        <NavProjects projects={[]} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={currentUser} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

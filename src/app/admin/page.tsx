@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { BarChart3, Rocket, Lightbulb, Layers, PlusCircle, Search, Users } from "lucide-react"
+import { BarChart3, Rocket, Lightbulb, Layers, PlusCircle, Search, Users, ClipboardList } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   AreaChart,
@@ -101,14 +101,20 @@ function QuickActions() {
             <PlusCircle className="h-4 w-4" />
             Criar Desafio
           </Button>
+          <Button className="flex items-center gap-2">
+            <ClipboardList className="h-4 w-4" />
+            Lista de desafios
+          </Button>
           <Button variant="outline" className="flex items-center gap-2">
             <Search className="h-4 w-4" />
             Explorar Startups
           </Button>
+          <a href="">
           <Button variant="secondary" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
-            Convidar Colaboradores
+            Usuários
           </Button>
+          </a>
         </div>
       </CardContent>
     </Card>
