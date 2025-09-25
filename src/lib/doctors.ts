@@ -1,4 +1,3 @@
-import { Description } from "@headlessui/react";
 
 export const categories = [
   { id: 1, label: "Neurology", icon: "🧠" },

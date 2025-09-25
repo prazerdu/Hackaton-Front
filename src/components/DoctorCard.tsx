@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import HireCards from "@/app/dekstop-user/dekstop/components/HireCards";
+import Image from "next/image";
 
 type Doctor = {
   id: number;
@@ -23,7 +23,9 @@ export default function DoctorCard({ doctor }: { doctor: Doctor }) {
         onClick={() => setIsOpen(true)}
         className="flex items-center gap-3 text-gray-600 font-semibold bg-white rounded-lg p-3 shadow-sm cursor-pointer hover:shadow-md transition"
       >
-        <img
+        <Image
+          width={200}
+          height={200}
           src={doctor.avatar}
           alt={doctor.name}
           className="w-12 h-12 rounded-full object-cover"
@@ -82,7 +84,9 @@ export default function DoctorCard({ doctor }: { doctor: Doctor }) {
             >
               <Dialog.Panel className="bg-white rounded-xl p-6 shadow-lg max-w-md w-full">
                 <div className="mt-4">
-                  <img
+                  <Image
+                    width={200}
+                    height={200}
                     src={doctor.avatar}
                     alt={doctor.name}
                     className="w-24 h-24 rounded-full object-cover mx-auto"
