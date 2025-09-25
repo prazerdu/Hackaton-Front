@@ -43,8 +43,8 @@ const navMain = [
     icon: ClipboardList,
     roles: ["manager", "user"],
     items: [
-      { title: "Meus Desafios", url: "/admin/desafios/meus" },
-      { title: "Criar Desafio", url: "/admin/desafios/novo" },
+      { title: "Meus Desafios", url: "/admin/SectionDesafios/meusdesafios" },
+      { title: "Criar Desafio", url: "/admin/SectionDesafios/desafio" },
       { title: "Abertos ao Público", url: "/desafios/abertos" },
     ],
   },

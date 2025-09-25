@@ -1,5 +1,6 @@
 "use client";
-import Link from "next/link"; 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -115,6 +116,9 @@ function KPICards({ kpis }: { kpis: typeof mockKpis }) {
 }
 
 function QuickActions() {
+  // Vai receber a url da pag "admin/desafio"
+  const router = useRouter();
+
   return (
     <Card className="shadow-sm">
       <CardHeader>
@@ -122,13 +126,13 @@ function QuickActions() {
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-4">
-          <Link
-            href="/admin/desafio"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          <Button
+            onClick={() => router.push("/admin/SectionDesafios/desafio")}
+            className="flex items-center gap-2"
           >
             <PlusCircle className="h-4 w-4" />
             Criar Desafio
-          </Link>
+          </Button>
           <Button className="flex items-center gap-2">
             <ClipboardList className="h-4 w-4" />
             Lista de desafios
