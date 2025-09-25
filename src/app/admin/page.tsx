@@ -35,7 +35,7 @@ const mockKpis = {
   desafios: 12,
   startups: 34,
   pocs: 5,
-}
+};
 
 const mockChart = [
   { etapa: "Captura", qtd: 128 },
@@ -43,13 +43,28 @@ const mockChart = [
   { etapa: "Ideação", qtd: 40 },
   { etapa: "Triagem Detalhada", qtd: 18 },
   { etapa: "POCs", qtd: 5 },
-]
+];
 
 const mockAtividades = [
-  { id: 1, titulo: "Novo desafio publicado", detalhe: "Sustentabilidade na cadeia de suprimentos", data: "15/09" },
-  { id: 2, titulo: "Startup conectada", detalhe: "GreenTech Solutions", data: "14/09" },
-  { id: 3, titulo: "POC iniciada", detalhe: "Automação de processos internos", data: "13/09" },
-]
+  {
+    id: 1,
+    titulo: "Novo desafio publicado",
+    detalhe: "Sustentabilidade na cadeia de suprimentos",
+    data: "15/09",
+  },
+  {
+    id: 2,
+    titulo: "Startup conectada",
+    detalhe: "GreenTech Solutions",
+    data: "14/09",
+  },
+  {
+    id: 3,
+    titulo: "POC iniciada",
+    detalhe: "Automação de processos internos",
+    data: "13/09",
+  },
+];
 
 // --- Componentes auxiliares --- //
 
@@ -88,10 +103,13 @@ function KPICards({ kpis }: { kpis: typeof mockKpis }) {
         <CardContent><div className="text-2xl font-bold">{kpis.pocs}</div></CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 function QuickActions() {
+  // Vai receber a url da pag "admin/desafio"
+  const router = useRouter();
+
   return (
     <div className="flex flex-wrap gap-4">
       <Button><PlusCircle className="mr-2 h-4 w-4" /> Nova Ideia</Button>
@@ -99,6 +117,37 @@ function QuickActions() {
       <Button variant="secondary"><Search className="mr-2 h-4 w-4" /> Buscar Startups</Button>
     </div>
   )
+    <Card className="shadow-sm">
+      <CardHeader>
+        <CardTitle>Ações Rápidas</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-wrap gap-4">
+          <Button
+            onClick={() => router.push("/admin/SectionDesafios/desafio")}
+            className="flex items-center gap-2"
+          >
+            <PlusCircle className="h-4 w-4" />
+            Criar Desafio
+          </Button>
+          <Button className="flex items-center gap-2">
+            <ClipboardList className="h-4 w-4" />
+            Lista de desafios
+          </Button>
+          <Button variant="outline" className="flex items-center gap-2">
+            <Search className="h-4 w-4" />
+            Explorar Startups
+          </Button>
+          <a href="">
+            <Button variant="secondary" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Usuários
+            </Button>
+          </a>
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 function FunnelEvolutionChart({ data }: { data: typeof mockChart }) {
@@ -125,7 +174,7 @@ function FunnelEvolutionChart({ data }: { data: typeof mockChart }) {
         </ResponsiveContainer>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function FunnelStageChart({ data }: { data: typeof mockChart }) {
@@ -146,10 +195,14 @@ function FunnelStageChart({ data }: { data: typeof mockChart }) {
         </ResponsiveContainer>
       </CardContent>
     </Card>
-  )
+  );
 }
 
-function RecentActivities({ atividades }: { atividades: typeof mockAtividades }) {
+function RecentActivities({
+  atividades,
+}: {
+  atividades: typeof mockAtividades;
+}) {
   return (
     <Card>
       <CardHeader>
@@ -169,7 +222,7 @@ function RecentActivities({ atividades }: { atividades: typeof mockAtividades })
         </ul>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 
@@ -251,9 +304,12 @@ export default function DashboardPage() {
   return (
     <div className="p-6 space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard de Inovação</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Dashboard de Inovação
+        </h1>
         <p className="text-muted-foreground">
-          Acompanhe o desempenho e engajamento geral da sua corporação na plataforma.
+          Acompanhe o desempenho e engajamento geral da sua corporação na
+          plataforma.
         </p>
       </div>
 
@@ -263,5 +319,5 @@ export default function DashboardPage() {
       <FunnelStageChart data={data} />
       <RecentActivities atividades={atividadesRecentes} />
     </div>
-  )
+  );
 }
