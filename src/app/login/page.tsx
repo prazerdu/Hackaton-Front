@@ -1,11 +1,16 @@
 'use client'
 
 import { LoginForm } from "@/components/login-form"
+import { ModeToggle } from "@/components/theme-toggle"
 import Image from "next/image"
 
 export default function LoginPage() {
   return (
-    <div className="grid min-h-svh lg:grid-cols-2">
+    <div className="grid min-h-svh lg:grid-cols-2 relative">
+      <div className="fixed top-4 left-4 z-50">
+        <ModeToggle />
+      </div>
+
       <div className="flex flex-col gap-4 px-6 py-9 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
           <a href="https://ninnahub.com.br/" className="block sm:hidden md:hidden items-center font-medium">
@@ -25,6 +30,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+
       <div className="bg-muted relative hidden lg:block">
         <video
           src="/NinnaBGVideo.mp4"
