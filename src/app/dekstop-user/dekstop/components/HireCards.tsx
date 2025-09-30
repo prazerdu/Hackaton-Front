@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import LikeButton from "./LikeButto";
 
 const cards = [
   {
@@ -71,11 +72,10 @@ export default function HireCards({ searchQuery }: HireCardsProps) {
 
   const cardsPerPage = 5;
 
-
   const filteredCards = searchQuery
     ? cards.filter((c) =>
-        c.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      c.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
     : cards;
 
   const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
@@ -111,14 +111,24 @@ export default function HireCards({ searchQuery }: HireCardsProps) {
         </div>
       </div>
 
+
+
       {/* GRID DE CARDS */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {visibleCards.map((c) => (
           <Card
             key={c.id}
-            className="shadow-sm border hover:shadow-md transition cursor-pointer group"
+            className="shadow-sm border hover:shadow-md transition cursor-pointer group relative"
             onClick={() => setSelectedCard(c)}
           >
+            {/* LikeButton no canto superior direito */}
+            <div
+              className="absolute top-2 right-2 z-10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <LikeButton />
+            </div>
+
             <CardHeader className="flex flex-col items-center space-y-2 p-4">
               <div className="w-16 h-16 rounded-md overflow-hidden bg-indigo-50 flex items-center justify-center group-hover:scale-105 transition">
                 <Image
@@ -138,6 +148,7 @@ export default function HireCards({ searchQuery }: HireCardsProps) {
           </Card>
         ))}
       </div>
+
 
       {/* MODAL */}
       <Dialog open={!!selectedCard} onOpenChange={() => setSelectedCard(null)}>
