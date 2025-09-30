@@ -24,7 +24,7 @@ export default function Header() {
   }, [inputValue])
 
   return (
-    <header className="flex items-center justify-center p-4 bg-gray-50">
+    <header className="flex items-center text-black justify-center p-4">
       <div className="flex items-center gap-3 w-full max-w-md">
         {/* Barra de pesquisa */}
         <div className="relative flex-1">

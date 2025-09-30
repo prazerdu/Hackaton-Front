@@ -7,7 +7,7 @@ import Header from "../dekstop-user/dekstop/components/Header";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white/70 flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col text-black">
       {/* Layout Mobile (até lg) */}
       <div className="block lg:hidden flex-1 flex-col">
         <Header />

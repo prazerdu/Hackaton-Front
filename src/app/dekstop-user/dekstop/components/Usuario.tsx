@@ -9,7 +9,7 @@ export default function Usuario() {
     <Dialog>
       {/* Avatar vira trigger */}
       <DialogTrigger asChild>
-        <button className="flex items-center gap-3 sm:gap-4 focus:outline-none">
+        <button className="flex items-center gap-3 sm:gap-4 focus:outline-none cursor-pointer">
           <div className="hidden sm:flex flex-col text-right">
             <span className="text-sm font-medium">Usuario X</span>
             <span className="text-xs text-gray-400">ver perfil</span>
