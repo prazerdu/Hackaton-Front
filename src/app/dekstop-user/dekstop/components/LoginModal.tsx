@@ -32,9 +32,9 @@ export default function LoginModal() {
           </svg>
         </div>
         <DialogHeader>
-          <DialogTitle className="sm:text-center">Welcome back</DialogTitle>
+          <DialogTitle className="sm:text-center">Bem-vindo de volta</DialogTitle>
           <DialogDescription className="sm:text-center">
-            Enter your credentials to login to your account.
+            Introduza seus dados para entrar na sua conta.
           </DialogDescription>
         </DialogHeader>
       </div>
@@ -67,23 +67,20 @@ export default function LoginModal() {
               htmlFor={`${id}-remember`}
               className="text-muted-foreground font-normal"
             >
-              Remember me
+              Lembrar-me
             </Label>
           </div>
-          <a className="text-sm underline hover:no-underline" href="#">
-            Forgot password?
-          </a>
         </div>
         <Button type="button" className="w-full">
-          Sign in
+          Entrar
         </Button>
       </form>
 
       <div className="before:bg-border after:bg-border flex items-center gap-3 before:h-px before:flex-1 after:h-px after:flex-1">
-        <span className="text-muted-foreground text-xs">Or</span>
+        <span className="text-muted-foreground text-xs">Ou</span>
       </div>
 
-      <Button variant="outline">Login with Google</Button>
+      <Button variant="outline">Entrar com Google</Button>
     </DialogContent>
   );
 }

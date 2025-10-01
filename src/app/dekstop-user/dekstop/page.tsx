@@ -1,22 +1,36 @@
 "use client";
 
-import Sidebar from "@/app/dekstop-user/dekstop/components/SideBar";
+import { useState } from "react";
 import Header from "@/app/dekstop-user/dekstop/components/Header";
 import HeroBanner from "@/app/dekstop-user/dekstop/components/HeroBanner";
 import HireCards from "@/app/dekstop-user/dekstop/components/HireCards";
-import RecruitmentTable from "@/app/dekstop-user/dekstop/components/RecruitmentTable";
 import Rightbar from "@/app/dekstop-user/dekstop/components/Rightbar";
 
 export default function Dekstop() {
+  // Estado para a barra de pesquisa
+  const [searchQuery, setSearchQuery] = useState("");
+  const [likedCards, setLikedCards] = useState<Record<number, boolean>>({});
+
+  const toggleLike = (cardId: number) => {
+    setLikedCards((prev) => ({
+      ...prev,
+      [cardId]: !prev[cardId]
+    }));
+  };
+
   return (
     <div className="bg-[#e9e7ff] flex items-center text-gray-700">
       <div className="w-full bg-white/70 backdrop-blur-lg overflow-hidden flex">
         {/* <Sidebar /> */}
 
         <main className="flex-1 p-6">
-          <Header />
+          <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           <HeroBanner />
-          <HireCards />
+          <HireCards
+            searchQuery={searchQuery}
+            likedCards={likedCards}
+            toggleLike={toggleLike}
+          />
           {/* <RecruitmentTable /> */}
         </main>
 

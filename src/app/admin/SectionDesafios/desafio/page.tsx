@@ -126,7 +126,8 @@ export default function GerenciarDesafios() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target as HTMLInputElement;
+    const checked = (e.target as HTMLInputElement).checked;
 
     setFormData((prev) => ({
       ...prev,
@@ -165,9 +166,10 @@ export default function GerenciarDesafios() {
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
-        error.errors.forEach((err) => {
-          if (err.path[0]) {
-            newErrors[err.path[0]] = err.message;
+        error.issues.forEach((err) => {
+          const key = String(err.path[0]);
+          if (key) {
+            newErrors[key] = err.message;
           }
         });
         setErrors(newErrors);
@@ -202,12 +204,12 @@ export default function GerenciarDesafios() {
     setFormData({
       titulo: desafio.titulo,
       descricao: desafio.descricao,
-      objetivos: desafio.objetivos,
-      areaAtuacao: desafio.areaAtuacao,
-      beneficios: desafio.beneficios,
+      objetivos: desafio.objetivos ?? "",
+      areaAtuacao: desafio.areaAtuacao ?? "",
+      beneficios: desafio.beneficios ?? "",
       visibilidade: desafio.visibilidade,
-      dataInicio: desafio.dataInicio,
-      dataFim: desafio.dataFim,
+      dataInicio: desafio.dataInicio ?? "",
+      dataFim: desafio.dataFim ?? "",
       prazoAberto: desafio.prazoAberto,
     });
     setEditandoId(desafio.id);
@@ -503,8 +505,7 @@ export default function GerenciarDesafios() {
                                     Confirmar exclusão
                                   </AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    Tem certeza que deseja deletar o desafio "
-                                    {desafio.titulo}"? Esta ação não pode ser
+                                    Tem certeza que deseja deletar {desafio.titulo}? Esta ação não pode ser
                                     desfeita.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
