@@ -56,7 +56,7 @@ export default function NavigationHeader({ cardId, likedCards, toggleLike }: Nav
             <DialogTitle className="text-lg font-semibold">Comentários</DialogTitle>
           </DialogHeader>
 
-          {/* Renderiza o componente de comentários */}
+
           <App cardId={cardId} />
         </DialogContent>
       </Dialog>

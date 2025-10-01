@@ -30,19 +30,19 @@ export default function CommentForm({ onAddComment }: CommentFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mb-6">
       <div>
-        <label className="block font-semibold text-gray-700 mb-1">Nome:</label>
+        <label className="block font-semibold mb-1">Nome:</label>
         <input
           type="text"
-          className="w-full border border-gray-300 rounded px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-500"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
         />
       </div>
       <div>
-        <label className="block font-semibold text-gray-700 mb-1">Mensagem:</label>
+        <label className="block font-semibold mb-1">Mensagem:</label>
         <textarea
-          className="w-full border border-gray-300 rounded px-3 py-2 text-black resize-y h-24 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          className="w-full border border-gray-300 rounded px-3 py-2 resize-y h-24 focus:outline-none focus:ring-2 focus:ring-gray-500"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           required

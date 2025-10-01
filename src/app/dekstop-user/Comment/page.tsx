@@ -21,7 +21,7 @@ export default function App({ cardId }: AppProps) {
 
   return (
 
-    <div className="p-6 shadow-md rounded-md mt-10">
+    <div className="p-6 shadow-md h-[600px] rounded-md">
       <h1 className="text-2xl font-bold mb-6 text-white">Comentários</h1>
       <CommentForm onAddComment={handleAddComment} />
       <CommentList comments={comments} />

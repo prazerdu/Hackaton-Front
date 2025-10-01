@@ -36,10 +36,8 @@ export default function HireCards({ searchQuery }: HireCardsProps) {
   const [page, setPage] = useState(0);
   const [selectedCard, setSelectedCard] = useState<typeof cards[0] | null>(null);
 
-  // Estado global de likes por card
   const [likedCards, setLikedCards] = useState<Record<number, boolean>>({});
 
-  // Carrega likes do localStorage
   useEffect(() => {
     const savedLikes: Record<number, boolean> = {};
     cards.forEach(c => {
@@ -82,7 +80,7 @@ export default function HireCards({ searchQuery }: HireCardsProps) {
             </div>
             <CardHeader className="flex flex-col items-center space-y-2 p-4">
               <div className="w-16 h-16 rounded-md overflow-hidden bg-indigo-50 flex items-center justify-center group-hover:scale-105 transition">
-                <Image src={c.image} alt={c.title} width={64} height={64} className="object-cover" />
+                <Image src={c.image} alt={c.title} width={64} height={64} className="object-contain" />
               </div>
               <CardTitle className="text-sm text-center">{c.title}</CardTitle>
               <CardDescription className="text-xs text-gray-500 text-center line-clamp-2">{c.subtitle}</CardDescription>

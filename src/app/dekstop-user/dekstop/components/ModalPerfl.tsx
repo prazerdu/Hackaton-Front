@@ -21,15 +21,15 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import ProfileOptions from "./ProfileOptions"
 
-const initialBgImage = [
-  {
-    name: "profile-bg.jpg",
-    size: 1528737,
-    type: "image/jpeg",
-    url: "/profile-bg.jpg",
-    id: "profile-bg-123456789",
-  },
-]
+// const initialBgImage = [
+//   {
+//     name: "profile-bg.jpg",
+//     size: 1528737,
+//     type: "image/jpeg",
+//     url: "/profile-bg.jpg",
+//     id: "profile-bg-123456789",
+//   },
+// ]
 
 const initialAvatarImage = [
   {
@@ -68,8 +68,8 @@ export default function Component() {
           </DialogTitle>
         </DialogHeader>
         <DialogDescription className="sr-only">
-          Make changes to your profile here. You can change your photo and set a
-          username.
+          Faça alterações ao seu perfil aqui. Você pode alterar sua foto e definir um
+          nome de usuário.
         </DialogDescription>
         <div className="overflow-y-auto">
           <ProfileBg />
@@ -78,7 +78,7 @@ export default function Component() {
             <form className="space-y-4">
               <div className="flex flex-col gap-4 sm:flex-row">
                 <div className="flex-1 space-y-2">
-                  <Label htmlFor={`${id}-first-name`}>First name</Label>
+                  <Label htmlFor={`${id}-first-name`}>Primeiro nome</Label>
                   <Input
                     id={`${id}-first-name`}
                     placeholder="Matt"
@@ -88,7 +88,7 @@ export default function Component() {
                   />
                 </div>
                 <div className="flex-1 space-y-2">
-                  <Label htmlFor={`${id}-last-name`}>Last name</Label>
+                  <Label htmlFor={`${id}-last-name`}>Último nome</Label>
                   <Input
                     id={`${id}-last-name`}
                     placeholder="Welsh"
@@ -99,7 +99,7 @@ export default function Component() {
                 </div>
               </div>
               <div className="*:not-first:mt-2">
-                <Label htmlFor={`${id}-username`}>Username</Label>
+                <Label htmlFor={`${id}-username`}>Nome de usuário</Label>
                 <div className="relative">
                   <Input
                     id={`${id}-username`}
@@ -134,7 +134,7 @@ export default function Component() {
                 </div>
               </div>
               <div className="*:not-first:mt-2">
-                <Label htmlFor={`${id}-bio`}>Biography</Label>
+                <Label htmlFor={`${id}-bio`}>Biografia</Label>
                 <Textarea
                   id={`${id}-bio`}
                   placeholder="Write a few sentences about yourself"
@@ -160,11 +160,11 @@ export default function Component() {
         <DialogFooter className="border-t px-6 py-4">
           <DialogClose asChild>
             <Button type="button" variant="outline">
-              Cancel
+              Cancelar
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button type="button">Save changes</Button>
+            <Button type="button">Salvar alterações</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
@@ -176,7 +176,7 @@ function ProfileBg() {
   const [{ files }, { removeFile, openFileDialog, getInputProps }] =
     useFileUpload({
       accept: "image/*",
-      initialFiles: initialBgImage,
+      // initialFiles: initialBgImage,
     })
 
   const currentImage = files[0]?.preview || null
