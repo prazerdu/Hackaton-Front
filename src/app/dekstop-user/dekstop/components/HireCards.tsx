@@ -2,137 +2,118 @@
 
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Modal from "./Modal";
 import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import LikeButton from "./LikeButto";
+import NavigationHeader from "./NavBar";
+
+
 
 const cards = [
-  { id: 1, 
-    title: "Projeto X", 
-    subtitle: "Projeto que busca crescer na aréa da tecnologia aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
-    image: "https://i.pinimg.com/736x/35/31/74/3531741d5601c7ed9c1505d784db9b4b.jpg" },
-    
-  { id: 2, 
-    title: "Desafio Design", 
-    subtitle: "2 acessos", 
-    image: "https://i.pinimg.com/1200x/92/40/ef/9240ef093578c01b6f4e087ef9989b5a.jpg" },
-
-  { id: 3, 
-    title: "Desafio Dekstop", 
-    subtitle: "5 acessos", 
-    image: "https://i.pinimg.com/736x/42/27/71/42277172780abf5043438989d49856e2.jpg" },
-    
-  { id: 4, 
-    title: "Desafio Mobile", 
-    subtitle: "1 acesso", 
-    image: "https://i.pinimg.com/1200x/a9/fb/fe/a9fbfec81940413f28fde608c3321101.jpg" },
-
-  { id: 5, 
-    title: "Desafio Frontend", 
-    subtitle: "4 acessos", 
-    image: "https://i.pinimg.com/736x/0b/b4/17/0bb41713571ad487947c810ad18c73d4.jpg" },
-
-  // { id: 6, 
-  //   title: "Backend Developer", 
-  //   subtitle: "2 open", 
-  //   image:"https://i.pinimg.com/1200x/fc/f0/eb/fcf0ebf1eb5e49b477ebd8ca0e74d3d4.jpg" },
+  { id: 1, title: "Projeto X", subtitle: "Projeto que busca crescer na área da tecnologia e gerar impacto positivo para jovens devs.", image: "https://i.pinimg.com/736x/35/31/74/3531741d5601c7ed9c1505d784db9b4b.jpg" },
+  { id: 2, title: "Desafio Design", subtitle: "2 acessos", image: "https://i.pinimg.com/1200x/92/40/ef/9240ef093578c01b6f4e087ef9989b5a.jpg" },
+  { id: 3, title: "Desafio Desktop", subtitle: "5 acessos", image: "https://i.pinimg.com/736x/42/27/71/42277172780abf5043438989d49856e2.jpg" },
+  { id: 4, title: "Desafio Mobile", subtitle: "1 acesso", image: "https://i.pinimg.com/1200x/a9/fb/fe/a9fbfec81940413f28fde608c3321101.jpg" },
+  { id: 5, title: "Desafio Frontend", subtitle: "4 acessos", image: "https://i.pinimg.com/736x/0b/b4/17/0bb41713571ad487947c810ad18c73d4.jpg" },
 ];
 
-export default function HireCards() {
+interface HireCardsProps {
+  searchQuery: string;
+  likedCards: Record<number, boolean>;
+  toggleLike: (cardId: number) => void;
+}
+
+
+export default function HireCards({ searchQuery }: HireCardsProps) {
   const [page, setPage] = useState(0);
-  const [animating, setAnimating] = useState(false);
-  const [clicks, setClicks] = useState<{ [key: number]: number }>({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const [selectedCard, setSelectedCard] = useState<typeof cards[0] | null>(null);
 
-  const cardsPerPage = 5;
-  const totalPages = Math.ceil(cards.length / cardsPerPage);
-
-  const handlePrev = () => {
-    if (page > 0 && !animating) {
-      setAnimating(true);
-      setTimeout(() => {
-        setPage((prev) => prev - 1);
-        setAnimating(false);
-      }, 300);
-    }
-  };
-
-  const handleNext = () => {
-    if (page < totalPages - 1 && !animating) {
-      setAnimating(true);
-      setTimeout(() => {
-        setPage((prev) => prev + 1);
-        setAnimating(false);
-      }, 300);
-    }
-  };
-
-  const handleDetailsClick = async (id: number) => {
-    const res = await fetch(`/api/card/${id}`, { method: "POST" });
-    const data = await res.json();
-    setClicks((prev) => ({ ...prev, [id]: data.count }));
-
-    setSelectedCard(id);
-    setIsModalOpen(true);
-  };
-
-  const visibleCards = cards.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage);
+  const [likedCards, setLikedCards] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
-    visibleCards.forEach(async (c) => {
-      const res = await fetch(`/api/card/${c.id}`);
-      const data = await res.json();
-      setClicks((prev) => ({ ...prev, [c.id]: data.count }));
+    const savedLikes: Record<number, boolean> = {};
+    cards.forEach(c => {
+      const saved = localStorage.getItem(`isLiked-${c.id}`);
+      if (saved) savedLikes[c.id] = JSON.parse(saved);
     });
-  }, [page]);
+    setLikedCards(savedLikes);
+  }, []);
+
+  const toggleLike = (cardId: number) => {
+    const newLiked = !likedCards[cardId];
+    const newState = { ...likedCards, [cardId]: newLiked };
+    setLikedCards(newState);
+    localStorage.setItem(`isLiked-${cardId}`, JSON.stringify(newLiked));
+  };
+
+  const cardsPerPage = 5;
+  const filteredCards = searchQuery
+    ? cards.filter(c => c.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    : cards;
+  const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
+  const visibleCards = filteredCards.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage);
 
   return (
     <section className="mb-6 mt-2">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-medium">Novos Desafios</h3>
+        <h3 className="text-lg font-semibold tracking-tight">Novos Desafios</h3>
         <div className="flex items-center gap-2">
-          {page > 0 && (
-            <button onClick={handlePrev} className="bg-white shadow-md p-2 rounded-full hover:bg-gray-100">
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
-            </button>
-          )}
-          <button className="text-sm text-indigo-600 cursor-pointer">View All</button>
-          {page < totalPages - 1 && (
-            <button onClick={handleNext} className="bg-white shadow-md p-2 rounded-full cursor-pointer hover:bg-gray-100">
-              <ChevronRight className="w-5 h-5 text-gray-600" />
-            </button>
-          )}
+          {page > 0 && <button onClick={() => setPage(p => p - 1)} className="bg-white shadow-md p-2 rounded-full hover:bg-gray-100"><ChevronLeft size={16} /></button>}
+          {page < totalPages - 1 && <button onClick={() => setPage(p => p + 1)} className="bg-white shadow-md p-2 rounded-full hover:bg-gray-100"><ChevronRight size={16} /></button>}
         </div>
       </div>
 
+      {/* GRID DE CARDS */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        {visibleCards.map((c) => (
-          <div
-            key={c.id}
-            className={`bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col items-start gap-2 transform transition-all duration-300 ${animating ? "-translate-x-4 opacity-0" : "translate-x-0 opacity-100"
-              }`}
-          >
-            <div className="w-12 h-12 rounded-md mb-2 overflow-hidden flex items-center justify-center bg-indigo-50">
-              <div className="w-14 h-14 rounded-md overflow-hidden relative bg-indigo-50">
-                <Image src={c.image} alt={c.title} fill className="object-cover" />
+        {visibleCards.map(c => (
+          <Card key={c.id} className="shadow-sm border hover:shadow-md transition cursor-pointer group relative" onClick={() => setSelectedCard(c)}>
+            <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
+              <LikeButton cardId={c.id} isLiked={likedCards[c.id] || false} toggleLike={toggleLike} />
+            </div>
+            <CardHeader className="flex flex-col items-center space-y-2 p-4">
+              <div className="w-16 h-16 rounded-md overflow-hidden bg-indigo-50 flex items-center justify-center group-hover:scale-105 transition">
+                <Image src={c.image} alt={c.title} width={64} height={64} className="object-contain" />
               </div>
-            </div>
-            <div className="text-sm font-medium">{c.title}</div>
-            <div className="text-xs text-gray-400 truncate w-40">
-              {c.subtitle}
-            </div>
-
-            {/* Botão Detalhes */}
-            <button
-              onClick={() => handleDetailsClick(c.id)}
-              className="text-sm text-indigo-600 hover:underline"
-            >
-             <Modal card={c} />
-
-            </button>
-          </div>
+              <CardTitle className="text-sm text-center">{c.title}</CardTitle>
+              <CardDescription className="text-xs text-gray-500 text-center line-clamp-2">{c.subtitle}</CardDescription>
+            </CardHeader>
+          </Card>
         ))}
       </div>
+
+      {/* MODAL */}
+      <Dialog open={!!selectedCard} onOpenChange={() => setSelectedCard(null)}>
+        <DialogContent className="max-w-md rounded-2xl">
+          {selectedCard && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-xl font-semibold">{selectedCard.title}</DialogTitle>
+                <DialogDescription>{selectedCard.subtitle}</DialogDescription>
+              </DialogHeader>
+              <div className="mt-4">
+                <Image src={selectedCard.image} alt={selectedCard.title} width={400} height={250} className="w-full h-48 rounded-lg object-cover shadow-md" />
+              </div>
+              <NavigationHeader
+                cardId={selectedCard.id}
+                likedCards={likedCards}
+                toggleLike={toggleLike}
+              />
+              <div className="flex justify-end gap-2 mt-6">
+                <Button variant="outline" onClick={() => setSelectedCard(null)}>Fechar</Button>
+                <Button onClick={() => alert(`Acessando ${selectedCard.title}`)}>Acessar</Button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
