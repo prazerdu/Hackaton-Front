@@ -363,7 +363,7 @@ export default function Desafiopage() {
                                     Confirmar exclusão
                                   </AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    Tem certeza que deseja excluir o desafio "{desafio.titulo}"? 
+                                    Tem certeza que deseja excluir o desafio {desafio.titulo}? 
                                     Esta ação não pode ser desfeita.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
