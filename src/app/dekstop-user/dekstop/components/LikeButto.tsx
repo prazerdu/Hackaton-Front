@@ -13,7 +13,7 @@ interface LikeButtonProps {
 
 export default function LikeButton({ cardId }: LikeButtonProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const [likes, setLikes] = useState(0);
+  const [likes, setLikes] = useState();
 
   useEffect(() => {
     // Carrega estado do card específico
@@ -21,20 +21,16 @@ export default function LikeButton({ cardId }: LikeButtonProps) {
     const savedLikes = localStorage.getItem(`likes-${cardId}`);
 
     if (savedLiked) setIsLiked(JSON.parse(savedLiked));
-    if (savedLikes) setLikes(Number(savedLikes));
   }, [cardId]);
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // evita abrir modais ao clicar no like
     const newLiked = !isLiked;
-    const newLikes = newLiked ? likes + 1 : likes - 1;
 
     setIsLiked(newLiked);
-    setLikes(newLikes);
 
     // Salva no localStorage por card
     localStorage.setItem(`isLiked-${cardId}`, JSON.stringify(newLiked));
-    localStorage.setItem(`likes-${cardId}`, newLikes.toString());
   };
 
   return (
