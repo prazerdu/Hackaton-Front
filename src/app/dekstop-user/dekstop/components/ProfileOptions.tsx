@@ -4,7 +4,7 @@ import { Bell, Paintbrush, Download, CreditCard } from "lucide-react";
 
 export default function ProfileOptions() {
   return (
-    <div className="mt-8 w-full h-[900px] max-w-md bg-white rounded-2xl shadow-md p-8 space-y-10 text-gray-600 font-semibold">
+    <div className="mt-8 w-full  max-w-md rounded-2xl shadow-md p-8 space-y-10 text-gray-200">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Bell className="text-pink-500" />

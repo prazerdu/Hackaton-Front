@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import LoginModal from "./LoginModal";
+import Component from "./ModalPerfl";
 
 export default function Usuario() {
   return (
@@ -26,6 +27,9 @@ export default function Usuario() {
 
       {/* Conteúdo do modal */}
       <LoginModal />
+
+      {/* quando clicar no avatar abre o modal de login, se não for logado, quando for, abre o modal de perfil */}
+      <Component />
     </Dialog>
   );
 }

@@ -63,7 +63,6 @@ export default function ProjectCards() {
     },
   ];
 
-  // solicitações (exemplo)
   const solicitacoes = [
     { id: 1, desafio: "Desafio Front-end", data: "20/09/2025", status: "pendente" },
     { id: 2, desafio: "Desafio UX Design", data: "18/09/2025", status: "aprovado" },
@@ -100,7 +99,7 @@ export default function ProjectCards() {
           <DialogTrigger asChild>
             <Card
               onClick={() => setSelectedProject(project)}
-              className={`cursor-pointer p-3 transition-transform hover:scale-[1.02] ${
+              className={`cursor-pointer p-6 transition-transform hover:scale-[1.02] ${
                 project.highlight ? "bg-blue-900 text-white" : ""
               }`}
             >
