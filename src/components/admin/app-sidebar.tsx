@@ -84,7 +84,7 @@ const navMain = [
     url: "/admin/config",
     icon: Settings,
     roles: ["manager"],
-    items: [{ title: "Usuários & Permissões", url: "/admin/config/usuarios" }],
+    items: [{ title: "Usuários & Permissões", url: "/admin/users" }],
   },
 ]
 

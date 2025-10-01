@@ -21,7 +21,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// Sidebar para corporações
 const data = {
   user: {
     name: "Maria Silva",

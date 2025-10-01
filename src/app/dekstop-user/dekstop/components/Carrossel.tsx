@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 interface CarouselProps {
   images: string[];
@@ -35,10 +36,10 @@ export default function Carousel({ images }: CarouselProps) {
 
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
         {images.map((_, i) => (
-          <button
+          <Button
             key={i}
             onClick={() => setIndex(i)}
-            className={`w-1.5 h-1.5 rounded-full transition-all ${
+            className={`w-1.5 h-1.5 p-1 rounded-full transition-all ${
               i === index ? "bg-white scale-110" : "bg-white/50"
             }`}
           />
