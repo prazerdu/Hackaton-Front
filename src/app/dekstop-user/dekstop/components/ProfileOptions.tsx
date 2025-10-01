@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Bell, Download, CreditCard, Heart } from "lucide-react";
+import { Bell, CreditCard, Heart } from "lucide-react";
 
 const iconChecked = {
   icon: "/icons/checklist.png",

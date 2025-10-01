@@ -34,11 +34,30 @@ function Progress({ value }: ProgressProps) {
   );
 }
 
-export default function ProjectCards() {
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+interface Project {
+  id: number;
+  title: string;
+  progress: number;
+  icon: string | React.ReactNode;
+  highlight: boolean;
+  description: string;
+  count: number;
+  isImage: boolean;
+  type: "solicitacoes" | "completos";
+}
 
-  // cards principais
-  const projects = [
+interface Solicitacao {
+  id: number;
+  desafio: string;
+  data: string;
+  status: "pendente" | "aprovado" | "recusado";
+}
+
+export default function ProjectCards() {
+  // corrigido: tipagem explícita
+  const [, setSelectedProject] = useState<Project | null>(null);
+
+  const projects: Project[] = [
     {
       id: 1,
       title: "Desafios Solicitados",
@@ -63,13 +82,13 @@ export default function ProjectCards() {
     },
   ];
 
-  const solicitacoes = [
+  const solicitacoes: Solicitacao[] = [
     { id: 1, desafio: "Desafio Front-end", data: "20/09/2025", status: "pendente" },
     { id: 2, desafio: "Desafio UX Design", data: "18/09/2025", status: "aprovado" },
     { id: 3, desafio: "Desafio de Dados", data: "15/09/2025", status: "recusado" },
   ];
 
-  const renderStatus = (status: string) => {
+  const renderStatus = (status: Solicitacao["status"]) => {
     switch (status) {
       case "pendente":
         return (
@@ -106,7 +125,7 @@ export default function ProjectCards() {
               <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0">
                 {project.isImage ? (
                   <Image
-                    src={project.icon}
+                    src={project.icon as string}
                     alt={project.title}
                     width={24}
                     height={24}

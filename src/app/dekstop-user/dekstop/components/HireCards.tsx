@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import {
   Card,
-  CardContent,
   CardHeader,
   CardTitle,
   CardDescription,

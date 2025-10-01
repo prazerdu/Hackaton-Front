@@ -13,12 +13,11 @@ interface LikeButtonProps {
 
 export default function LikeButton({ cardId }: LikeButtonProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const [likes, setLikes] = useState();
+  const [likes] = useState();
 
   useEffect(() => {
     // Carrega estado do card específico
     const savedLiked = localStorage.getItem(`isLiked-${cardId}`);
-    const savedLikes = localStorage.getItem(`likes-${cardId}`);
 
     if (savedLiked) setIsLiked(JSON.parse(savedLiked));
   }, [cardId]);

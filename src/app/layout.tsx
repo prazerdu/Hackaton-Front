@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Ninna Hub",
   description: "Plataforma de Inovação Aberta",
+  icons: {
+    icon:"/favicon.ico"
+  }
 };
 
 export default function RootLayout({

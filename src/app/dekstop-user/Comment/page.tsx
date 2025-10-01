@@ -8,11 +8,7 @@ type CommentType = {
   message: string
   timestamp: string
 }
-interface AppProps {
-  cardId: number;
-}
-
-export default function App({ cardId }: AppProps) {
+export default function App() {
   const [comments, setComments] = useState<CommentType[]>([])
 
   const handleAddComment = (comment: CommentType) => {

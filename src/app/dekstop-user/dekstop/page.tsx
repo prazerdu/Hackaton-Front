@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Sidebar from "@/app/dekstop-user/dekstop/components/SideBar";
 import Header from "@/app/dekstop-user/dekstop/components/Header";
 import HeroBanner from "@/app/dekstop-user/dekstop/components/HeroBanner";
 import HireCards from "@/app/dekstop-user/dekstop/components/HireCards";

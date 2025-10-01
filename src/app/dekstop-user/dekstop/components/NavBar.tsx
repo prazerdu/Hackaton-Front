@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { HeartIcon, MessageCircleIcon, CircleIcon } from "lucide-react";
+import { MessageCircleIcon, CircleIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -57,7 +57,7 @@ export default function NavigationHeader({ cardId, likedCards, toggleLike }: Nav
           </DialogHeader>
 
 
-          <App cardId={cardId} />
+          <App/>
         </DialogContent>
       </Dialog>
     </header>

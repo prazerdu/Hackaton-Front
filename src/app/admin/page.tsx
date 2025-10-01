@@ -111,12 +111,6 @@ function QuickActions() {
   const router = useRouter();
 
   return (
-    <div className="flex flex-wrap gap-4">
-      <Button><PlusCircle className="mr-2 h-4 w-4" /> Nova Ideia</Button>
-      <Button variant="secondary"><ClipboardList className="mr-2 h-4 w-4" /> Novo Desafio</Button>
-      <Button variant="secondary"><Search className="mr-2 h-4 w-4" /> Buscar Startups</Button>
-    </div>
-  )
     <Card className="shadow-sm">
       <CardHeader>
         <CardTitle>Ações Rápidas</CardTitle>

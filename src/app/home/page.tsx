@@ -1,11 +1,9 @@
 "use client";
 import Banner from "@/components/Banner";
-import Dekstop from "../dekstop-user/dekstop/page";
-import HireCards from "../dekstop-user/dekstop/components/HireCards";
-import Rightbar from "../dekstop-user/dekstop/components/Rightbar";
 import Header from "../dekstop-user/dekstop/components/Header";
-import NavigationHeader from "../dekstop-user/dekstop/components/NavBar";
 import React, { useState } from "react";
+import HireCards from "../dekstop-user/dekstop/components/HireCards";
+import ProjectCards from "../dekstop-user/dekstop/components/Rightbar";
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,7 +25,7 @@ export default function HomePage() {
 
         <div className="px-4 flex-1 flex flex-col overflow-hidden">
           <Banner />
-          <Rightbar />
+          <ProjectCards />
           
           {/* Hire Cards */}
           <div className="mt-4 flex-shrink-0">
@@ -38,11 +36,6 @@ export default function HomePage() {
             />
           </div>
         </div>
-      </div>
-
-      {/* Layout Desktop */}
-      <div className="hidden lg:block">
-        <Dekstop />
       </div>
     </div>
   );
