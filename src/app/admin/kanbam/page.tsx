@@ -28,18 +28,18 @@ interface Column {
 
 export default function KanbanBoard() {
   const [columns] = useState<Column[]>([
-    { id: "todo", title: "Captura de ideias", color: "bg-blue-500" },
-    { id: "inProgress", title: "In Progress", color: "bg-yellow-500" },
-    { id: "review", title: "Review", color: "bg-purple-500" },
-    { id: "testing", title: "Testing", color: "bg-orange-500" },
-    { id: "done", title: "Done", color: "bg-green-500" },
+    { id: "GENERATION", title: "Captura de ideias", color: "bg-blue-500" },
+    { id: "PRETRIAGEM", title: "Pré-Triagem", color: "bg-yellow-500" },
+    { id: "IDEACAO", title: "Ideação", color: "bg-purple-500" },
+    { id: "TRIAGEM", title: "Triagem", color: "bg-orange-500" },
+    { id: "POCS", title: "POCs", color: "bg-green-500" },
   ]);
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDescription, setNewTaskDescription] = useState("");
-  const [selectedColumn, setSelectedColumn] = useState("todo");
+  const [selectedColumn, setSelectedColumn] = useState("GENERATION");
   const [draggedTask, setDraggedTask] = useState<string | null>(null);
 
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
@@ -98,8 +98,8 @@ export default function KanbanBoard() {
             onClick={() => setIsAddingTask(true)}
             className="bg-primary hover:bg-primary/90"
           >
-            <Plus className="mr-2 h-4 w-4" />
-            Add Task
+            <Plus className="h-4 w-4" />
+            Adicionar ideia
           </Button>
         </div>
 
@@ -108,21 +108,21 @@ export default function KanbanBoard() {
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <Card className="w-full max-w-md">
               <CardHeader>
-                <CardTitle>Add New Task</CardTitle>
+                <CardTitle>Adicionar ideia</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Input
-                  placeholder="Task title"
+                  placeholder="Título da ideia"
                   value={newTaskTitle}
                   onChange={(e) => setNewTaskTitle(e.target.value)}
                 />
                 <Textarea
-                  placeholder="Task description"
+                  placeholder="Descrição da ideia"
                   value={newTaskDescription}
                   onChange={(e) => setNewTaskDescription(e.target.value)}
                 />
                 <label htmlFor="column-select" className="sr-only">
-                  Select column
+                  Selecionar coluna
                 </label>
                 <select
                   id="column-select"
@@ -142,13 +142,13 @@ export default function KanbanBoard() {
                     onClick={addTask}
                     className="bg-primary hover:bg-primary/90"
                   >
-                    Add Task
+                    Adicionar ideia
                   </Button>
                   <Button
                     variant="outline"
                     onClick={() => setIsAddingTask(false)}
                   >
-                    Cancel
+                    Cencelar
                   </Button>
                 </div>
               </CardContent>

@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
+import { SignupModal } from "@/components/signup-modal"
 
 interface User {
   id: string
@@ -82,8 +83,9 @@ export default function UsersPage() {
   return (
     <div className="p-6">
       <Card className="w-full shadow-md">
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Usuários da Empresa</CardTitle>
+          <SignupModal />
         </CardHeader>
         <CardContent>
           {loading ? (

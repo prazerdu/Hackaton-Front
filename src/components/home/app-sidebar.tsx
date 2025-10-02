@@ -1,42 +1,127 @@
 "use client"
 
 import * as React from "react"
-import { Home, Info, Users } from "lucide-react"
+import { Camera, ChartArea, ChartBar, FileIcon, FolderIcon, IndentDecreaseIcon, Info, ListIcon, UsersIcon } from "lucide-react"
 
-import { NavMain } from "./nav-main"
-import { Sidebar, SidebarContent, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
+import { NavMain } from "@/components/nav-main"
+import { NavUser } from "@/components/nav-user"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar"
 
-const publicNav = [
-  {
-    title: "Início",
-    url: "/",
-    icon: Home,
-    items: [],
+const data = {
+  user: {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
   },
-  {
-    title: "Sobre",
-    url: "/sobre",
-    icon: Info,
-    items: [],
-  },
-  {
-    title: "Comunidade",
-    url: "/comunidade",
-    icon: Users,
-    items: [],
-  },
-]
+  navMain: [
+    {
+      title: "Dashboard",
+      url: "#",
+      icon: ChartArea,
+    },
+    {
+      title: "Lifecycle",
+      url: "#",
+      icon: ListIcon,
+    },
+    {
+      title: "Analytics",
+      url: "#",
+      icon: ChartBar,
+    },
+    {
+      title: "Projects",
+      url: "#",
+      icon: FolderIcon,
+    },
+    {
+      title: "Team",
+      url: "#",
+      icon: UsersIcon,
+    },
+  ],
+  navClouds: [
+    {
+      title: "Capture",
+      icon: Camera,
+      isActive: true,
+      url: "#",
+      items: [
+        {
+          title: "Active Proposals",
+          url: "#",
+        },
+        {
+          title: "Archived",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Proposal",
+      icon: FileIcon,
+      url: "#",
+      items: [
+        {
+          title: "Active Proposals",
+          url: "#",
+        },
+        {
+          title: "Archived",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Prompts",
+      icon: Info,
+      url: "#",
+      items: [
+        {
+          title: "Active Proposals",
+          url: "#",
+        },
+        {
+          title: "Archived",
+          url: "#",
+        },
+      ],
+    },
+  ],
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <h1 className="text-lg font-semibold px-2">Portal Público</h1>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
+            >
+              <a href="#">
+                <IndentDecreaseIcon className="!size-5" />
+                <span className="text-base font-semibold">Acme Inc.</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={publicNav} />
+        <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarRail />
+      <SidebarFooter>
+        <NavUser user={data.user} />
+      </SidebarFooter>
     </Sidebar>
   )
 }
