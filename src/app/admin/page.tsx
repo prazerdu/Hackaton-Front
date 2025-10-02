@@ -132,7 +132,7 @@ function QuickActions() {
             <Search className="h-4 w-4" />
             Explorar Startups
           </Button>
-          <a href="">
+          <a href="/admin/users">
             <Button variant="secondary" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               Usuários

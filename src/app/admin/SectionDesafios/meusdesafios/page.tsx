@@ -282,12 +282,6 @@ export default function Desafiopage() {
 
         {/* Lista de Desafios */}
         <Card>
-          <CardHeader>
-            <CardTitle>Gerenciamento de Desafios</CardTitle>
-            <CardDescription>
-              Lista completa de desafios da plataforma
-            </CardDescription>
-          </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between mb-6">
               <div>
