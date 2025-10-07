@@ -77,8 +77,10 @@ export default function DashboardLayout({
         <main className="flex-1 overflow-y-auto">
           <div className="p-2 flex justify-between gap-16">
             <SidebarTrigger />
-            <ModeToggle />
-            <LogoutButton />
+            <div className="space-x-2">
+              <ModeToggle />
+              <LogoutButton />
+            </div>
           </div>
           <div className="p-4">{children}</div>
         </main>

@@ -18,6 +18,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
+import { SignupModal } from "@/components/signup-modal"
+import { Button } from "@/components/ui/button"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface User {
   id: string
@@ -38,6 +41,8 @@ interface TokenPayload {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const usersPerPage = 10
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -67,7 +72,6 @@ export default function UsersPage() {
             },
           }
         )
-
         setUsers(res.data)
       } catch (error) {
         console.error("Erro ao buscar usuários:", error)
@@ -79,11 +83,25 @@ export default function UsersPage() {
     fetchUsers()
   }, [])
 
+  const totalPages = Math.ceil(users.length / usersPerPage)
+  const startIndex = (currentPage - 1) * usersPerPage
+  const endIndex = startIndex + usersPerPage
+  const paginatedUsers = users.slice(startIndex, endIndex)
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1))
+  }
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+  }
+
   return (
     <div className="p-6">
       <Card className="w-full shadow-md">
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Usuários da Empresa</CardTitle>
+          <SignupModal />
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -92,34 +110,59 @@ export default function UsersPage() {
               <p className="font-semibold mt-2">Carregando dados...</p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Cargo</TableHead>
-                  <TableHead>Data de Criação</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.role}</TableCell>
-                    <TableCell>
-                      {new Date(user.createdAt).toLocaleDateString("pt-BR", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </TableCell>
+            <>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Cargo</TableHead>
+                    <TableHead>Data de Criação</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {paginatedUsers.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.name}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.role}</TableCell>
+                      <TableCell>
+                        {new Date(user.createdAt).toLocaleDateString("pt-BR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+
+              {/* Paginação */}
+              {users.length > usersPerPage && (
+                <div className="flex justify-between items-center mt-3">
+                  <Button
+                    variant="outline"
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft/> Anterior
+                  </Button>
+                  <p className="text-sm font-medium">
+                    Página {currentPage} de {totalPages}
+                  </p>
+                  <Button
+                    variant="default"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                  >
+                    Próximo <ChevronRight/>
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
