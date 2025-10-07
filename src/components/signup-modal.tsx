@@ -14,7 +14,14 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Plus } from "lucide-react"
 
 type JwtPayload = {
   companyId: string
@@ -63,59 +70,91 @@ export function SignupModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Criar Usuário</Button>
+        <Button className="font-medium transition-all duration-200 shadow-md">
+          <Plus/> Criar Usuário
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-md p-6 rounded-2xl shadow-xl">
         <DialogHeader>
-          <DialogTitle>Registrar Usuário</DialogTitle>
+          <DialogTitle className="text-xl font-bold text-center">
+            Registrar Novo Usuário
+          </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+
+        <div className="space-y-5 mt-4">
           <div className="grid gap-2">
-            <Label htmlFor="name">Nome</Label>
+            <Label htmlFor="name" className="text-sm font-medium">
+              Nome
+            </Label>
             <Input
               id="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              className="rounded-lg focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
+
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-sm font-medium">
+              Email
+            </Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="rounded-lg focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
+
           <div className="grid gap-2">
-            <Label htmlFor="password">Senha</Label>
+            <Label htmlFor="password" className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              Senha
+            </Label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="rounded-lg focus:ring-2"
               required
             />
           </div>
+
           <div className="grid gap-2">
-            <Label>Role</Label>
-            <Select value={role} onValueChange={(val: "MANAGER" | "EVALUATOR" | "COMMON") => setRole(val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione uma role" />
+            <Label className="text-sm font-medium">
+              Função
+            </Label>
+            <Select
+              value={role}
+              onValueChange={(val: "MANAGER" | "EVALUATOR" | "COMMON") => setRole(val)}
+            >
+              <SelectTrigger className="rounded-lg focus:ring-2 focus:ring-blue-500">
+                <SelectValue placeholder="Selecione uma função" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="COMMON">COMMON</SelectItem>
-                <SelectItem value="EVALUATOR">EVALUATOR</SelectItem>
-                <SelectItem value="MANAGER">MANAGER</SelectItem>
+                <SelectItem value="COMMON">Usuário Comum</SelectItem>
+                <SelectItem value="EVALUATOR">Avaliador</SelectItem>
+                <SelectItem value="MANAGER">Gerente</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          {error && <p className="text-sm text-red-500">{error}</p>}
-          <Button onClick={handleRegister} disabled={loading} className="w-full">
-            {loading ? "Criando..." : "Registrar"}
+
+          {error && (
+            <p className="text-sm text-red-500 bg-red-50 dark:bg-red-950/40 p-2 rounded-md border border-red-200 dark:border-red-800">
+              {error}
+            </p>
+          )}
+
+          <Button
+            onClick={handleRegister}
+            disabled={loading}
+            className="w-full py-2 font-medium rounded-lg shadow-md transition-all duration-200"
+          >
+            {loading ? "Criando usuário..." : "Registrar Usuário"}
           </Button>
         </div>
       </DialogContent>

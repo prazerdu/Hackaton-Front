@@ -58,7 +58,7 @@ export default function DashboardLayout({
 
   if (loading) {
     return(
-      <div className="flex justify-center items-center mt-80">
+      <div className="flex justify-center items-center h-screen">
         <Spinner className="text-[#8884d8]" variant="bars"/>
       </div>
     )
@@ -70,7 +70,7 @@ export default function DashboardLayout({
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <div className="flex min-h-screen w-screen">
         <AppSidebar />
 

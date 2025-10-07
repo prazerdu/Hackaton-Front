@@ -1,6 +1,6 @@
 "use client"
 
-import { AppSidebar } from "@/components/app-sidebar" 
+import { AppSidebar } from "@/components/common/app-sidebar" 
 import { LogoutButton } from "@/components/log-out"
 import { ModeToggle } from "@/components/theme-toggle"
 import {

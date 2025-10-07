@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Users, BarChart3, Settings, ClipboardList, Network, Rocket } from "lucide-react"
+import { Users, BarChart3, Settings, ClipboardList, Network, Rocket, LayoutGrid } from "lucide-react"
 
 import { NavMain } from "./nav-main"
 import { NavProjects } from "@/components/admin/nav-projects"
@@ -26,15 +26,11 @@ const navMain = [
   },
   {
     title: "Funil de Inovação",
-    url: "/admin/kanbam",
-    icon: Users,
+    url: "/admin/funil/kanbam",
+    icon: LayoutGrid,
     roles: ["manager", "evaluator"],
     items: [
-      { title: "Kanbam", url: "/admin/kanbam" },
-      { title: "Pré-Triagem", url: "/admin/funil/pre-triagem" },
-      { title: "Ideação", url: "/admin/funil/ideacao" },
-      { title: "Triagem Detalhada", url: "/admin/funil/triagem" },
-      { title: "Experimentação (POCs)", url: "/admin/funil/pocs" },
+      { title: "Kanbam", url: "/admin/funil/kanbam" },
     ],
   },
   {
@@ -43,9 +39,9 @@ const navMain = [
     icon: ClipboardList,
     roles: ["manager", "user"],
     items: [
-      { title: "Meus Desafios", url: "/admin/SectionDesafios/meusdesafios" },
-      { title: "Criar Desafio", url: "/admin/SectionDesafios/desafio" },
-      { title: "Abertos ao Público", url: "/desafios/abertos" },
+      { title: "Meus Desafios", url: "/admin/desafios/meus-desafios" },
+      { title: "Criar Desafio", url: "/admin/desafios/criar" },
+      { title: "Abertos ao Público", url: "admin/desafios/publicos" },
     ],
   },
   {
@@ -76,13 +72,12 @@ const navMain = [
     roles: ["manager"],
     items: [
       { title: "Indicadores por Etapa", url: "/admin/relatorios/etapas" },
-      { title: "Relatórios Personalizados", url: "/admin/relatorios/personalizados" },
     ],
   },
   {
     title: "Configurações",
     url: "/admin/config",
-    icon: Settings,
+    icon: Users,
     roles: ["manager"],
     items: [{ title: "Usuários & Permissões", url: "/admin/users" }],
   },

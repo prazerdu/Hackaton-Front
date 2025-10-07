@@ -3,8 +3,8 @@
 import * as React from "react"
 import { Camera, ChartArea, ChartBar, FileIcon, FolderIcon, IndentDecreaseIcon, Info, ListIcon, UsersIcon } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/common/nav-main"
+import { NavUser } from "@/components/common/nav-user"
 import {
   Sidebar,
   SidebarContent,
