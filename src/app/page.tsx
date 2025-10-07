@@ -1,6 +1,7 @@
 import HeroSection from '@/components/shadcn-studio/blocks/hero-section01/hero-section-01'
 import Header from '@/components/shadcn-studio/blocks/hero-section01/header'
 import type { NavigationSection } from '@/components/shadcn-studio/blocks/hero-section01/header'
+import ElasticCard from '@/components/elasticCard'
 
 const navigationData: NavigationSection[] = [
   {
@@ -31,6 +32,10 @@ const HeroSectionPage = () => {
       <main className='flex flex-col'>
         <HeroSection />
       </main>
+      .
+      <div className='p-10'>
+        <ElasticCard />
+      </div>
     </div>
   )
 }
