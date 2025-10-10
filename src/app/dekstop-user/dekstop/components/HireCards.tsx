@@ -136,7 +136,6 @@ const challenges: Challenge[] = [
   },
 ]
 
-// --- componente de dialog ---
 const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
   const [accepted, setAccepted] = useState(false)
   const [participants, setParticipants] = useState(challenge.participants)

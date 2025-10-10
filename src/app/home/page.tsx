@@ -9,7 +9,7 @@ export default function HomePage() {
           <div className="">
           </div>
 
-          <div className="mt-4 flex-shrink-0">
+          <div className="flex-shrink-0">
             <CardTweetDemo/>
           </div>
         </div>
