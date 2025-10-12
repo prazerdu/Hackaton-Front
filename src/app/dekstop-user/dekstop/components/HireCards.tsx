@@ -38,7 +38,7 @@ type Challenge = {
     logo: string
     verified?: boolean
   }
-  area: string
+  category: string
   problem: string
   goal: string
   description: string
@@ -58,7 +58,7 @@ const challenges: Challenge[] = [
       logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png',
       verified: true,
     },
-    area: 'Logística e Sustentabilidade',
+    category: 'Logística e Sustentabilidade',
     problem:
       'Nossa operação logística tem alto custo de combustível e impacto ambiental elevado.',
     goal:
@@ -78,7 +78,7 @@ const challenges: Challenge[] = [
       name: 'AgroFuturo',
       logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-6.png',
     },
-    area: 'Agricultura e Tecnologia',
+    category: 'Agricultura e Tecnologia',
     problem:
       'Pequenos agricultores têm dificuldade em monitorar suas plantações e prever pragas.',
     goal:
@@ -99,7 +99,7 @@ const challenges: Challenge[] = [
       logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-7.png',
       verified: true,
     },
-    area: 'Saúde Digital',
+    category: 'Saúde Digital',
     problem:
       'Alta taxa de absenteísmo em consultas médicas devido à falta de lembretes eficientes.',
     goal:
@@ -120,7 +120,7 @@ const challenges: Challenge[] = [
       logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-9.png',
       verified: true,
     },
-    area: 'Inovação e Transformação Digital',
+    category: 'Inovação e Transformação Digital',
     problem:
       'Empresas e startups têm dificuldade em encontrar um ambiente digital unificado para inovação aberta.',
     goal:
@@ -161,7 +161,7 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
                   {challenge.corporation.name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex flex-col gap-0.5">
+              <div className="flex flex-col">
                 <CardTitle className="flex items-center gap-1 text-sm">
                   {challenge.corporation.name}
                   {challenge.corporation.verified && (
@@ -170,7 +170,7 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
                 </CardTitle>
                 <CardDescription>Corporação</CardDescription>
                 <Badge variant="secondary" className="mt-1 text-xs">
-                  {challenge.area}
+                  {challenge.category}
                 </Badge>
               </div>
             </div>
@@ -208,8 +208,8 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
             <p>{challenge.goal}</p>
           </div>
           <div>
-            <p className="font-semibold text-blue-600">Área</p>
-            <Badge variant="secondary">{challenge.area}</Badge>
+            <p className="font-semibold text-blue-600">Categoria</p>
+            <Badge variant="secondary">{challenge.category}</Badge>
           </div>
           <p>{challenge.description}</p>
 
@@ -246,30 +246,63 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
   )
 }
 
-// --- componente da lista com search ---
+// --- lista com busca e filtros como badges ---
 const ChallengesList = () => {
   const [search, setSearch] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
 
-  const filteredChallenges = challenges.filter(
-    (c) =>
+  const categories = Array.from(new Set(challenges.map((c) => c.category)))
+
+  const filteredChallenges = challenges.filter((c) => {
+    const matchesSearch =
       c.corporation.name.toLowerCase().includes(search.toLowerCase()) ||
       c.problem.toLowerCase().includes(search.toLowerCase()) ||
-      c.area.toLowerCase().includes(search.toLowerCase())
-  )
+      c.category.toLowerCase().includes(search.toLowerCase())
+
+    const matchesCategory =
+      selectedCategory === '' || c.category === selectedCategory
+
+    return matchesSearch && matchesCategory
+  })
 
   return (
-    <div className="p-4">
-      <div className="relative mb-4">
+    <div className="space-y-4">
+      {/* busca */}
+      <div className="relative w-full mt-1 max-w-[700px] mx-auto">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-4" />
         <Input
-          placeholder="Buscar desafios por corporação, problema ou área..."
+          placeholder="Buscar desafios por corporação, problema ou categoria..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="pl-10"
+          className="pl-10 bg-background text-foreground border-input focus:ring-ring focus:border-ring"
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* filtros como badges horizontais com scroll suave */}
+      <div className="flex gap-2 overflow-x-auto px-3 py-1 justify-center scrollbar-none">
+        <Badge
+          variant={selectedCategory === '' ? 'default' : 'outline'}
+          className="flex-shrink-0 cursor-pointer px-2.5 py-1 text-xs"
+          onClick={() => setSelectedCategory('')}
+        >
+          Todas
+        </Badge>
+
+        {categories.map((cat) => (
+          <Badge
+            key={cat}
+            variant={selectedCategory === cat ? 'default' : 'outline'}
+            className="flex-shrink-0 cursor-pointer px-2 py-2.5 text-xs"
+            onClick={() => setSelectedCategory(cat)}
+          >
+            {cat}
+          </Badge>
+        ))}
+      </div>
+
+
+      {/* grid de cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 max-w-[1200px] mx-auto">
         {filteredChallenges.map((challenge) => (
           <ChallengeDialog key={challenge.id} challenge={challenge} />
         ))}

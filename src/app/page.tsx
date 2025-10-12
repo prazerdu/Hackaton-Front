@@ -7,10 +7,9 @@ import type { NavigationSection } from "@/components/shadcn-studio/blocks/hero-s
 import ElasticCard from "@/components/elasticCard";
 
 const navigationData: NavigationSection[] = [
-  { title: "Home", href: "#" },
+  { title: "Home", href: "/page" },
   { title: "Products", href: "#" },
   { title: "About Us", href: "#" },
-  { title: "Contacts", href: "#" },
 ];
 
 const HeroSectionPage = () => {

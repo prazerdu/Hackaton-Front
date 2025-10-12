@@ -34,7 +34,7 @@ const Header = ({ navigationData, className }: HeaderProps) => {
     <header className={cn('bg-background sticky top-0 z-50 h-16 border-b', className)}>
       <div className='mx-auto flex h-full max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8'>
         
-        <a href='#'>
+        <a href='https://www.instagram.com/ninna.hub?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' target='_blank' rel='noopener noreferrer'>
           <Logo className='gap-3' />
         </a>
 
