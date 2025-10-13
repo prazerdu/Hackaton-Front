@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Users, BarChart3, Settings, ClipboardList, Network, Rocket, LayoutGrid } from "lucide-react"
+import { Users, BarChart3, ClipboardList, Network, Rocket, LayoutGrid } from "lucide-react"
 
 import { NavMain } from "./nav-main"
 import { NavProjects } from "@/components/admin/nav-projects"
