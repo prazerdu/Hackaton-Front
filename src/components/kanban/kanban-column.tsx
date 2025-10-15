@@ -18,7 +18,7 @@ interface KanbanColumnProps {
 export function KanbanColumn({ column, onDragStart, onDragOver, onDrop, onCardClick, onAddCard }: KanbanColumnProps) {
   return (
     <div
-      className="flex-shrink-0 w-80 bg-secondary/50 rounded-lg p-3"
+      className="flex-shrink-0 w-80 bg-secondary/50 rounded-lg p-2"
       onDragOver={onDragOver}
       onDrop={() => onDrop(column.id)}
     >
@@ -38,7 +38,7 @@ export function KanbanColumn({ column, onDragStart, onDragOver, onDrop, onCardCl
         </Button>
       </div>
 
-      <div className="space-y-2 min-h-[200px]">
+      <div className="space-y-1 min-h-[500px]">
         {column.cards.map((card) => (
           <KanbanCard
             key={card.id}

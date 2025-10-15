@@ -17,9 +17,8 @@ const initialColumns: Column[] = [
         id: "1",
         title: "Automação de Processos Logísticos",
         description: "Implementar IA para otimizar rotas de entrega",
-        company: "Empresa A",
+        user: "Empresa A",
         tags: ["Logística", "IA"],
-        priority: "high",
         date: "2025-01-15",
         comments: 3,
         attachments: 2,
@@ -29,9 +28,8 @@ const initialColumns: Column[] = [
         id: "2",
         title: "Plataforma de Gestão Sustentável",
         description: "Sistema para monitorar pegada de carbono",
-        company: "Empresa B",
+        user: "Empresa B",
         tags: ["Sustentabilidade", "ESG"],
-        priority: "medium",
         date: "2025-01-18",
         comments: 1,
         attachments: 0,
@@ -47,9 +45,8 @@ const initialColumns: Column[] = [
         id: "3",
         title: "Chatbot para Atendimento ao Cliente",
         description: "Bot inteligente com processamento de linguagem natural",
-        company: "Empresa C",
+        user: "Empresa C",
         tags: ["IA", "Atendimento"],
-        priority: "high",
         date: "2025-01-10",
         comments: 5,
         attachments: 1,
@@ -66,9 +63,8 @@ const initialColumns: Column[] = [
         id: "4",
         title: "Marketplace B2B de Fornecedores",
         description: "Conectar empresas com fornecedores verificados",
-        company: "Empresa A",
+        user: "Empresa A",
         tags: ["Marketplace", "B2B"],
-        priority: "medium",
         date: "2025-01-05",
         comments: 2,
         attachments: 3,
@@ -77,9 +73,8 @@ const initialColumns: Column[] = [
         id: "5",
         title: "Sistema de Gestão de Energia",
         description: "IoT para monitoramento e economia de energia",
-        company: "Empresa D",
+        user: "Empresa D",
         tags: ["IoT", "Energia"],
-        priority: "high",
         date: "2025-01-08",
         comments: 4,
         attachments: 1,
@@ -96,9 +91,8 @@ const initialColumns: Column[] = [
         id: "6",
         title: "Blockchain para Rastreabilidade",
         description: "Sistema de rastreamento de produtos com blockchain",
-        company: "Empresa B",
+        user: "Empresa B",
         tags: ["Blockchain", "Supply Chain"],
-        priority: "high",
         date: "2024-12-20",
         comments: 7,
         attachments: 4,
@@ -115,9 +109,8 @@ const initialColumns: Column[] = [
         id: "7",
         title: "Análise Preditiva de Vendas",
         description: "Machine Learning para previsão de demanda",
-        company: "Empresa C",
+        user: "Empresa C",
         tags: ["ML", "Vendas"],
-        priority: "high",
         date: "2024-12-01",
         comments: 12,
         attachments: 6,
@@ -194,7 +187,7 @@ export function KanbanBoard() {
 
   return (
     <>
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="flex grid-cols-5 overflow-x-auto gap-4 pb-4">
         {columns.map((column) => (
           <KanbanColumn
             key={column.id}
@@ -208,7 +201,11 @@ export function KanbanBoard() {
         ))}
       </div>
 
-      <CardDetailModal card={selectedCard} open={isDetailModalOpen} onOpenChange={setIsDetailModalOpen} />
+      <CardDetailModal 
+        card={selectedCard} 
+        open={isDetailModalOpen} 
+        onOpenChange={setIsDetailModalOpen} 
+      />
 
       <AddCardModal
         open={isAddModalOpen}

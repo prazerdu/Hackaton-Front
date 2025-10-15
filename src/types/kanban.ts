@@ -2,9 +2,8 @@ export interface Card {
   id: string
   title: string
   description: string
-  company: string
+  user: string
   tags: string[]
-  priority: "high" | "medium" | "low"
   date: string
   assignee?: string
   attachments?: number

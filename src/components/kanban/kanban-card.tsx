@@ -1,7 +1,7 @@
 "use client"
 
 import type { Card } from "@/types/kanban"
-import { Calendar, Building2 } from "lucide-react"
+import { Calendar, UserCircle2 } from "lucide-react"
 
 interface KanbanCardProps {
   card: Card
@@ -10,18 +10,6 @@ interface KanbanCardProps {
 }
 
 export function KanbanCard({ card, onDragStart, onClick }: KanbanCardProps) {
-  const priorityColors = {
-    high: "text-red-600 bg-red-50",
-    medium: "text-orange-600 bg-orange-50",
-    low: "text-green-600 bg-green-50",
-  }
-
-  const priorityLabels = {
-    high: "Alta",
-    medium: "Média",
-    low: "Baixa",
-  }
-
   return (
     <div
       draggable
@@ -31,15 +19,7 @@ export function KanbanCard({ card, onDragStart, onClick }: KanbanCardProps) {
     >
       <div className="flex items-start justify-between mb-2">
         <h4 className="font-medium text-sm text-card-foreground leading-tight flex-1">{card.title}</h4>
-        {card.priority && (
-          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${priorityColors[card.priority]}`}>
-            {priorityLabels[card.priority]}
-          </span>
-        )}
       </div>
-
-      <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{card.description}</p>
-
       <div className="flex flex-wrap gap-1 mb-3">
         {card.tags.map((tag) => (
           <span key={tag} className="text-xs px-2 py-0.5 rounded bg-primary/10 text-primary font-medium">
@@ -50,8 +30,8 @@ export function KanbanCard({ card, onDragStart, onClick }: KanbanCardProps) {
 
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
-          <Building2 className="w-3 h-3" />
-          <span>{card.company}</span>
+          <UserCircle2 className="w-3 h-3" />
+          <span>{card.user}</span>
         </div>
         <div className="flex items-center gap-1">
           <Calendar className="w-3 h-3" />

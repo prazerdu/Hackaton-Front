@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useState } from "react"
 import type { Card } from "@/types/kanban"
 
@@ -21,24 +20,22 @@ interface AddCardModalProps {
 export function AddCardModal({ open, onOpenChange, onAddCard }: AddCardModalProps) {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [company, setCompany] = useState("")
+  const [user, setUser] = useState("")
   const [tags, setTags] = useState("")
-  const [priority, setPriority] = useState<"high" | "medium" | "low">("medium")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!title.trim() || !company.trim()) return
+    if (!title.trim() || !user.trim()) return
 
     const newCard: Omit<Card, "id"> = {
       title: title.trim(),
       description: description.trim(),
-      company: company.trim(),
+      user: user.trim(),
       tags: tags
         .split(",")
         .map((tag) => tag.trim())
         .filter(Boolean),
-      priority,
       date: new Date().toISOString().split("T")[0],
       comments: 0,
       attachments: 0,
@@ -49,9 +46,8 @@ export function AddCardModal({ open, onOpenChange, onAddCard }: AddCardModalProp
     // Reset form
     setTitle("")
     setDescription("")
-    setCompany("")
+    setUser("")
     setTags("")
-    setPriority("medium")
     onOpenChange(false)
   }
 
@@ -87,33 +83,20 @@ export function AddCardModal({ open, onOpenChange, onAddCard }: AddCardModalProp
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="company">Empresa *</Label>
+              <Label htmlFor="user">Empresa *</Label>
               <Input
-                id="company"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
+                id="user"
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
                 placeholder="Nome da empresa"
                 required
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="priority">Prioridade</Label>
-              <Select value={priority} onValueChange={(value: "high" | "medium" | "low") => setPriority(value)}>
-                <SelectTrigger id="priority">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Baixa</SelectItem>
-                  <SelectItem value="medium">Média</SelectItem>
-                  <SelectItem value="high">Alta</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="tags">Tags (separadas por vírgula)</Label>
+            <Label htmlFor="tags">Tags</Label>
             <Input
               id="tags"
               value={tags}
