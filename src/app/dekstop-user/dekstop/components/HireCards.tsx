@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, ReactNode } from 'react'
 import {
   BadgeCheckIcon,
   EllipsisIcon,
@@ -8,6 +8,10 @@ import {
   CalendarIcon,
   TargetIcon,
   SearchIcon,
+  LeafIcon,
+  SproutIcon,
+  HeartPulseIcon,
+  RocketIcon,
 } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -30,6 +34,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
+import Drop from '@/components/drop'
 
 type Challenge = {
   id: string
@@ -38,7 +43,7 @@ type Challenge = {
     logo: string
     verified?: boolean
   }
-  area: string
+  category: string
   problem: string
   goal: string
   description: string
@@ -58,7 +63,7 @@ const challenges: Challenge[] = [
       logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png',
       verified: true,
     },
-    area: 'Logística e Sustentabilidade',
+    category: 'Logística e Sustentabilidade',
     problem:
       'Nossa operação logística tem alto custo de combustível e impacto ambiental elevado.',
     goal:
@@ -78,7 +83,7 @@ const challenges: Challenge[] = [
       name: 'AgroFuturo',
       logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-6.png',
     },
-    area: 'Agricultura e Tecnologia',
+    category: 'Agricultura e Tecnologia',
     problem:
       'Pequenos agricultores têm dificuldade em monitorar suas plantações e prever pragas.',
     goal:
@@ -99,7 +104,7 @@ const challenges: Challenge[] = [
       logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-7.png',
       verified: true,
     },
-    area: 'Saúde Digital',
+    category: 'Saúde Digital',
     problem:
       'Alta taxa de absenteísmo em consultas médicas devido à falta de lembretes eficientes.',
     goal:
@@ -120,7 +125,7 @@ const challenges: Challenge[] = [
       logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-9.png',
       verified: true,
     },
-    area: 'Inovação e Transformação Digital',
+    category: 'Inovação e Transformação Digital',
     problem:
       'Empresas e startups têm dificuldade em encontrar um ambiente digital unificado para inovação aberta.',
     goal:
@@ -136,7 +141,6 @@ const challenges: Challenge[] = [
   },
 ]
 
-// --- componente de dialog ---
 const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
   const [accepted, setAccepted] = useState(false)
   const [participants, setParticipants] = useState(challenge.participants)
@@ -149,11 +153,18 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Card className="cursor-pointer hover:shadow-lg transition">
-          <CardHeader className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <Avatar className="ring-ring ring-2">
+      <DialogTrigger asChild className="">
+        <Card
+          className="
+            cursor-pointer hover:shadow-lg transition
+            sm:p-4
+            text-xs sm:text-sm
+            flex flex-col justify-between
+          "
+        >
+          <CardHeader className="flex items-center justify-between gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Avatar className="ring-ring ring-2 w-8 h-8 sm:w-10 sm:h-10">
                 <AvatarImage
                   src={challenge.corporation.logo}
                   alt={challenge.corporation.name}
@@ -162,26 +173,39 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
                   {challenge.corporation.name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex flex-col gap-0.5">
-                <CardTitle className="flex items-center gap-1 text-sm">
+              <div className="flex flex-col overflow-hidden">
+                <CardTitle className="flex items-center gap-1 text-xs sm:text-sm truncate">
                   {challenge.corporation.name}
                   {challenge.corporation.verified && (
                     <BadgeCheckIcon className="size-4 fill-sky-600 stroke-white dark:fill-sky-400" />
                   )}
                 </CardTitle>
-                <CardDescription>Corporação</CardDescription>
-                <Badge variant="secondary" className="mt-1 text-xs">
-                  {challenge.area}
+                <CardDescription className="text-[10px] sm:text-sm truncate">
+                  Corporação
+                </CardDescription>
+                <Badge
+                  variant="secondary"
+                  className="
+                    mt-1 text-[10px] sm:text-xs
+                    max-w-[120px] sm:max-w-[160px]  /* largura máxima */
+                    px-2  /* padding horizontal proporcional */
+                    overflow-hidden
+                    text-ellipsis
+                    whitespace-nowrap
+                    inline-block
+                  "
+                >
+                  {challenge.category}
                 </Badge>
               </div>
             </div>
             <EllipsisIcon className="size-4 text-muted-foreground" />
           </CardHeader>
 
-          <CardContent className="space-y-2 text-sm">
-            <p className="font-semibold text-red-600">Problema</p>
+          <CardContent className="text-[10px] sm:text-sm">
+            <p className="font-semibold text-red-600 truncate">Problema</p>
             <p className="line-clamp-2">{challenge.problem}</p>
-            <p className="font-semibold text-green-600 flex items-center gap-1 mt-2">
+            <p className="font-semibold text-green-600 flex items-center gap-1 mt-1 sm:mt-2 truncate">
               <TargetIcon className="size-4" /> Objetivo
             </p>
             <p className="line-clamp-2">{challenge.goal}</p>
@@ -189,7 +213,7 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
         </Card>
       </DialogTrigger>
 
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl sm">
         <DialogHeader>
           <DialogTitle>{challenge.corporation.name} - Desafio</DialogTitle>
           <DialogDescription>
@@ -209,8 +233,8 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
             <p>{challenge.goal}</p>
           </div>
           <div>
-            <p className="font-semibold text-blue-600">Área</p>
-            <Badge variant="secondary">{challenge.area}</Badge>
+            <p className="font-semibold text-blue-600">Categoria</p>
+            <Badge variant="secondary">{challenge.category}</Badge>
           </div>
           <p>{challenge.description}</p>
 
@@ -233,10 +257,7 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
             <Button
               onClick={handleAccept}
               disabled={accepted}
-              className={cn(
-                'w-full',
-                accepted && 'bg-green-500 cursor-default'
-              )}
+              className={cn('w-full', accepted && 'bg-green-500 cursor-default')}
             >
               {accepted ? 'Solicitação enviada !' : 'Solicitar participação'}
             </Button>
@@ -247,30 +268,52 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
   )
 }
 
-// --- componente da lista com search ---
 const ChallengesList = () => {
   const [search, setSearch] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
 
-  const filteredChallenges = challenges.filter(
-    (c) =>
+  const categories: { name: string; icon: ReactNode }[] = [
+    { name: 'Logística e Sustentabilidade', icon: <LeafIcon className="size-4 mr-1 text-green-600" /> },
+    { name: 'Agricultura e Tecnologia', icon: <SproutIcon className="size-4 mr-1 text-lime-600" /> },
+    { name: 'Saúde Digital', icon: <HeartPulseIcon className="size-4 mr-1 text-pink-600" /> },
+    { name: 'Inovação e Transformação Digital', icon: <RocketIcon className="size-4 mr-1 text-indigo-600" /> },
+  ]
+
+  const filteredChallenges = challenges.filter((c) => {
+    const matchesSearch =
       c.corporation.name.toLowerCase().includes(search.toLowerCase()) ||
       c.problem.toLowerCase().includes(search.toLowerCase()) ||
-      c.area.toLowerCase().includes(search.toLowerCase())
-  )
+      c.category.toLowerCase().includes(search.toLowerCase())
+
+    const matchesCategory =
+      selectedCategory === '' || c.category === selectedCategory
+
+    return matchesSearch && matchesCategory
+  })
 
   return (
-    <div className="p-4">
-      <div className="relative mb-4">
-        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-4" />
-        <Input
-          placeholder="Buscar desafios por corporação, problema ou área..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pl-10"
+    <div className="space-y-4 w-full">
+      {/* Busca */}
+      <div className="flex items-center p-1 gap-2 max-w-[700px] mx-auto mb-4">
+        <div className="flex-1 relative">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+          <Input
+            placeholder="Buscar desafios..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10 w-full"
+          />
+        </div>
+
+        <Drop
+          categories={categories}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Grid de cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[1200px] mx-auto">
         {filteredChallenges.map((challenge) => (
           <ChallengeDialog key={challenge.id} challenge={challenge} />
         ))}
