@@ -1,77 +1,86 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import CardHorizontalDemo from "@/components/cardHorizontal";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRightIcon } from "lucide-react";
+import TiltShineCard from "./../card";
 
 const HeroSection = () => {
   return (
-    <section className="relative flex min-h-[calc(100dvh-4rem)] flex-col justify-between overflow-x-hidden pt-20 pb-32 sm:pt-28 lg:pt-36 bg-gradient-to-b">
-      {/* Hero Content */}
-      <div className="mx-auto flex max-w-7xl flex-col items-center gap-8 px-4 text-center sm:px-6 lg:px-8">
-        {/* Badge de destaque */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-muted flex items-center gap-2.5 rounded-full border px-4 py-2 shadow-md"
-        >
-          <Badge className="rounded-full bg-purple-700 text-white">Inovação</Badge>
-          <span className="text-muted-foreground font-medium">
-            Solução para negócios voltados ao cliente
-          </span>
-        </motion.div>
-
-        {/* Título */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-purple-500 leading-tight drop-shadow-md"
-        >
-          Inove, Colabore e Transforme
-        </motion.h1>
-
-        {/* Subtítulo */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="max-w-2xl text-muted-foreground text-lg sm:text-xl leading-relaxed"
-        >
-          Uma plataforma para criar, lançar e participar de desafios de inovação, conectando mentes criativas para construir o futuro juntos. <br />
-          Tudo em um ambiente flexível e colaborativo.
-        </motion.p>
-
-        {/* Botões lado a lado */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-          className="flex flex-wrap justify-center gap-4 mt-6"
-        >
-          <Button
-            size="lg"
-            className="text-white  bg-gradient-to-br from-purple-900 to-purple-600 border transition-all duration-300 shadow-lg hover:scale-105"
-            asChild
-          >
-            <a href="/home">Entrar</a>
-          </Button>
-
-          <Button
-            size="lg"
-            className="text-white  bg-gradient-to-br from-purple-900 to-purple-600 border shadow-md transition-all duration-300 hover:scale-105"
-            asChild
-          >
-            <a href="/login">Login</a>
-          </Button>
-        </motion.div>
+    <section className="relative flex flex-col items-center justify-center min-h-[90dvh] pt-8 md:pt-16 lg:pt-10 overflow-hidden">
+      {/* Fundo decorativo centralizado */}
+      <div className="absolute inset-0 -z-10 flex justify-center items-center">
+        <div className="absolute w-96 h-96 bg-purple-950/30 rounded-full blur-3xl animate-blob"></div>
+        <div className="absolute w-[28rem] h-[28rem] bg-purple-500/20 rounded-full blur-2xl animate-blob animation-delay-2000 translate-x-32 translate-y-20"></div>
       </div>
 
-      {/* Cards Horizontais */}
-      <div className="mt-20 px-4 sm:px-6 lg:px-8">
-        <CardHorizontalDemo />
+      {/* Conteúdo principal */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-0 flex flex-col lg:flex-row items-center gap-16">
+        {/* Texto */}
+        <div className="flex-1 text-center lg:text-left space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1 backdrop-blur-md"
+          >
+            <Badge className="bg-purple-600 text-white rounded-full">
+              Novo
+            </Badge>
+            <span className="text-foreground font-medium text-sm">
+              Versão 2025
+            </span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-foreground leading-tight drop-shadow-lg"
+          >
+            Transforme sua empresa <br className="hidden sm:block" /> com
+            soluções digitais
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-foreground max-w-xl text-lg sm:text-xl leading-relaxed mx-auto lg:mx-0"
+          >
+            Desenvolvemos produtos digitais e experiências que conectam sua
+            empresa com clientes de forma inovadora e eficiente.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className="flex flex-wrap justify-center lg:justify-start rounded-2xl gap-6 mt-6"
+          >
+            <Button
+              className="text-white p-2 shadow-2xl font-semibold sm:text-sm border border-transparent hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+              asChild
+            >
+              <a href="/contact">
+                Contate-nos <ArrowRightIcon className="w-5 h-5" />
+              </a>
+            </Button>
+
+            <Button
+              className="p-2 shadow-2xl text-white font-semibold sm:text-sm border border-transparenthover:bg-white/95 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:scale-105"
+              asChild
+            >
+              <a href="/services">
+                Nossos Serviços <ArrowRightIcon className="w-5 h-5" />
+              </a>
+            </Button>
+          </motion.div>
+        </div>
+
+        {/* Card */}
+        <TiltShineCard />
       </div>
     </section>
   );
