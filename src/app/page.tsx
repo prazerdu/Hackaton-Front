@@ -35,10 +35,7 @@
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
         >
-        </motion.div>
-        <div className="min-h-screen">
-          <h1 className="mt-96" id="about">About</h1>
-        </div>
+        </motion.div> 
       </motion.div>
     );
   };
