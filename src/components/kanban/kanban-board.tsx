@@ -1,218 +1,176 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
+import { useEffect, useState, useCallback } from "react"
+import {
+  DndContext,
+  type DragEndEvent,
+  type DragStartEvent,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  pointerWithin,
+} from "@dnd-kit/core"
 import { KanbanColumn } from "./kanban-column"
+import { KanbanCard } from "./kanban-card"
 import { CardDetailModal } from "./card-details"
 import { AddCardModal } from "./add-card"
-import type { Card, Column } from "@/types/kanban"
+import type { Idea, IDEA_STATUSES, Column } from "@/lib/kanban/types"
+import { ideasService } from "@/lib/kanban/services/ideas"
 
-const initialColumns: Column[] = [
-  {
-    id: "capture",
-    title: "Geração/Captura de Ideias",
-    color: "bg-blue-500",
-    cards: [
-      {
-        id: "1",
-        title: "Automação de Processos Logísticos",
-        description: "Implementar IA para otimizar rotas de entrega",
-        user: "Empresa A",
-        tags: ["Logística", "IA"],
-        date: "2025-01-15",
-        comments: 3,
-        attachments: 2,
-        checklist: { completed: 2, total: 5 },
-      },
-      {
-        id: "2",
-        title: "Plataforma de Gestão Sustentável",
-        description: "Sistema para monitorar pegada de carbono",
-        user: "Empresa B",
-        tags: ["Sustentabilidade", "ESG"],
-        date: "2025-01-18",
-        comments: 1,
-        attachments: 0,
-      },
-    ],
-  },
-  {
-    id: "pre-screening",
-    title: "Pré-Triagem",
-    color: "bg-purple-500",
-    cards: [
-      {
-        id: "3",
-        title: "Chatbot para Atendimento ao Cliente",
-        description: "Bot inteligente com processamento de linguagem natural",
-        user: "Empresa C",
-        tags: ["IA", "Atendimento"],
-        date: "2025-01-10",
-        comments: 5,
-        attachments: 1,
-        checklist: { completed: 3, total: 4 },
-      },
-    ],
-  },
-  {
-    id: "ideation",
-    title: "Ideação",
-    color: "bg-green-500",
-    cards: [
-      {
-        id: "4",
-        title: "Marketplace B2B de Fornecedores",
-        description: "Conectar empresas com fornecedores verificados",
-        user: "Empresa A",
-        tags: ["Marketplace", "B2B"],
-        date: "2025-01-05",
-        comments: 2,
-        attachments: 3,
-      },
-      {
-        id: "5",
-        title: "Sistema de Gestão de Energia",
-        description: "IoT para monitoramento e economia de energia",
-        user: "Empresa D",
-        tags: ["IoT", "Energia"],
-        date: "2025-01-08",
-        comments: 4,
-        attachments: 1,
-        checklist: { completed: 1, total: 3 },
-      },
-    ],
-  },
-  {
-    id: "detailed-screening",
-    title: "Triagem Detalhada",
-    color: "bg-orange-500",
-    cards: [
-      {
-        id: "6",
-        title: "Blockchain para Rastreabilidade",
-        description: "Sistema de rastreamento de produtos com blockchain",
-        user: "Empresa B",
-        tags: ["Blockchain", "Supply Chain"],
-        date: "2024-12-20",
-        comments: 7,
-        attachments: 4,
-        checklist: { completed: 5, total: 8 },
-      },
-    ],
-  },
-  {
-    id: "experimentation",
-    title: "Experimentação (POC)",
-    color: "bg-red-500",
-    cards: [
-      {
-        id: "7",
-        title: "Análise Preditiva de Vendas",
-        description: "Machine Learning para previsão de demanda",
-        user: "Empresa C",
-        tags: ["ML", "Vendas"],
-        date: "2024-12-01",
-        comments: 12,
-        attachments: 6,
-        checklist: { completed: 8, total: 10 },
-      },
-    ],
-  },
+function decodeToken(token: string) {
+  try {
+    const payload = token.split(".")[1]
+    return JSON.parse(atob(payload))
+  } catch {
+    return null
+  }
+}
+
+const COLUMNS: Omit<Column, "ideas">[] = [
+  { id: "GENERATION", title: "Geração/Captura", color: "bg-blue-500" },
+  { id: "TRIAGE", title: "Triagem", color: "bg-purple-500" },
+  { id: "IDEATION", title: "Ideação", color: "bg-green-500" },
+  { id: "IMPLEMENTATION", title: "Implementação", color: "bg-orange-500" },
+  { id: "COMPLETED", title: "Concluído", color: "bg-red-500" },
 ]
 
-export function KanbanBoard() {
-  const [columns, setColumns] = useState<Column[]>(initialColumns)
-  const [draggedCard, setDraggedCard] = useState<Card | null>(null)
-  const [draggedFromColumn, setDraggedFromColumn] = useState<string | null>(null)
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null)
+export function KanbanBoard({ challengeId }: { challengeId: string }) {
+  const [columns, setColumns] = useState<Column[]>([])
+  const [activeIdea, setActiveIdea] = useState<Idea | null>(null)
+  const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-  const [targetColumnId, setTargetColumnId] = useState<string>("")
+  const [loading, setLoading] = useState(true)
+  const [userRole, setUserRole] = useState<string>("")
+  const [accessToken, setAccessToken] = useState<string | null>(null)
 
-  const handleDragStart = (card: Card, columnId: string) => {
-    setDraggedCard(card)
-    setDraggedFromColumn(columnId)
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
+
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null
+    if (token) {
+      setAccessToken(token)
+      const decoded = decodeToken(token)
+      if (decoded?.role) {
+        setUserRole(decoded.role.toUpperCase())
+        console.log("[KanbanBoard] Usuário autenticado:", decoded)
+      }
+    }
+  }, [])
+
+  const canUpdateStatus = ["MANAGER", "EVALUATOR"].includes(userRole)
+
+  const fetchIdeas = useCallback(async () => {
+    setLoading(true)
+    const ideasByStatus = await ideasService.getIdeasByChallenge(challengeId)
+
+    const newColumns: Column[] = COLUMNS.map((col) => ({
+      ...col,
+      ideas: ideasByStatus[col.id] || [],
+    }))
+
+    setColumns(newColumns)
+    setLoading(false)
+  }, [challengeId])
+
+  useEffect(() => {
+    fetchIdeas()
+  }, [fetchIdeas])
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event
+    const idea = columns.flatMap((col) => col.ideas).find((i) => String(i.id) === String(active.id))
+    setActiveIdea(idea || null)
   }
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-  }
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+    setActiveIdea(null)
+    if (!over) return
 
-  const handleDrop = (targetColumnId: string) => {
-    if (!draggedCard || !draggedFromColumn) return
+    const ideaId = String(active.id)
+    const newStatus = String(over.id) as IDEA_STATUSES
 
-    setColumns((prevColumns) => {
-      const newColumns = prevColumns.map((col) => {
-        if (col.id === draggedFromColumn) {
-          return {
-            ...col,
-            cards: col.cards.filter((card) => card.id !== draggedCard.id),
-          }
+    const sourceColumn = columns.find((col) => col.ideas.some((i) => String(i.id) === ideaId))
+    if (!sourceColumn) return
+    if (sourceColumn.id === newStatus) return
+
+    const movedIdea = sourceColumn.ideas.find((i) => String(i.id) === ideaId)
+    if (!movedIdea) return
+
+    setColumns((prev) =>
+      prev.map((col) => {
+        if (col.id === sourceColumn.id) {
+          return { ...col, ideas: col.ideas.filter((i) => String(i.id) !== ideaId) }
         }
-        if (col.id === targetColumnId) {
-          return {
-            ...col,
-            cards: [...col.cards, draggedCard],
-          }
+        if (col.id === newStatus) {
+          return { ...col, ideas: [...col.ideas, { ...movedIdea, status: newStatus }] }
         }
         return col
-      })
-      return newColumns
-    })
-
-    setDraggedCard(null)
-    setDraggedFromColumn(null)
-  }
-
-  const handleCardClick = (card: Card) => {
-    setSelectedCard(card)
-    setIsDetailModalOpen(true)
-  }
-
-  const handleAddCardClick = (columnId: string) => {
-    setTargetColumnId(columnId)
-    setIsAddModalOpen(true)
-  }
-
-  const handleAddCard = (newCardData: Omit<Card, "id">) => {
-    const newCard: Card = {
-      ...newCardData,
-      id: Date.now().toString(),
-    }
-
-    setColumns((prevColumns) =>
-      prevColumns.map((col) => (col.id === targetColumnId ? { ...col, cards: [...col.cards, newCard] } : col)),
+      }),
     )
+
+    if (canUpdateStatus && accessToken) {
+      try {
+        console.log(`[Kanban] Atualizando status da ideia ${ideaId} para ${newStatus}`)
+        await ideasService.updateIdeaStatus(ideaId, newStatus)
+        console.log("[Kanban] Status atualizado com sucesso!")
+      } catch (err) {
+        console.error("❌ Erro ao atualizar status:", err)
+        await fetchIdeas()
+      }
+    } else {
+      console.warn("[Kanban] Sem permissão para alterar status — revertendo")
+      await fetchIdeas()
+    }
+  }
+
+  if (loading) {
+    return <div className="p-6 text-muted-foreground">Carregando ideias...</div>
   }
 
   return (
-    <>
-      <div className="flex grid-cols-5 overflow-x-auto gap-4 pb-4">
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      collisionDetection={pointerWithin}
+    >
+      <div className="flex gap-4 p-6 overflow-x-auto">
         {columns.map((column) => (
           <KanbanColumn
             key={column.id}
             column={column}
-            onDragStart={handleDragStart}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            onCardClick={handleCardClick}
-            onAddCard={handleAddCardClick}
+            onCardClick={(idea) => {
+              setSelectedIdea(idea)
+              setIsDetailModalOpen(true)
+            }}
+            onAddCard={() => setIsAddModalOpen(true)}
           />
         ))}
       </div>
 
-      <CardDetailModal 
-        card={selectedCard} 
-        open={isDetailModalOpen} 
-        onOpenChange={setIsDetailModalOpen} 
+      <DragOverlay>
+        {activeIdea ? (
+          <div className="rotate-3 opacity-80">
+            <KanbanCard idea={activeIdea} onClick={() => {}} />
+          </div>
+        ) : null}
+      </DragOverlay>
+
+      <CardDetailModal
+        idea={selectedIdea}
+        open={isDetailModalOpen}
+        onOpenChange={setIsDetailModalOpen}
       />
 
       <AddCardModal
+        challengeId={challengeId}
         open={isAddModalOpen}
         onOpenChange={setIsAddModalOpen}
-        onAddCard={handleAddCard}
-        columnId={targetColumnId}
+        onIdeaCreated={fetchIdeas}
       />
-    </>
+    </DndContext>
   )
 }

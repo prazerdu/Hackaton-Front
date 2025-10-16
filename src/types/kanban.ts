@@ -3,7 +3,7 @@ export interface Card {
   title: string
   description: string
   user: string
-  tags: string[]
+  area: string[]
   date: string
   assignee?: string
   attachments?: number
