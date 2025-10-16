@@ -98,7 +98,7 @@ export function NavUser({
                   <div className="flex items-center gap-1">
                     <span className="truncate font-medium">{user.name}</span>
                     <Badge variant="secondary" className="text-xs py-0.5 px-1.5">
-                      {user.role.toUpperCase()}
+                      {user.role?.toUpperCase() ?? "USUÁRIO"}
                     </Badge>
                   </div>
                   <span className="truncate text-xs">{user.email}</span>
