@@ -79,7 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       url: "/admin",
       icon: BarChart3,
       roles: ["MANAGER"],
-      items: [{ title: "Visão Geral", url: "/admin" }],
+      items: [{ title: "Visão Geral", url: "/admin/dashboard" }],
     },
     {
       title: "Funil de Inovação",
@@ -161,7 +161,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           user={{
             name: currentUser.name!,
             email: currentUser.email!,
-            avatar: currentUser.avatar,
+            avatar: currentUser.avatar!,
+            role: "Gestor"
           }}
         />
       </SidebarFooter>

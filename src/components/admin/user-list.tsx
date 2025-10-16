@@ -20,7 +20,7 @@ import {
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
 import { SignupModal } from "@/components/signup-modal"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react"
 
 interface User {
   id: string
@@ -38,7 +38,7 @@ interface TokenPayload {
   exp: number
 }
 
-export default function USerList() {
+export default function UserList() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
@@ -67,9 +67,7 @@ export default function USerList() {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/users?companyId=${companyId}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         )
         setUsers(res.data)
@@ -83,18 +81,32 @@ export default function USerList() {
     fetchUsers()
   }, [])
 
+  const handleDelete = async (id: string) => {
+    const confirmed = confirm("Tem certeza que deseja excluir este usuário?")
+    if (!confirmed) return
+
+    const token = localStorage.getItem("access_token")
+    if (!token) return
+
+    try {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      setUsers((prev) => prev.filter((user) => user.id !== id))
+      alert("Usuário deletado com sucesso!")
+    } catch (error) {
+      console.error("Erro ao deletar usuário:", error)
+      alert("Não foi possível excluir o usuário.")
+    }
+  }
+
   const totalPages = Math.ceil(users.length / usersPerPage)
   const startIndex = (currentPage - 1) * usersPerPage
   const endIndex = startIndex + usersPerPage
   const paginatedUsers = users.slice(startIndex, endIndex)
 
-  const handlePrevPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1))
-  }
-
-  const handleNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-  }
+  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1))
+  const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages))
 
   return (
     <div className="p-6">
@@ -118,6 +130,7 @@ export default function USerList() {
                     <TableHead>Email</TableHead>
                     <TableHead>Cargo</TableHead>
                     <TableHead>Data de Criação</TableHead>
+                    <TableHead className="text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -135,6 +148,16 @@ export default function USerList() {
                           minute: "2-digit",
                         })}
                       </TableCell>
+                      <TableCell className="flex justify-end gap-2">
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDelete(user.id)}
+                          className="flex items-center gap-1"
+                        >
+                          <Trash2 className="h-4 w-4" /> Excluir
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -148,7 +171,7 @@ export default function USerList() {
                     onClick={handlePrevPage}
                     disabled={currentPage === 1}
                   >
-                    <ChevronLeft/> Anterior
+                    <ChevronLeft /> Anterior
                   </Button>
                   <p className="text-sm font-medium">
                     Página {currentPage} de {totalPages}
@@ -158,7 +181,7 @@ export default function USerList() {
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
                   >
-                    Próximo <ChevronRight/>
+                    Próximo <ChevronRight />
                   </Button>
                 </div>
               )}

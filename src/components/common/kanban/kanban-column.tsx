@@ -1,6 +1,5 @@
 "use client"
 
-import { useDroppable } from "@dnd-kit/core"
 import { KanbanCard } from "./kanban-card"
 import type { Column, Idea } from "@/lib/kanban/types"
 import { Plus } from "lucide-react"
@@ -13,18 +12,9 @@ interface KanbanColumnProps {
 }
 
 export function KanbanColumn({ column, onCardClick, onAddCard }: KanbanColumnProps) {
-  // Sempre droppable — sem autenticação ou permissão
-  const { setNodeRef, isOver } = useDroppable({
-    id: String(column.id),
-  })
-
   return (
     <div
-      ref={setNodeRef}
-      data-column-id={column.id}
-      className={`flex-shrink-0 w-80 rounded-lg p-4 transition-colors min-h-[500px] border border-border ${
-        isOver ? "bg-secondary/80 border-primary" : "bg-secondary/50"
-      }`}
+      className="flex-shrink-0 w-80 rounded-lg p-4 transition-colors min-h-[500px] border border-border bg-secondary/50"
     >
       {/* Cabeçalho */}
       <div className="flex items-center justify-between mb-4">
@@ -51,12 +41,7 @@ export function KanbanColumn({ column, onCardClick, onAddCard }: KanbanColumnPro
       <div className="space-y-3">
         {column.ideas.length > 0 ? (
           column.ideas.map((idea) => (
-            <KanbanCard
-              key={idea.id}
-              idea={idea}
-              onClick={() => onCardClick(idea)}
-              // Drag sempre ativo
-            />
+            <KanbanCard key={idea.id} idea={idea} onClick={() => onCardClick(idea)} />
           ))
         ) : (
           <div className="text-xs text-muted-foreground italic text-center py-4">

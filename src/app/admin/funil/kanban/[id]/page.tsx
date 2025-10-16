@@ -5,7 +5,7 @@ import { useParams } from "next/navigation"
 import { challengesService } from "@/lib/kanban/services/challenges"
 import type { Challenge } from "@/lib/kanban/types"
 import { Skeleton } from "@/components/ui/skeleton"
-import { KanbanBoard } from "@/components/kanban/kanban-board"
+import { KanbanBoard } from "@/components/admin/kanban/kanban-board"
 import { Lightbulb } from "lucide-react"
 
 export default function ChallengeKanbanPage() {

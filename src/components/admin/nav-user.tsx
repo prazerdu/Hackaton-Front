@@ -25,12 +25,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { Badge } from "../ui/badge"
 
 interface NavUserProps {
   user: {
     name: string
     email: string
     avatar?: string
+    role?: string
   }
 }
 
@@ -93,29 +95,16 @@ export function NavUser({ user }: NavUserProps) {
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
+                  <Badge variant="secondary" className="text-xs py-0.5 px-1.5">
+                    {user.role?.toUpperCase() ?? "USUÁRIO"}
+                  </Badge>
                   <span className="truncate text-xs text-muted-foreground">
                     {user.email}
                   </span>
                 </div>
               </div>
             </DropdownMenuLabel>
-            {/* <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck className="mr-2 h-4 w-4" />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard className="mr-2 h-4 w-4" />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell className="mr-2 h-4 w-4" />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup> */}
-
             <DropdownMenuSeparator />
-
             <DropdownMenuItem onClick={handleLogout} >
               <LogOut className="mr-2 h-4 w-4" />
               Sair

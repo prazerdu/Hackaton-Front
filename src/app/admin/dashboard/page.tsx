@@ -5,28 +5,38 @@ import axios from "axios"
 import { useRouter } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
-
-import { KPICards } from "@/components/admin/dashboard/kpi"
 import { QuickActions } from "@/components/admin/dashboard/quick-actions"
+import { FunnelEvolutionChart } from "@/components/admin/dashboard/funil-evoluation"
+import { FunnelStageChart } from "@/components/admin/dashboard/funil-stage"
+import { RecentActivities } from "@/components/admin/dashboard/recent-activies"
 
 type JwtPayload = {
   exp: number
   role?: string
 }
 
-// ✅ Define o tipo do objeto de KPIs que vem da API
-export interface Kpis {
-  totalIdeas: number
-  totalStartupsConnected: number
-  totalPocs: number
-}
+
+const mockChart = [
+  { etapa: "Captura", qtd: 128 },
+  { etapa: "Pré-Triagem", qtd: 64 },
+  { etapa: "Ideação", qtd: 40 },
+  { etapa: "Triagem Detalhada", qtd: 18 },
+  { etapa: "POCs", qtd: 5 },
+]
+
+const mockAtividades = [
+  { id: 1, titulo: "Novo desafio publicado", detalhe: "Sustentabilidade na cadeia de suprimentos", data: "15/09" },
+  { id: 2, titulo: "Startup conectada", detalhe: "GreenTech Solutions", data: "14/09" },
+  { id: 3, titulo: "POC iniciada", detalhe: "Automação de processos internos", data: "13/09" },
+]
 
 export default function DashboardPage() {
   const router = useRouter()
   const [authorized, setAuthorized] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  const [kpis, setKpis] = useState<Kpis | null>(null)
+  const [data, setData] = useState(mockChart)
+  const [atividadesRecentes, setAtividadesRecentes] = useState(mockAtividades)
 
   useEffect(() => {
     const checkAuth = () => {
@@ -55,52 +65,29 @@ export default function DashboardPage() {
     checkAuth()
   }, [router])
 
-useEffect(() => {
-  if (!authorized) return
+  useEffect(() => {
+    if (!authorized) return
 
-  const fetchData = async () => {
-    try {
-      const adminURL = process.env.NEXT_PUBLIC_API_URL
-      const token = localStorage.getItem("access_token")
+    const fetchData = async () => {
+      try {
+        const adminURL = process.env.NEXT_PUBLIC_API_URL
+        const [ chartRes, atividadesRes] = await Promise.all([
+          axios.get(`${adminURL}/dashboard`),
+          axios.get(`${adminURL}/dashboard`),
+          axios.get(`${adminURL}/dashboard`),
+        ])
 
-      if (!token) {
-        router.push("/login")
-        return
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-
-      const [kpiRes] = await Promise.all([
-        axios.get(`${adminURL}/dashboard`, config),
-        axios.get(`${adminURL}/dashboard`, config),
-        axios.get(`${adminURL}/dashboard`, config),
-      ])
-
-      setKpis(kpiRes.data)
-        } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          console.warn("Sessão expirada. Redirecionando para login.")
-          localStorage.removeItem("access_token")
-          router.push("/login")
-        } else {
-          console.error("Erro ao buscar dados do dashboard:", error)
-        }
-      } else {
-        console.error("Erro inesperado:", error)
+        setData(chartRes.data)
+        setAtividadesRecentes(atividadesRes.data)
+      } catch (error) {
+        console.warn("⚠️ Usando mocks, API não encontrada:", error)
       }
     }
-  }
 
-  fetchData()
-}, [authorized, router])
+    fetchData()
+  }, [authorized])
 
-
-  if (loading || !kpis)
+  if (loading)
     return (
       <div className="flex justify-center items-center mt-80">
         <Spinner className="text-[#8884d8]" variant="bars" />
@@ -117,10 +104,10 @@ useEffect(() => {
           Acompanhe o desempenho e engajamento geral da sua corporação na plataforma.
         </p>
       </div>
-
-      {/* ✅ Passa o objeto kpis (não a função setKpis) */}
-      <KPICards kpis={kpis} />
       <QuickActions />
+      <FunnelEvolutionChart data={data} />
+      <FunnelStageChart data={data} />
+      <RecentActivities atividades={atividadesRecentes} />
     </div>
   )
 }

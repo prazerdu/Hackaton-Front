@@ -54,7 +54,6 @@ export function KanbanBoard({ challengeId }: { challengeId: string }) {
       const decoded = decodeToken(token)
       if (decoded?.role) {
         setUserRole(decoded.role.toUpperCase())
-        console.log("[KanbanBoard] Usuário autenticado:", decoded)
       }
     }
   }, [])
@@ -111,17 +110,15 @@ export function KanbanBoard({ challengeId }: { challengeId: string }) {
       }),
     )
 
+    // 🔹 Atualiza no backend
     if (canUpdateStatus && accessToken) {
       try {
-        console.log(`[Kanban] Atualizando status da ideia ${ideaId} para ${newStatus}`)
         await ideasService.updateIdeaStatus(ideaId, newStatus)
-        console.log("[Kanban] Status atualizado com sucesso!")
       } catch (err) {
-        console.error("❌ Erro ao atualizar status:", err)
+        console.error("Erro ao atualizar status:", err)
         await fetchIdeas()
       }
     } else {
-      console.warn("[Kanban] Sem permissão para alterar status — revertendo")
       await fetchIdeas()
     }
   }
@@ -163,6 +160,7 @@ export function KanbanBoard({ challengeId }: { challengeId: string }) {
         idea={selectedIdea}
         open={isDetailModalOpen}
         onOpenChange={setIsDetailModalOpen}
+        onIdeaUpdated={fetchIdeas}
       />
 
       <AddCardModal

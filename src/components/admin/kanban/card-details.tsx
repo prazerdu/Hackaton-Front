@@ -8,38 +8,94 @@ import { MessageSquare, ThumbsUp, Calendar, User } from "lucide-react"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { ideasService } from "@/lib/kanban/services/ideas"
 import { Badge } from "@/components/ui/badge"
+import AlertError from "../../alert-error"
+import AlertSuccess from "../../alert-success"
+import AlertInfo from "../../alert-info"
 import type { Idea, Comment } from "@/lib/kanban/types"
 
 interface CardDetailModalProps {
   idea: Idea | null
   open: boolean
   onOpenChange: (open: boolean) => void
+  onIdeaUpdated: () => void
 }
 
-export function CardDetailModal({ idea, open, onOpenChange }: CardDetailModalProps) {
+export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: CardDetailModalProps) {
   const [comments, setComments] = useState<Comment[]>([])
   const [votes, setVotes] = useState(0)
+  const [newComment, setNewComment] = useState("")
+  const [hasVoted, setHasVoted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [alert, setAlert] = useState<"success" | "error" | "info" | null>(null)
+
+  const canInteract = idea?.status === "IDEATION"
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!idea?.challengeId) return
-      try {
-        const ideasByStatus = await ideasService.getIdeasByChallenge(idea.challengeId)
-        const allIdeas = Object.values(ideasByStatus).flat()
-        const current = allIdeas.find((i: Idea) => i.id === idea.id)
-        if (current) {
-          setComments(current.comments || [])
-          setVotes(current.votes?.length || 0)
-        }
-      } catch (error) {
-        console.error("Erro ao carregar detalhes da ideia:", error)
-      }
+  if (!idea?.challengeId) return
+  try {
+    const ideasByStatus = await ideasService.getIdeasByChallenge(idea.challengeId)
+
+    const allIdeas = Object.values(ideasByStatus).flat()
+
+    const current = allIdeas.find((i: Idea) => i.id === idea.id)
+    if (current) {
+      setComments(current.comments || [])
+      setVotes(current.votes?.length || 0)
     }
+  } catch (error) {
+    console.error("Erro ao carregar comentários e votos:", error)
+  }
+}
+
 
     fetchData()
   }, [idea])
 
   if (!idea) return null
+
+  const handleAddComment = async () => {
+    if (!newComment.trim() || !canInteract) {
+      setAlert("error")
+      return
+    }
+
+    setIsSubmitting(true)
+    const result = await ideasService.addComment(idea.id, newComment.trim())
+    setIsSubmitting(false)
+
+    if (result) {
+      setComments((prev) => [...prev, result])
+      setNewComment("")
+      setAlert("success")
+      onIdeaUpdated()
+    } else {
+      setAlert("error")
+    }
+  }
+
+  // 🔹 Vota na ideia
+  const handleVote = async () => {
+    if (!canInteract) {
+      setAlert("error")
+      return
+    }
+
+    if (hasVoted) {
+      setAlert("info")
+      return
+    }
+
+    const result = await ideasService.voteIdea(idea.id)
+    if (result) {
+      setVotes((prev) => prev + 1)
+      setHasVoted(true)
+      setAlert("success")
+      onIdeaUpdated()
+    } else {
+      setAlert("error")
+    }
+  }
 
   const getStatusBadgeColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -63,7 +119,7 @@ export function CardDetailModal({ idea, open, onOpenChange }: CardDetailModalPro
         </div>
 
         <div className="flex overflow-hidden h-[calc(95vh-73px)]">
-          {/* Esquerda — informações da ideia */}
+          {/* Esquerda */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6">
             <div>
               <h2 className="text-2xl font-semibold mb-2">{idea.title}</h2>
@@ -86,21 +142,28 @@ export function CardDetailModal({ idea, open, onOpenChange }: CardDetailModalPro
               </p>
             </div>
 
-            {/* Botão de voto (somente visual) */}
+            {/* Botão de voto */}
             <div className="flex items-center gap-4 pt-4 border-t">
               <Button
-                variant="secondary"
+                variant={hasVoted ? "secondary" : "default"}
                 size="sm"
-                disabled
-                className="flex items-center gap-2 opacity-70 cursor-not-allowed"
+                onClick={handleVote}
+                disabled={!canInteract || hasVoted}
+                className="flex items-center gap-2"
               >
                 <ThumbsUp className="w-4 h-4" />
-                Votar ({votes})
+                {hasVoted ? "Votado" : "Votar"} ({votes})
               </Button>
-              <p className="text-xs text-muted-foreground">
-                Votação desativada neste modo
-              </p>
+              {!canInteract && (
+                <p className="text-xs text-muted-foreground">
+                  Votação e comentários disponíveis apenas na etapa de Ideação
+                </p>
+              )}
             </div>
+
+            {alert === "success" && <AlertSuccess />}
+            {alert === "error" && <AlertError />}
+            {alert === "info" && <AlertInfo />}
           </div>
 
           {/* Direita — Comentários */}
@@ -110,19 +173,23 @@ export function CardDetailModal({ idea, open, onOpenChange }: CardDetailModalPro
               <h3 className="text-sm font-semibold">Comentários ({comments.length})</h3>
             </div>
 
-            {/* Área de comentário (somente visual) */}
             <div className="mb-4">
               <Textarea
-                placeholder="Comentários desativados neste modo"
-                className="min-h-[80px] resize-none text-sm mb-2 opacity-70 cursor-not-allowed"
-                disabled
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder={
+                  canInteract ? "Adicione um comentário..." : "Comentários disponíveis apenas na etapa de Ideação"
+                }
+                className="min-h-[80px] resize-none text-sm mb-2"
+                disabled={!canInteract || isSubmitting}
               />
               <Button
-                className="w-full opacity-70 cursor-not-allowed"
+                onClick={handleAddComment}
+                disabled={!newComment.trim() || !canInteract || isSubmitting}
+                className="w-full"
                 size="sm"
-                disabled
               >
-                Comentar
+                {isSubmitting ? "Enviando..." : "Comentar"}
               </Button>
             </div>
 
@@ -130,7 +197,7 @@ export function CardDetailModal({ idea, open, onOpenChange }: CardDetailModalPro
             <div className="space-y-4">
               {comments.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-8">
-                  Nenhum comentário ainda.
+                  Nenhum comentário ainda
                 </p>
               ) : (
                 comments.map((comment) => (

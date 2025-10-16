@@ -52,7 +52,9 @@ export interface Idea {
   description: string
   status: IDEA_STATUSES
   challengeId: string
-  createdById?: string
+  createdById?: {
+    name:string
+  }
   createdAt: string
   updatedAt: string
   votes: Vote[]
