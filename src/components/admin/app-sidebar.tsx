@@ -4,7 +4,6 @@ import type * as React from "react"
 import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
 import { Users, BarChart3, ClipboardList, Network, Rocket, LayoutGrid } from "lucide-react"
-
 import { NavMain } from "./nav-main"
 import { NavProjects } from "@/components/admin/nav-projects"
 import { NavUser } from "@/components/admin/nav-user"
@@ -82,15 +81,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       items: [{ title: "Visão Geral", url: "/admin/dashboard" }],
     },
     {
-      title: "Funil de Inovação",
-      url: "/admin/funil/kanban",
-      icon: LayoutGrid,
-      roles: ["MANAGER", "evaluator"],
-      items: [
-        ...(challengeItems.length > 0 ? [...challengeItems] : []),
-      ],
-    },
-    {
       title: "Desafios",
       url: "/admin/desafios",
       icon: ClipboardList,
@@ -99,6 +89,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         { title: "Meus Desafios", url: "/admin/desafios/meus-desafios" },
         { title: "Criar Desafio", url: "/admin/desafios/criar" },
         { title: "Abertos ao Público", url: "/admin/desafios/publicos" },
+      ],
+    },
+    {
+      title: "Funil de Inovação",
+      url: "/admin/funil/kanban",
+      icon: LayoutGrid,
+      roles: ["MANAGER"],
+      items: [
+        ...(challengeItems.length > 0 ? [...challengeItems] : []),
       ],
     },
     {
@@ -116,22 +115,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       title: "Conexões",
       url: "/admin/conexoes",
       icon: Network,
-      roles: ["MANAGER", "evaluator"],
+      roles: ["MANAGER"],
       items: [
         { title: "Histórico de Interações", url: "/admin/conexoes/historico" },
         { title: "POCs em Andamento", url: "/admin/conexoes/pocs" },
       ],
     },
     {
-      title: "Relatórios",
-      url: "/admin/relatorios",
-      icon: BarChart3,
-      roles: ["MANAGER"],
-      items: [{ title: "Indicadores por Etapa", url: "/admin/relatorios/etapas" }],
-    },
-    {
-      title: "Configurações",
-      url: "/admin/config",
+      title: "Usuários",
+      url: "/admin/users",
       icon: Users,
       roles: ["MANAGER"],
       items: [{ title: "Usuários & Permissões", url: "/admin/users" }],
