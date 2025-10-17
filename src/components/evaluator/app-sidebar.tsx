@@ -82,15 +82,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       items: [{ title: "Visão Geral", url: "/evaluator/dashboard" }],
     },
     {
-      title: "Funil de Inovação",
-      url: "/evaluator/funil/kanban",
-      icon: LayoutGrid,
-      roles: ["EVALUATOR"],
-      items: [
-        ...(challengeItems.length > 0 ? [...challengeItems] : []),
-      ],
-    },
-    {
       title: "Desafios",
       url: "/evaluator/desafios",
       icon: ClipboardList,
@@ -99,6 +90,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         { title: "Meus Desafios", url: "/admin/desafios/meus-desafios" },
         { title: "Criar Desafio", url: "/admin/desafios/criar" },
         { title: "Abertos ao Público", url: "/admin/desafios/publicos" },
+      ],
+    },
+    {
+      title: "Funil de Inovação",
+      url: "/evaluator/funil/kanban",
+      icon: LayoutGrid,
+      roles: ["EVALUATOR"],
+      items: [
+        ...(challengeItems.length > 0 ? [...challengeItems] : []),
       ],
     },
     {
