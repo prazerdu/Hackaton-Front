@@ -1,130 +1,131 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardDescription,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import DialogScrollableDemo from "./modal"
+import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 
-type CardData = {
-  image: string
-  title: string
-  description: string
-  buttonText: string
-  howItWorks: string
-}
-
-const cards: CardData[] = [
+const sections = [
   {
-    image: "/homepage.png",
-    title: "Transforme ideias em impacto",
+    id: 'usuario-comum',
+    title: 'Usuário Comum',
     description:
-      "Crie, compartilhe e participe de desafios de inovação e construa o futuro junto com quem quer fazer a diferença. Participe de desafios de inovação que conectam pessoas com ideias a quem pode transformá-las em soluções reais. Explore diferentes setores e projetos, compartilhe suas ideias, colabore com outros inovadores e veja seu impacto ganhar forma. Cada desafio é uma oportunidade de aprendizado e crescimento, incentivando a criatividade e a solução de problemas complexos.",
-    buttonText: "Saiba mais",
-    howItWorks: `
-Crie ou participe de desafios públicos ou privados.
-
-Colabore com outros participantes em tempo real.
-
-Receba feedback e veja suas ideias evoluírem em soluções concretas.`,
+      'Trabalhe com sua equipe em harmonia, com feedback instantâneo e comunicação integrada.',
+    image: 'https://i.pinimg.com/736x/16/ef/40/16ef40bf188f4227650a664637ee30ab.jpg',
   },
   {
-    image: "/innovation.png",
-    title: "Inove do seu jeito",
+    id: 'gestor-avaliador',
+    title: 'Gestor e Avaliador',
     description:
-      "Lance desafios públicos para engajar a comunidade ou privados para sua equipe — tudo em um único ambiente flexível. Customize seus desafios e inovações da forma que desejar. Se você quer testar novas ideias com sua equipe ou engajar a comunidade, este ambiente flexível permite que você defina regras, metas e formatos que se adaptam às suas necessidades. Experimente diferentes abordagens, incentive a criatividade e acompanhe o progresso das soluções que surgirem.",
-    buttonText: "Saiba mais",
-    howItWorks: `
-Crie desafios adaptados ao seu estilo ou da sua equipe.
-
-Experimente métodos colaborativos e iterativos.
-
-Analise resultados e métricas para ajustar e melhorar cada iniciativa.
-`,
+      'Acompanhe métricas, progresso e resultados de forma inteligente e visual.',
+    image: 'https://i.pinimg.com/1200x/e2/c9/18/e2c918fddd4fc517665b3ce9c73bb5f6.jpg',
   },
   {
-    image: "/community.png",
-    title: "Conecte mentes criativas",
+    id: 'super-admin',
+    title: 'Super Admin Ninna',
     description:
-      "Junte-se a uma rede de inovadores e colabore em soluções que impulsionam negócios e transformam realidades.",
-    buttonText: "Saiba mais",
-    howItWorks: `
-Explore uma rede diversificada de participantes.
-
-Participe de grupos de colaboração e brainstorms virtuais.
-
-Transforme ideias em protótipos ou projetos reais com suporte da comunidade.
-`,
+      'Descubra oportunidades e tendências que impulsionam o crescimento do seu projeto.',
+    image: 'https://i.pinimg.com/736x/16/ef/40/16ef40bf188f4227650a664637ee30ab.jpg',
   },
 ]
 
-export default function CardHorizontalList() {
-  const [open, setOpen] = useState(false)
-  const [selectedCard, setSelectedCard] = useState<CardData | null>(null)
-
-  const handleOpenModal = (card: CardData) => {
-    setSelectedCard(card)
-    setOpen(true)
+export default function CardsSection() {
+  const scrollToSection = (id: string) => {
+    const section = document.getElementById(id)
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   return (
-    <section className="w-full flex flex-col items-center justify-center py-10">
-      <div className="flex flex-wrap justify-center gap-8">
-        {cards.map((card, index) => (
-          <Card
-            key={index}
-            className="group relative w-[400px sm:w-[420px] h-[270px] flex flex-col sm:flex-row rounded-2xl border border-border/40 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden bg-background"
+    <section className="text-center w-full py-24">
+      {/* Título principal */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="max-w-3xl mx-auto mb-16"
+      >
+        <h2 className="text-4xl font-bold mb-4">Perfis de Usuário</h2>
+        <p className="text-lg text-muted-foreground">
+          Explore os diferentes níveis de acesso e funcionalidades da plataforma.
+        </p>
+      </motion.div>
+
+      {/* Cards 3D interativos */}
+      <motion.div
+        className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto perspective-[1000px]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 1 }}
+      >
+        {sections.map((section, index) => (
+          <motion.div
+            key={section.id}
+            whileHover={{ scale: 1.05, rotateY: 0 }}
+            initial={{ rotateY: index === 0 ? 15 : index === 2 ? -15 : 0 }}
+            className="group relative w-[300px] cursor-pointer overflow-hidden rounded-2xl shadow-lg bg-card hover:shadow-xl transition-all duration-500 [transform-style:preserve-3d]"
+            onClick={() => scrollToSection(section.id)}
           >
-            {/* Imagem */}
-            <div className="sm:w-1/2 h-[160px] sm:h-auto overflow-hidden rounded-t-2xl sm:rounded-tl-2xl sm:rounded-bl-2xl">
-              <img
-                src={card.image}
-                alt={card.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            <div className="relative w-full h-[360px] [transform:translateZ(50px)]">
+              <Image
+                src={section.image}
+                alt={section.title}
+                fill
+                className="object-cover group-hover:brightness-70 transition-all duration-500 rounded-2xl"
               />
             </div>
-
-            {/* Conteúdo */}
-            <div className="flex-1 flex flex-col justify-between p-5 sm:p-6 bg-background/90 backdrop-blur-sm rounded-b-2xl sm:rounded-bl-none sm:rounded-br-2xl z-10">
-              <CardHeader className="p-0">
-                <CardTitle className="text-purple-800 dark:text-white font-semibold leading-snug">
-                  {card.title}
-                </CardTitle>
-                <CardDescription className="text-sm text-purple-950 dark:text-gray-200 mt-2 line-clamp-4">
-                  {card.description}
-                </CardDescription>
-              </CardHeader>
-
-              <CardFooter className="p-0 mt-4">
-                <Button
-                  onClick={() => handleOpenModal(card)}
-                  className="w-full cursor-pointer bg-gradient-to-r from-purple-800 to-purple-600 text-white text-sm font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.03]"
-                >
-                  {card.buttonText}
-                </Button>
-              </CardFooter>
+            <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-background/90 via-background/20 to-transparent [transform:translateZ(60px)]">
+              <h3 className="text-xl font-semibold mb-2">{section.title}</h3>
+              <p className="text-sm text-muted-foreground">{section.description}</p>
             </div>
-          </Card>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Modal Dinâmico */}
-      {selectedCard && (
-        <DialogScrollableDemo
-          open={open}
-          onOpenChange={setOpen}
-          title={selectedCard.title}
-          description={selectedCard.description}
-          image={selectedCard.image}
-          howItWorks={selectedCard.howItWorks}
-        />
-      )}
+      {/* Sessões individuais melhoradas */}
+      {sections.map((section, index) => (
+        <motion.section
+          key={section.id}
+          id={section.id}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: index * 0.2 }}
+          viewport={{ once: true }}
+          className={`flex flex-col lg:flex-row items-center mt-30 justify-center gap-12 my-24 ${
+            index % 2 === 1 ? 'lg:flex-row-reverse' : ''
+          }`}
+        >
+          {/* Imagem com hover elegante */}
+          <motion.div
+            className="relative w-full lg:w-[300px] h-[400px] rounded-3xl overflow-hidden shadow-2xl"
+            initial={{ x: index % 2 === 1 ? 50 : -50, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Image
+              src={section.image}
+              alt={section.title}
+              fill
+              className="object-cover rounded-3xl"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent rounded-3xl pointer-events-none" />
+          </motion.div>
+
+          <motion.div
+            className="max-w-xl text-center lg:text-left"
+            initial={{ x: index % 2 === 1 ? -50 : 50, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-4xl font-extrabold mb-4 text-primary">{section.title}</h2>
+            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+              {section.description}
+            </p>
+
+          </motion.div>
+        </motion.section>
+      ))}
     </section>
   )
 }

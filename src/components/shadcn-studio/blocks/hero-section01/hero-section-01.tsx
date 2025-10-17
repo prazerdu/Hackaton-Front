@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRightIcon } from "lucide-react";
 import TiltShineCard from "./../card";
+import { Card } from "@/components/ui/card";
+import CardsSection from "@/components/cardHorizontal";
 
 const HeroSection = () => {
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-[90dvh] pt-6 md:pt-16 lg:pt-10 overflow-hidden">
+    <section className="relative  flex flex-col items-center justify-center min-h-[90dvh] pt-6 md:pt-16 lg:pt-10 overflow-hidden">
       {/* Fundo animado */}
       <div className="absolute inset-0 -z-10 flex justify-center items-center">
         <div className="absolute w-96 h-96 bg-purple-950/30 rounded-full blur-3xl animate-blob"></div>
