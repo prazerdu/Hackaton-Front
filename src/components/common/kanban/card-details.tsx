@@ -27,73 +27,96 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
   const [hasVoted, setHasVoted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [alert, setAlert] = useState<"success" | "error" | "info" | null>(null)
+  const [currentIdea, setCurrentIdea] = useState<Idea | null>(null)
 
-  const canInteract = idea?.status === "IDEATION"
+  const statusOrder = ["GENERATION", "TRIAGE", "IDEATION", "IMPLEMENTATION", "COMPLETED"]
+  const currentStatusIndex = currentIdea ? statusOrder.indexOf(currentIdea.status) : -1
+  const ideationIndex = statusOrder.indexOf("IDEATION")
+
+  // Show voting and commenting only in IDEATION
+  const canInteract = currentIdea?.status === "IDEATION"
+  // Show comments list in IDEATION and after (IMPLEMENTATION, COMPLETED)
+  const showComments = currentStatusIndex >= ideationIndex
+  // </CHANGE>
 
   useEffect(() => {
     const fetchData = async () => {
-  if (!idea?.challengeId) return
-  try {
-    const ideasByStatus = await ideasService.getIdeasByChallenge(idea.challengeId)
+      if (!idea?.id) return
 
-    const allIdeas = Object.values(ideasByStatus).flat()
+      console.log("[v0] Fetching idea data from API for idea:", idea.id)
+      const freshIdea = await ideasService.getIdeaById(idea.id)
 
-    const current = allIdeas.find((i: Idea) => i.id === idea.id)
-    if (current) {
-      setComments(current.comments || [])
-      setVotes(current.votes?.length || 0)
+      if (freshIdea) {
+        console.log("[v0] Fresh idea status from API:", freshIdea.status)
+        setCurrentIdea(freshIdea)
+        setComments(freshIdea.comments || [])
+        setVotes(freshIdea.votes?.length || 0)
+        // TODO: Check if current user has voted
+        // setHasVoted(freshIdea.votes?.some(v => v.userId === currentUserId))
+      }
     }
-  } catch (error) {
-    console.error("Erro ao carregar comentários e votos:", error)
-  }
-}
 
+    if (open) {
+      fetchData()
+    } else {
+      setAlert(null)
+    }
+  }, [idea?.id, open])
 
-    fetchData()
-  }, [idea])
-
-  if (!idea) return null
+  if (!idea || !currentIdea) return null
 
   const handleAddComment = async () => {
-    if (!newComment.trim() || !canInteract) {
+    if (!newComment.trim()) {
       setAlert("error")
+      setTimeout(() => setAlert(null), 3000)
+      return
+    }
+
+    if (!canInteract) {
+      setAlert("info")
+      setTimeout(() => setAlert(null), 3000)
       return
     }
 
     setIsSubmitting(true)
-    const result = await ideasService.addComment(idea.id, newComment.trim())
+    const result = await ideasService.addComment(currentIdea.id, newComment.trim())
     setIsSubmitting(false)
 
     if (result) {
       setComments((prev) => [...prev, result])
       setNewComment("")
       setAlert("success")
+      setTimeout(() => setAlert(null), 3000)
       onIdeaUpdated()
     } else {
       setAlert("error")
+      setTimeout(() => setAlert(null), 3000)
     }
   }
 
-  // 🔹 Vota na ideia
   const handleVote = async () => {
-    if (!canInteract) {
-      setAlert("error")
-      return
-    }
-
     if (hasVoted) {
       setAlert("info")
+      setTimeout(() => setAlert(null), 3000)
       return
     }
 
-    const result = await ideasService.voteIdea(idea.id)
+    if (!canInteract) {
+      setAlert("info")
+      setTimeout(() => setAlert(null), 3000)
+      return
+    }
+
+    const result = await ideasService.voteIdea(currentIdea.id)
     if (result) {
       setVotes((prev) => prev + 1)
       setHasVoted(true)
       setAlert("success")
+      setTimeout(() => setAlert(null), 3000)
       onIdeaUpdated()
     } else {
       setAlert("error")
+      setTimeout(() => setAlert(null), 3000)
     }
   }
 
@@ -105,112 +128,121 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
       IMPLEMENTATION: "bg-orange-500",
       COMPLETED: "bg-red-500",
     }
-    return colors[status] || "bg-gray-500"
+    return colors[status?.toUpperCase()] || "bg-gray-500"
+  }
+
+  const getAuthorName = () => {
+    if (typeof currentIdea.createdById === "object" && currentIdea.createdById?.name) {
+      return currentIdea.createdById.name
+    }
+    return String(currentIdea.createdById)
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="min-w-4xl w-[90vw] overflow-hidden p-0 gap-0">
-        <DialogTitle />
+        <DialogTitle className="sr-only">{currentIdea.title}</DialogTitle>
         <div className="flex items-center justify-between p-4 border-b">
-          <Badge className={`${getStatusBadgeColor(idea.status)} text-white`}>
-            {idea.status}
-          </Badge>
+          <Badge className={`${getStatusBadgeColor(currentIdea.status)} text-white`}>{currentIdea.status}</Badge>
         </div>
 
         <div className="flex overflow-hidden h-[calc(95vh-73px)]">
-          {/* Esquerda */}
+          {/* Coluna esquerda - Detalhes da ideia */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6">
             <div>
-              <h2 className="text-2xl font-semibold mb-2">{idea.title}</h2>
+              <h2 className="text-2xl font-semibold mb-2">{currentIdea.title}</h2>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <User className="w-4 h-4" />
-                  <span>{String(idea.createdById)}</span>
+                  <span>{getAuthorName()}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  <span>{new Date(idea.createdAt).toLocaleDateString("pt-BR")}</span>
+                  <span>{new Date(currentIdea.createdAt).toLocaleDateString("pt-BR")}</span>
                 </div>
               </div>
             </div>
 
             <div>
               <h3 className="text-sm font-semibold mb-2">Descrição</h3>
-              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                {idea.description}
-              </p>
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap">{currentIdea.description}</p>
             </div>
 
-            {/* Botão de voto */}
-            <div className="flex items-center gap-4 pt-4 border-t">
-              <Button
-                variant={hasVoted ? "secondary" : "default"}
-                size="sm"
-                onClick={handleVote}
-                disabled={!canInteract || hasVoted}
-                className="flex items-center gap-2"
-              >
-                <ThumbsUp className="w-4 h-4" />
-                {hasVoted ? "Votado" : "Votar"} ({votes})
-              </Button>
-              {!canInteract && (
-                <p className="text-xs text-muted-foreground">
-                  Votação e comentários disponíveis apenas na etapa de Ideação
-                </p>
-              )}
-            </div>
+            {canInteract && (
+              <div className="flex items-center gap-4 pt-4 border-t">
+                <Button
+                  variant={hasVoted ? "secondary" : "default"}
+                  size="sm"
+                  onClick={handleVote}
+                  disabled={hasVoted}
+                  className="flex items-center gap-2"
+                >
+                  <ThumbsUp className="w-4 h-4" />
+                  {hasVoted ? "Votado" : "Votar"} ({votes})
+                </Button>
+              </div>
+            )}
+            {/* </CHANGE> */}
 
             {alert === "success" && <AlertSuccess />}
             {alert === "error" && <AlertError />}
             {alert === "info" && <AlertInfo />}
           </div>
 
-          {/* Direita — Comentários */}
-          <div className="w-96 border-l overflow-y-auto p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <MessageSquare className="w-5 h-5" />
-              <h3 className="text-sm font-semibold">Comentários ({comments.length})</h3>
-            </div>
+          {showComments && (
+            <div className="w-96 border-l overflow-y-auto p-4">
+              <div className="flex items-center gap-2 mb-4">
+                <MessageSquare className="w-5 h-5" />
+                <h3 className="text-sm font-semibold">Comentários ({comments.length})</h3>
+              </div>
 
-            <div className="mb-4">
-              <Textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder={
-                  canInteract ? "Adicione um comentário..." : "Comentários disponíveis apenas na etapa de Ideação"
-                }
-                className="min-h-[80px] resize-none text-sm mb-2"
-                disabled={!canInteract || isSubmitting}
-              />
-              <Button
-                onClick={handleAddComment}
-                disabled={!newComment.trim() || !canInteract || isSubmitting}
-                className="w-full"
-                size="sm"
-              >
-                {isSubmitting ? "Enviando..." : "Comentar"}
-              </Button>
-            </div>
-
-            {/* Lista de comentários */}
-            <div className="space-y-4">
-              {comments.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-8">
-                  Nenhum comentário ainda
-                </p>
-              ) : (
-                comments.map((comment) => (
-                  <div key={comment.id} className="flex flex-col border-b pb-2">
-                    <p className="text-sm text-muted-foreground">{comment.content}</p>
-                    <span className="text-xs text-muted-foreground mt-1">
-                      {new Date(comment.createdAt).toLocaleString("pt-BR")}
-                    </span>
-                  </div>
-                ))
+              {/* Only show comment input in IDEATION */}
+              {canInteract && (
+                <div className="mb-4">
+                  <Textarea
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="Adicione um comentário..."
+                    className="min-h-[80px] resize-none text-sm mb-2"
+                    disabled={isSubmitting}
+                  />
+                  <Button
+                    onClick={handleAddComment}
+                    disabled={!newComment.trim() || isSubmitting}
+                    className="w-full"
+                    size="sm"
+                  >
+                    {isSubmitting ? "Enviando..." : "Comentar"}
+                  </Button>
+                </div>
               )}
+
+              {/* Comments list - visible in IDEATION and after */}
+              <div className="space-y-4">
+                {comments.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-8">
+                    {canInteract ? "Nenhum comentário ainda. Seja o primeiro a comentar!" : "Nenhum comentário"}
+                  </p>
+                ) : (
+                  comments.map((comment) => (
+                    <div key={comment.id} className="flex flex-col border-b pb-3 last:border-b-0">
+                      <p className="text-sm text-foreground mb-1">{comment.content}</p>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(comment.createdAt).toLocaleString("pt-BR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
-          </div>
+          )}
+          {/* </CHANGE> */}
         </div>
       </DialogContent>
     </Dialog>

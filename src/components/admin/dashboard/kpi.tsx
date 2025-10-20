@@ -8,7 +8,7 @@ export function KPICards({ kpis }: { kpis: { totalIdeas: number; totalStartupsCo
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {[
         { label: "Ideias Capturadas", icon: Lightbulb, value: kpis.totalIdeas },
-        { label: "Desafios", icon: ClipboardList, value: kpis.totalStartupsConnected },
+        { label: "Startups conectadas", icon: ClipboardList, value: kpis.totalStartupsConnected },
         { label: "POCs em andamento", icon: Rocket, value: kpis.totalStartupsConnected },
       ].map((item, i) => (
         <Card key={i}>

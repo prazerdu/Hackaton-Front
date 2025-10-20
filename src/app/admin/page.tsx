@@ -117,8 +117,6 @@ useEffect(() => {
           Acompanhe o desempenho e engajamento geral da sua corporação na plataforma.
         </p>
       </div>
-
-      {/* ✅ Passa o objeto kpis (não a função setKpis) */}
       <KPICards kpis={kpis} />
       <QuickActions />
     </div>

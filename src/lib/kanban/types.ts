@@ -18,7 +18,7 @@ export interface NavItem {
 }
 
 export type IDEA_STATUSES = "GENERATION" | "TRIAGE" | "IDEATION" | "IMPLEMENTATION" | "COMPLETED"
-export type UserRole = "MANAGER" | "EVALUATOR" | "USER"
+export type UserRole = "MANAGER" | "EVALUATOR" | "COMMON"
 
 export interface User {
   id: string
