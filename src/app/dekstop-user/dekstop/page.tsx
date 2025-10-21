@@ -7,7 +7,6 @@ import Rightbar from "@/app/dekstop-user/dekstop/components/Rightbar";
 import CardTweetDemo from "@/app/dekstop-user/dekstop/components/HireCards";
 
 export default function Dekstop() {
-  // Estado para a barra de pesquisa
   const [searchQuery, setSearchQuery] = useState("");
 
   return (

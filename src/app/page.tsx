@@ -5,6 +5,7 @@ import HeroSection from "@/components/shadcn-studio/blocks/hero-section01/hero-s
 import Header from "@/components/shadcn-studio/blocks/hero-section01/header";
 import type { NavigationSection } from "@/components/shadcn-studio/blocks/hero-section01/header";
 import CardsSection from "../components/cardHorizontal";
+import Toolip from "../components/toolip";
 
 const navigationData: NavigationSection[] = [
   { title: "Home", href: "#home" },
