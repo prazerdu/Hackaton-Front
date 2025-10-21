@@ -41,7 +41,7 @@ interface currentUser {
   sub?: string
   avatar?: string
   role?: string
-  companyId?: string
+  companyName?: string
   exp?: number
 }
 
@@ -63,7 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           email: decoded.email || decoded.sub || "sem-email@exemplo.com",
           role: decoded.role || "user",
           avatar: decoded.avatar || "/avatars/default.jpg",
-          companyId: decoded.companyId || "Corporação"
+          companyName: decoded.companyName || "Corporação"
         })
       } catch (err) {
         console.error("Erro ao decodificar JWT:", err)
@@ -75,7 +75,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     setLoading(false)
   }, [])
 
-  // 🔹 Carrega os desafios (challenges)
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
@@ -97,14 +96,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return <div className="p-4 text-sm text-red-500">Usuário não autenticado</div>
   }
 
-  // 🔹 Prepara os desafios para o componente NavProjects
   const challengeItems = challenges.map((challenge) => ({
     name: challenge.title,
     url: `/admin/funil/kanban/${challenge.id}`,
-    icon: IconLayoutKanban, // ícone padrão
+    icon: IconLayoutKanban,
   }))
 
-  // 🔹 Menu principal
   const navMain = [
     {
       title: "Dashboard",
@@ -180,7 +177,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <a href="#">
                 <IconInnerShadowTop className="!size-6 fill-primary text-xs" />
                 {/* Exibe o nome da empresa do usuário logado */}
-                <span className="text-[1.5rem] font-semibold">Corporação</span>
+                <span className="text-[1.5rem] font-semibold">{currentUser.companyName}</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
