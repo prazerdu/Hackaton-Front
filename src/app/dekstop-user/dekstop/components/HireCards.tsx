@@ -1,13 +1,12 @@
-'use client'
+"use client";
 
-import { useState, ReactNode, useEffect } from 'react'
+import { useState, ReactNode, useEffect } from "react";
 import {
   LeafIcon,
   SproutIcon,
   HeartPulseIcon,
   RocketIcon,
   SearchIcon,
-  UserPlusIcon,
   MailIcon,
   TargetIcon,
   InfoIcon,
@@ -16,50 +15,51 @@ import {
   BadgeCheckIcon,
   BriefcaseIcon,
   GiftIcon,
-} from 'lucide-react'
+} from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import Drop from '@/components/drop'
-import Alert from '@/components/alert'
-import { cn } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import Drop from "@/components/drop";
+import Alert from "@/components/alert";
+import { cn } from "@/lib/utils";
+import NavDropDown from "@/components/navDrop";
 
 type Challenge = {
-  id: string
-  corporation: { name: string; logo: string; verified?: boolean }
-  category: string
-  problem: string
-  goal: string
-  description: string
-  reward: string
-  deadline: string
-  participants: number
-  likes: number
-  comments: number
-  shares: number
-}
+  id: string;
+  corporation: { name: string; logo: string; verified?: boolean };
+  category: string;
+  problem: string;
+  goal: string;
+  description: string;
+  reward: string;
+  deadline: string;
+  participants: number;
+  likes: number;
+  comments: number;
+  shares: number;
+};
 
 const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
-  const [accepted, setAccepted] = useState(false)
-  const [participants, setParticipants] = useState(challenge.participants)
-  const [showAlert, setShowAlert] = useState(false)
+  const [accepted, setAccepted] = useState(false);
+  const [participants, setParticipants] = useState(challenge.participants);
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleAccept = () => {
-    setAccepted(true)
-    setParticipants((prev) => prev + 1)
-    setShowAlert(true)
-  }
+    setAccepted(true);
+    setParticipants((prev) => prev + 1);
+    setShowAlert(true);
+  };
 
   useEffect(() => {
     if (showAlert) {
-      const timer = setTimeout(() => setShowAlert(false), 4000)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setShowAlert(false), 4000);
+      return () => clearTimeout(timer);
     }
-  }, [showAlert])
+  }, [showAlert]);
 
   return (
     <>
@@ -113,7 +113,8 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
           </Card>
         </DialogTrigger>
 
-        <DialogContent className="w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-3xl p-4 md:p-0 overflow-auto backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 border border-white/20 shadow-2xl transition-all duration-300">
+        {/* Modal ajustado */}
+        <DialogContent className="w-full max-w-4xl sm:max-w-3xl  h-auto sm:max-h-full p-4 md:p-6 overflow-y-auto backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 border border-white/20 shadow-2xl rounded-2xl transition-all duration-300">
           {/* Header modal */}
           <div className="bg-gradient-to-r border-b px-4 md:px-6 py-4 md:py-5 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -193,91 +194,88 @@ const ChallengeDialog = ({ challenge }: { challenge: Challenge }) => {
               onClick={handleAccept}
               disabled={accepted}
               className={cn(
-                'w-full text-white font-semibold py-3 md:py-5 rounded-xl shadow-md transition-all duration-300 text-sm md:text-base',
-                accepted ? 'bg-blue-800 hover:bg-blue-900 cursor-default' : 'bg-indigo-600 hover:bg-indigo-700'
+                "w-full text-white font-semibold py-3 md:py-5 rounded-xl shadow-md transition-all duration-300 text-sm md:text-base",
+                accepted ? "bg-blue-800 hover:bg-blue-900 cursor-default" : "bg-indigo-600 hover:bg-indigo-700"
               )}
             >
-              {accepted ? 'Solicitação enviada!' : 'Solicitar participação'}
+              {accepted ? "Solicitação enviada!" : "Solicitar participação"}
             </Button>
           </div>
         </DialogContent>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
 const ChallengesList = () => {
-  const [search, setSearch] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('')
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const categories: { name: string; icon: ReactNode }[] = [
-    { name: 'Logística e Sustentabilidade', icon: <LeafIcon className="size-4 mr-1 text-green-600" /> },
-    { name: 'Agricultura e Tecnologia', icon: <SproutIcon className="size-4 mr-1 text-lime-600" /> },
-    { name: 'Saúde Digital', icon: <HeartPulseIcon className="size-4 mr-1 text-pink-600" /> },
-    { name: 'Inovação e Transformação Digital', icon: <RocketIcon className="size-4 mr-1 text-indigo-600" /> },
-  ]
+    { name: "Logística e Sustentabilidade", icon: <LeafIcon className="size-4 mr-1 text-green-600" /> },
+    { name: "Agricultura e Tecnologia", icon: <SproutIcon className="size-4 mr-1 text-lime-600" /> },
+    { name: "Saúde Digital", icon: <HeartPulseIcon className="size-4 mr-1 text-pink-600" /> },
+    { name: "Inovação e Transformação Digital", icon: <RocketIcon className="size-4 mr-1 text-indigo-600" /> },
+  ];
 
   const challenges: Challenge[] = [
     {
-      id: '1',
-      corporation: { name: 'EcoLogística', logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png', verified: true },
-      category: 'Logística e Sustentabilidade',
-      problem: 'Alto custo de combustível e impacto ambiental elevado.',
-      goal: 'Reduzir emissões de carbono no transporte de cargas.',
-      description: 'Buscamos soluções inovadoras para otimização de rotas e uso de energias limpas.',
-      reward: '🏆 R$ 100.000 + contrato de 12 meses',
-      deadline: '30/11/2025',
+      id: "1",
+      corporation: { name: "EcoLogística", logo: "https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png", verified: true },
+      category: "Logística e Sustentabilidade",
+      problem: "Alto custo de combustível e impacto ambiental elevado.",
+      goal: "Reduzir emissões de carbono no transporte de cargas.",
+      description: "Buscamos soluções inovadoras para otimização de rotas e uso de energias limpas.",
+      reward: "🏆 R$ 100.000 + contrato de 12 meses",
+      deadline: "30/11/2025",
       participants: 42,
       likes: 230,
       comments: 45,
       shares: 18,
     },
     {
-      id: '2',
-      corporation: { name: 'AgroFuturo', logo: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-6.png' },
-      category: 'Agricultura e Tecnologia',
-      problem: 'Dificuldade em monitorar plantações e prever pragas.',
-      goal: 'Criar soluções digitais para monitoramento remoto e previsão de riscos.',
-      description: 'Startups de IA, sensores IoT ou apps são bem-vindas.',
-      reward: '💰 R$ 50.000 + parceria estratégica',
-      deadline: '15/12/2025',
+      id: "2",
+      corporation: { name: "AgroFuturo", logo: "https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-6.png" },
+      category: "Agricultura e Tecnologia",
+      problem: "Dificuldade em monitorar plantações e prever pragas.",
+      goal: "Criar soluções digitais para monitoramento remoto e previsão de riscos.",
+      description: "Startups de IA, sensores IoT ou apps são bem-vindas.",
+      reward: "💰 R$ 50.000 + parceria estratégica",
+      deadline: "15/12/2025",
       participants: 28,
       likes: 190,
       comments: 30,
       shares: 10,
     },
-  ]
+  ];
 
   const filteredChallenges = challenges.filter((c) => {
     const matchesSearch =
       c.corporation.name.toLowerCase().includes(search.toLowerCase()) ||
       c.problem.toLowerCase().includes(search.toLowerCase()) ||
-      c.category.toLowerCase().includes(search.toLowerCase())
-    const matchesCategory = selectedCategory === '' || c.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+      c.category.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = selectedCategory === "" || c.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
-    <div className="space-y-8 w-full min-h-[70vh] flex flex-col">
-      {/* Busca e filtro */}
-      <div className="flex items-center justify-center gap-2 max-w-[700px] mx-auto">
-        <div className="relative flex-1 min-w-[250px] sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px]">
+    <div className="space-y-4 w-full min-h-[70vh] flex flex-col">
+      <div className="flex items-center justify-center mt-3 gap-2 max-w-[700px] mx-auto">
+        <div className="relative p-1 flex-1 min-w-[250px] sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px]">
           <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
             placeholder="Buscar desafios..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 w-full rounded-xl"
+            className="pl-10 w-full text-foreground rounded-xl pr-12"
           />
+          <div className="absolute right-2 top-1/2 -translate-y-1/2">
+            <Drop categories={categories} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+          </div>
         </div>
-        <Drop
-          categories={categories}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
+        <NavDropDown />
       </div>
 
-      {/* Renderização condicional */}
       {filteredChallenges.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[1300px] mx-auto">
           {filteredChallenges.map((challenge) => (
@@ -291,7 +289,6 @@ const ChallengesList = () => {
           <p className="max-w-md text-sm md:text-base">
             Parece que ainda não há desafios cadastrados. Você pode criar seu próprio desafio ou entrar em contato para começar.
           </p>
-
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
             <Button className="flex items-center gap-2 border border-gray-400 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-zinc-800">
               <MailIcon className="w-5 h-5" />
@@ -301,7 +298,7 @@ const ChallengesList = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ChallengesList
+export default ChallengesList;

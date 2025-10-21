@@ -15,10 +15,10 @@ export default function NavDropDown() {
                 <Button
                     size="icon"
                     variant="ghost"
-                    className="rounded-full shadow-none"
+                    className="rounded-full text-foreground shadow-none"
                     aria-label="Open menu"
                 >
-                    <TextAlignJustify size={16} aria-hidden="true" />
+                    <TextAlignJustify aria-hidden="true" />
                 </Button>
             </DropdownMenuTrigger>
 
