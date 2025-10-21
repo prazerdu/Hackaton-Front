@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRightIcon } from "lucide-react";
 import TiltShineCard from "./../card";
-import { Card } from "@/components/ui/card";
-import CardsSection from "@/components/cardHorizontal";
 
 const HeroSection = () => {
   return (

@@ -32,12 +32,14 @@ export default function DropResponsive({ categories, selectedCategory, setSelect
                         <FilterIcon className="w-5 h-5" />
                     </Button>
                 </DropdownMenuTrigger>
-
                 <DropdownMenuContent
-                    side="bottom" 
-                    align="start" 
-                    className="w-56 bg-background border border-border shadow-lg rounded-md p-1"
+                    side="bottom"
+                    align="center"
+                    sideOffset={8}
+                    collisionPadding={12}
+                    className="w-56 bg-background border border-border shadow-lg rounded-md p-2"
                 >
+
                     <DropdownMenuItem
                         onClick={() => setSelectedCategory('')}
                         className={`cursor-pointer select-none rounded-sm px-2 py-1 text-sm hover:bg-accent hover:text-accent-foreground ${selectedCategory === '' ? 'bg-accent text-accent-foreground font-medium' : ''

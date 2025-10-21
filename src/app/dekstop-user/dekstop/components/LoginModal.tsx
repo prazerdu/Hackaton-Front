@@ -20,8 +20,11 @@ type JwtPayload = {
   exp: number
   role?: "COMMON" | "EVALUATOR" | "MANAGER" | "HUB_ADMIN"
 }
+type LoginModalProps = {
+  onClose?: () => void
+}
 
-export default function LoginModal() {
+export default function LoginModal({ onClose }: LoginModalProps) {
   const id = useId()
   const router = useRouter()
   const [isClient, setIsClient] = useState(false)
