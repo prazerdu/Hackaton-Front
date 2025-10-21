@@ -24,13 +24,13 @@ interface TiltCardProps {
 
 const TiltShineCard = ({
   imageSrc,
-  title = "Solução Corporativa Premium",
+  title = "Plataforma de Inovação Aberta ",
   description = "Uma plataforma completa para transformar seu negócio digitalmente, com soluções inovadoras e design de alto padrão.",
   badges = ["Destaque"],
   features = [
     { icon: <CheckCircle className="w-4 h-4" />, label: "Seguro" },
     { icon: <CheckCircle className="w-4 h-4" />, label: "Rápido" },
-    { icon: <CheckCircle className="w-4 h-4" />, label: "Premium" },
+    { icon: <CheckCircle className="w-4 h-4" />, label: "Acessível" },
   ],
   primaryButton = { text: "Saiba Mais", link: "/corporate" },
   secondaryButton = { text: "Contato", link: "/contact" },
@@ -58,18 +58,6 @@ const TiltShineCard = ({
       }}
     >
       <Card className="relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-white/10">
-        {/* Imagem de fundo */}
-        {imageSrc && (
-          <div className="absolute inset-0 z-0 opacity-60">
-            <Image
-              src={imageSrc}
-              alt={title}
-              className="object-cover w-full h-full rounded-3xl"
-              fill
-            />
-          </div>
-        )}
-
         {/* Overlay de cor e brilho */}
         <div className="absolute inset-0 z-10 bg-transparent rounded-3xl pointer-events-none"></div>
         <div className="absolute inset-0 z-20 pointer-events-none">
