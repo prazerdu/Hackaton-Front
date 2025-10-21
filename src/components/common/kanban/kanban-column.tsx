@@ -1,6 +1,6 @@
 "use client"
 
-import { KanbanCard } from "./kanban-card"
+import { KanbanCard } from "@/components/common/kanban/kanban-card"
 import type { Column, Idea } from "@/lib/kanban/types"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -13,9 +13,7 @@ interface KanbanColumnProps {
 
 export function KanbanColumn({ column, onCardClick, onAddCard }: KanbanColumnProps) {
   return (
-    <div
-      className="flex-shrink-0 w-80 rounded-lg p-4 transition-colors min-h-[500px] border border-border bg-secondary/50"
-    >
+    <div className="flex-shrink-0 w-80 rounded-lg p-4 transition-colors min-h-[500px] border border-border bg-secondary/50">
       {/* Cabeçalho */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -40,13 +38,9 @@ export function KanbanColumn({ column, onCardClick, onAddCard }: KanbanColumnPro
       {/* Cards */}
       <div className="space-y-3">
         {column.ideas.length > 0 ? (
-          column.ideas.map((idea) => (
-            <KanbanCard key={idea.id} idea={idea} onClick={() => onCardClick(idea)} />
-          ))
+          column.ideas.map((idea) => <KanbanCard key={idea.id} idea={idea} onClick={() => onCardClick(idea)} />)
         ) : (
-          <div className="text-xs text-muted-foreground italic text-center py-4">
-            Nenhuma ideia aqui ainda
-          </div>
+          <div className="text-xs text-muted-foreground italic text-center py-4">Nenhuma ideia aqui ainda</div>
         )}
       </div>
     </div>

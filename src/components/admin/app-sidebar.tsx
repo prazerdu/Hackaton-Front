@@ -3,12 +3,34 @@
 import type * as React from "react"
 import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
-import { Users, BarChart3, ClipboardList, Network, Rocket, LayoutGrid } from "lucide-react"
+import {
+  IconClipboardData,
+  IconClipboardListFilled,
+  IconClipboardPlus,
+  IconDashboard,
+  IconInnerShadowTop,
+  IconLayoutKanban,
+  IconNetwork,
+  IconRocket,
+  IconUser
+} from "@tabler/icons-react"
+
 import { NavMain } from "./nav-main"
 import { NavProjects } from "@/components/admin/nav-projects"
 import { NavUser } from "@/components/admin/nav-user"
 import { TeamSwitcher } from "@/components/admin/team-switcher"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail
+} from "@/components/ui/sidebar"
+
 import { challengesService } from "@/lib/kanban/services/challenges"
 import type { Challenge } from "@/lib/kanban/types"
 
@@ -19,6 +41,7 @@ interface currentUser {
   sub?: string
   avatar?: string
   role?: string
+  companyName?: string
   exp?: number
 }
 
@@ -27,6 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [loading, setLoading] = useState(true)
   const [challenges, setChallenges] = useState<Challenge[]>([])
 
+  // 🔹 Decodifica o token e obtém o usuário atual
   useEffect(() => {
     const token = localStorage.getItem("access_token")
     if (token) {
@@ -39,6 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           email: decoded.email || decoded.sub || "sem-email@exemplo.com",
           role: decoded.role || "user",
           avatar: decoded.avatar || "/avatars/default.jpg",
+          companyName: decoded.companyName || "Corporação"
         })
       } catch (err) {
         console.error("Erro ao decodificar JWT:", err)
@@ -52,8 +77,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   useEffect(() => {
     const fetchChallenges = async () => {
-      const data = await challengesService.getAll()
-      setChallenges(data)
+      try {
+        const data = await challengesService.getAll()
+        setChallenges(data)
+      } catch (err) {
+        console.error("Erro ao carregar desafios:", err)
+      }
     }
 
     fetchChallenges()
@@ -68,42 +97,41 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   const challengeItems = challenges.map((challenge) => ({
-    title: challenge.title,
+    name: challenge.title,
     url: `/admin/funil/kanban/${challenge.id}`,
+    icon: IconLayoutKanban,
   }))
 
   const navMain = [
     {
       title: "Dashboard",
       url: "/admin",
-      icon: BarChart3,
+      icon: IconDashboard,
       roles: ["MANAGER"],
       items: [{ title: "Visão Geral", url: "/admin/dashboard" }],
     },
     {
-      title: "Desafios",
-      url: "/admin/desafios",
-      icon: ClipboardList,
+      title: "Criar desafio",
+      url: "/admin/desafios/criar",
+      icon: IconClipboardPlus,
       roles: ["MANAGER"],
-      items: [
-        { title: "Meus Desafios", url: "/admin/desafios/meus-desafios" },
-        { title: "Criar Desafio", url: "/admin/desafios/criar" },
-        { title: "Abertos ao Público", url: "/admin/desafios/publicos" },
-      ],
     },
     {
-      title: "Funil de Inovação",
-      url: "/admin/funil/kanban",
-      icon: LayoutGrid,
+      title: "Meus desafios",
+      url: "/admin/desafios/meus-desafios",
+      icon: IconClipboardData,
       roles: ["MANAGER"],
-      items: [
-        ...(challengeItems.length > 0 ? [...challengeItems] : []),
-      ],
+    },
+    {
+      title: "Abertos ao público",
+      url: "/admin/desafios",
+      icon: IconClipboardListFilled,
+      roles: ["MANAGER"],
     },
     {
       title: "Startups",
       url: "/admin/startups",
-      icon: Rocket,
+      icon: IconRocket,
       roles: ["MANAGER"],
       items: [
         { title: "Base de Startups", url: "/admin/startups" },
@@ -112,19 +140,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       ],
     },
     {
-      title: "Conexões",
+      title: "POCs",
       url: "/admin/conexoes",
-      icon: Network,
+      icon: IconNetwork,
       roles: ["MANAGER"],
       items: [
-        { title: "Histórico de Interações", url: "/admin/conexoes/historico" },
         { title: "POCs em Andamento", url: "/admin/conexoes/pocs" },
       ],
     },
     {
       title: "Usuários",
       url: "/admin/users",
-      icon: Users,
+      icon: IconUser,
       roles: ["MANAGER"],
       items: [{ title: "Usuários & Permissões", url: "/admin/users" }],
     },
@@ -141,11 +168,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={[]} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
+            >
+              <a href="#">
+                <IconInnerShadowTop className="!size-6 fill-primary text-xs" />
+                {/* Exibe o nome da empresa do usuário logado */}
+                <span className="text-[1.5rem] font-semibold">{currentUser.companyName}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
 
       <SidebarContent>
         <NavMain items={filteredNav} />
-        <NavProjects projects={[]} />
+        <NavProjects projects={challengeItems} />
       </SidebarContent>
 
       <SidebarFooter>
@@ -154,7 +195,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             name: currentUser.name!,
             email: currentUser.email!,
             avatar: currentUser.avatar!,
-            role: "Gestor"
+            role: "Gestor",
           }}
         />
       </SidebarFooter>
