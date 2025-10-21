@@ -1,15 +1,11 @@
 "use client"
 
-import {
-  MoreHorizontal,
-} from "lucide-react"
+import type React from "react"
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { MoreHorizontal } from "lucide-react"
+import { usePathname } from "next/navigation"
+
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -31,47 +27,58 @@ export function NavProjects({
   }[]
 }) {
   const { isMobile } = useSidebar()
+  const pathname = usePathname()
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>
         <span className="flex gap-2">
-          <IconLayoutKanbanFilled className="!size-4"/>
+          <IconLayoutKanbanFilled className="!size-4" />
           Funil de Inovação
-          </span>
+        </span>
       </SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-                <span>{item.name}</span>
-            </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
+        {projects.map((item) => {
+          const isActive = pathname === item.url || pathname.startsWith(item.url + "/")
+
+          return (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton
+                asChild
+                isActive={isActive}
+                className={isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : ""}
               >
-                <DropdownMenuItem>
-                  <IconFolderFilled className="text-muted-foreground" />
-                  <a href={item.url}>
-                    <span>Ver no kanban</span>
-                  </a>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <IconTrashFilled className="text-muted-foreground" />
+                <a href={item.url}>
+                  <span>{item.name}</span>
+                </a>
+              </SidebarMenuButton>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuAction showOnHover>
+                    <MoreHorizontal />
+                    <span className="sr-only">More</span>
+                  </SidebarMenuAction>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-48 rounded-lg"
+                  side={isMobile ? "bottom" : "right"}
+                  align={isMobile ? "end" : "start"}
+                >
+                  <DropdownMenuItem>
+                    <IconFolderFilled className="text-muted-foreground" />
+                    <a href={item.url}>
+                      <span>Ver no kanban</span>
+                    </a>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <IconTrashFilled className="text-muted-foreground" />
                     <span>Deletar</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        ))}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          )
+        })}
       </SidebarMenu>
     </SidebarGroup>
   )

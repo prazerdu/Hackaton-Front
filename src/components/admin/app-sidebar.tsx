@@ -12,7 +12,7 @@ import {
   IconLayoutKanban,
   IconNetwork,
   IconRocket,
-  IconUser
+  IconUser,
 } from "@tabler/icons-react"
 
 import { NavMain } from "./nav-main"
@@ -28,7 +28,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail
+  SidebarRail,
 } from "@/components/ui/sidebar"
 
 import { challengesService } from "@/lib/kanban/services/challenges"
@@ -63,7 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           email: decoded.email || decoded.sub || "sem-email@exemplo.com",
           role: decoded.role || "user",
           avatar: decoded.avatar || "/avatars/default.jpg",
-          companyName: decoded.companyName || "Corporação"
+          companyName: decoded.companyName || "Corporação",
         })
       } catch (err) {
         console.error("Erro ao decodificar JWT:", err)
@@ -105,26 +105,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navMain = [
     {
       title: "Dashboard",
-      url: "/admin",
+      url: "/admin/dashboard",
       icon: IconDashboard,
       roles: ["MANAGER"],
       items: [{ title: "Visão Geral", url: "/admin/dashboard" }],
     },
     {
       title: "Criar desafio",
-      url: "/admin/desafios/criar",
+      url: "/admin/challenges/create",
       icon: IconClipboardPlus,
       roles: ["MANAGER"],
     },
     {
       title: "Meus desafios",
-      url: "/admin/desafios/meus-desafios",
+      url: "/admin/challenges/my-challenges",
       icon: IconClipboardData,
       roles: ["MANAGER"],
     },
     {
       title: "Abertos ao público",
-      url: "/admin/desafios",
+      url: "/admin/challenges/public-challengers",
       icon: IconClipboardListFilled,
       roles: ["MANAGER"],
     },
@@ -133,20 +133,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       url: "/admin/startups",
       icon: IconRocket,
       roles: ["MANAGER"],
-      items: [
-        { title: "Base de Startups", url: "/admin/startups" },
-        { title: "Recomendações", url: "/admin/startups/recomendacoes" },
-        { title: "Matches", url: "/admin/startups/matches" },
-      ],
     },
     {
       title: "POCs",
-      url: "/admin/conexoes",
+      url: "/admin/pocs",
       icon: IconNetwork,
       roles: ["MANAGER"],
-      items: [
-        { title: "POCs em Andamento", url: "/admin/conexoes/pocs" },
-      ],
+      items: [{ title: "POCs em Andamento", url: "/admin/pocs" }],
     },
     {
       title: "Usuários",
@@ -170,13 +163,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={[]} />
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
               <a href="#">
                 <IconInnerShadowTop className="!size-6 fill-primary text-xs" />
-                {/* Exibe o nome da empresa do usuário logado */}
                 <span className="text-[1.5rem] font-semibold">{currentUser.companyName}</span>
               </a>
             </SidebarMenuButton>
