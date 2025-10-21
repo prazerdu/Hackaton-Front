@@ -36,7 +36,7 @@ export default function LoginPage() {
             [5, 5],
           ]}
           className={cn(
-            "absolute inset-0 opacity-40",
+            "absolute inset-0 opacity-40  ",
             "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
             "skew-y-12 scale-125"
           )}

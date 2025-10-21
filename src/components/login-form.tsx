@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google"
 import axios from "axios"
 import { useEffect, useState, useCallback } from "react"
 import { jwtDecode } from "jwt-decode"
@@ -93,29 +92,6 @@ export function LoginForm({
     }
   }
 
-  const LoginSuccess = async (credentialResponse: CredentialResponse) => {
-    try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/google`,
-        { credential: credentialResponse.credential },
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      )
-      const token = res.data.token
-      if (token) {
-        localStorage.setItem("access_token", token)
-        const decoded = jwtDecode<JwtPayload>(token)
-        redirectByRole(decoded.role)
-      } else {
-        console.error("Token ausente")
-      }
-    } catch (error) {
-      console.error("Erro ao fazer login com o Google:", error)
-    }
-  }
-
   if (!isClient) return null
 
   return (
@@ -175,40 +151,6 @@ export function LoginForm({
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Entrando..." : "Entrar"}
           </Button>
-
-          <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-            <span className="bg-background text-muted-foreground relative z-10 px-2">
-              Ou
-            </span>
-          </div>
-
-          <motion.div
-            className="w-full flex justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-          >
-            <GoogleLogin
-              onSuccess={LoginSuccess}
-              onError={() => console.error("Login com Google falhou")}
-              logo_alignment="center"
-            />
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          className="text-center text-sm"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-        >
-          Não tem uma conta?{" "}
-          <a
-            href="/signup"
-            className="hover:underline underline-offset-4 text-blue-700"
-          >
-            Criar
-          </a>
         </motion.div>
       </form>
     </motion.div>

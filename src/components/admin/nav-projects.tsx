@@ -1,7 +1,6 @@
 "use client"
 
 import {
-  Folder,
   MoreHorizontal,
 } from "lucide-react"
 
@@ -20,7 +19,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { IconLayoutKanbanFilled } from "@tabler/icons-react"
+import { IconFolderFilled, IconLayoutKanbanFilled, IconTrashFilled } from "@tabler/icons-react"
 
 export function NavProjects({
   projects,
@@ -60,10 +59,14 @@ export function NavProjects({
                 align={isMobile ? "end" : "start"}
               >
                 <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
+                  <IconFolderFilled className="text-muted-foreground" />
                   <a href={item.url}>
                     <span>Ver no kanban</span>
                   </a>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <IconTrashFilled className="text-muted-foreground" />
+                    <span>Deletar</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
