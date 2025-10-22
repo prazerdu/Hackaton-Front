@@ -22,7 +22,7 @@ export default function Usuario() {
         </Button>
       </DialogTrigger>
 
-      <LoginModal onClose={() => setOpen(false)} />
+      <LoginModal onCloseAction={() => setOpen(false)} />
     </Dialog>
   );
 }

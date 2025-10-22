@@ -3,13 +3,33 @@
 import type * as React from "react"
 import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
-import { BarChart3, ClipboardList, Network, Rocket, LayoutGrid } from "lucide-react"
+import {
+  IconClipboardData,
+  IconClipboardListFilled,
+  IconClipboardPlus,
+  IconDashboard,
+  IconInnerShadowTop,
+  IconLayoutKanban,
+  IconNetwork,
+  IconRocket,
+} from "@tabler/icons-react"
 
 import { NavMain } from "./nav-main"
-import { NavProjects } from "@/components/admin/nav-projects"
-import { NavUser } from "@/components/admin/nav-user"
-import { TeamSwitcher } from "@/components/admin/team-switcher"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
+import { NavProjects } from "@/components/evaluator/nav-projects"
+import { NavUser } from "@/components/evaluator/nav-user"
+import { TeamSwitcher } from "@/components/evaluator/team-switcher"
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@/components/ui/sidebar"
+
 import { challengesService } from "@/lib/kanban/services/challenges"
 import type { Challenge } from "@/lib/kanban/types"
 
@@ -20,6 +40,7 @@ interface currentUser {
   sub?: string
   avatar?: string
   role?: string
+  companyName?: string
   exp?: number
 }
 
@@ -40,6 +61,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           email: decoded.email || decoded.sub || "sem-email@exemplo.com",
           role: decoded.role || "user",
           avatar: decoded.avatar || "/avatars/default.jpg",
+          companyName: decoded.companyName || "Corporação",
         })
       } catch (err) {
         console.error("Erro ao decodificar JWT:", err)
@@ -53,8 +75,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   useEffect(() => {
     const fetchChallenges = async () => {
-      const data = await challengesService.getAll()
-      setChallenges(data)
+      try {
+        const data = await challengesService.getAll()
+        setChallenges(data)
+      } catch (err) {
+        console.error("Erro ao carregar desafios:", err)
+      }
     }
 
     fetchChallenges()
@@ -69,58 +95,47 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   const challengeItems = challenges.map((challenge) => ({
-    title: challenge.title,
-    url: `/admin/funil/kanban/${challenge.id}`,
+    name: challenge.title,
+    url: `/evaluator/funil/kanban/${challenge.id}`,
+    icon: IconLayoutKanban,
   }))
 
   const navMain = [
     {
       title: "Dashboard",
-      url: "/evaluator",
-      icon: BarChart3,
+      url: "/evaluator/dashboard",
+      icon: IconDashboard,
       roles: ["EVALUATOR"],
-      items: [{ title: "Visão Geral", url: "/evaluator/dashboard" }],
     },
     {
-      title: "Desafios",
-      url: "/evaluator/desafios",
-      icon: ClipboardList,
+      title: "Criar desafio",
+      url: "/evaluator/challenges/create",
+      icon: IconClipboardPlus,
       roles: ["EVALUATOR"],
-      items: [
-        { title: "Meus Desafios", url: "/admin/desafios/meus-desafios" },
-        { title: "Criar Desafio", url: "/admin/desafios/criar" },
-        { title: "Abertos ao Público", url: "/admin/desafios/publicos" },
-      ],
     },
     {
-      title: "Funil de Inovação",
-      url: "/evaluator/funil/kanban",
-      icon: LayoutGrid,
+      title: "Meus desafios",
+      url: "/evaluator/challenges/my-challenges",
+      icon: IconClipboardData,
       roles: ["EVALUATOR"],
-      items: [
-        ...(challengeItems.length > 0 ? [...challengeItems] : []),
-      ],
+    },
+    {
+      title: "Desafios públicos",
+      url: "/evaluator/challenges/public-challengers",
+      icon: IconClipboardListFilled,
+      roles: ["EVALUATOR"],
     },
     {
       title: "Startups",
-      url: "/admin/startups",
-      icon: Rocket,
+      url: "/evaluator/startups",
+      icon: IconRocket,
       roles: ["EVALUATOR"],
-      items: [
-        { title: "Base de Startups", url: "/admin/startups" },
-        { title: "Recomendações", url: "/admin/startups/recomendacoes" },
-        { title: "Matches", url: "/admin/startups/matches" },
-      ],
     },
     {
-      title: "Conexões",
-      url: "/admin/conexoes",
-      icon: Network,
+      title: "POCs",
+      url: "/evaluator/pocs",
+      icon: IconNetwork,
       roles: ["EVALUATOR"],
-      items: [
-        { title: "Histórico de Interações", url: "/evaluator/conexoes/historico" },
-        { title: "POCs em Andamento", url: "/evaluator/conexoes/pocs" },
-      ],
     },
   ]
 
@@ -135,11 +150,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={[]} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+              <a href="#">
+                <IconInnerShadowTop className="!size-6 fill-primary text-xs" />
+                <span className="text-[1.5rem] font-semibold">{currentUser.companyName}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
 
       <SidebarContent>
         <NavMain items={filteredNav} />
-        <NavProjects projects={[]} />
+        <NavProjects projects={challengeItems} />
       </SidebarContent>
 
       <SidebarFooter>
@@ -147,8 +172,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           user={{
             name: currentUser.name!,
             email: currentUser.email!,
-            avatar: currentUser.avatar,
-            role: "Avaliador"  
+            avatar: currentUser.avatar!,
+            role: "Avaliador",
           }}
         />
       </SidebarFooter>
