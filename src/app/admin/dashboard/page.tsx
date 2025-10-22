@@ -47,7 +47,7 @@ export default function DashboardPage() {
         const decoded = jwtDecode<JwtPayload>(token)
         const now = Date.now() / 1000
 
-        if (decoded.exp < now || decoded.role !== "MANAGER") {
+        if (decoded.exp < now || decoded.role !== "MANAGER" ) {
           localStorage.removeItem("access_token")
           router.push("/login")
           return

@@ -16,14 +16,14 @@ export function QuickActions() {
       <CardContent>
         <div className="flex flex-wrap gap-4">
           <Button
-            onClick={() => router.push("/admin/desafios/criar")}
+            onClick={() => router.push("/admin/challenges/create")}
             className="flex items-center gap-2"
           >
             <PlusCircle className="h-4 w-4" /> Criar Desafio
           </Button>
 
           <Button
-            onClick={() => router.push("/admin/desafios")}
+            onClick={() => router.push("/admin/challenges/my-challenges")}
             className="flex items-center gap-2"
           >
             <ClipboardList className="h-4 w-4" /> Lista de Desafios
