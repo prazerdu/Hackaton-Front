@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRightIcon } from "lucide-react";
 import TiltShineCard from "./../card";
-import Toolip from "@/components/toolip";
 
 const HeroSection = () => {
   return (
@@ -82,9 +81,7 @@ const HeroSection = () => {
             </a>
           </motion.div>
         </div>
-
         <TiltShineCard />
-        <Toolip />
       </div>
     </section>
   );

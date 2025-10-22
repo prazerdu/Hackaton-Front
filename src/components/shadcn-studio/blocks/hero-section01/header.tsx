@@ -1,97 +1,16 @@
-import { MenuIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList
-} from '@/components/ui/navigation-menu'
-import { cn } from '@/lib/utils'
-import Logo from '@/components/shadcn-studio/logo'
-import { ModeToggle } from '@/components/theme-toggle'
+"use client";
 
-export type NavigationSection = {
-  title: string
-  href: string
-}
+import Logo from '@/components/shadcn-studio/logo';
+import { ModeToggle } from '@/components/theme-toggle';
 
-type HeaderProps = {
-  navigationData: NavigationSection[]
-  className?: string
-}
-
-const Header = ({ navigationData, className }: HeaderProps) => {
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#')) {
-      e.preventDefault()
-      const target = document.querySelector(href)
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
-    }
-  }
-
+export const SimpleHeader = () => {
   return (
-    <header className={cn('bg-background sticky top-0 z-50 h-16 border-b', className)}>
-      <div className='mx-auto flex h-full max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8'>
-        
-        <a href='https://ninnahub.com.br/' target='_blank' rel='noopener noreferrer'>
-          <Logo className='gap-3' />
-        </a>
+    <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-4 bg-background/90 backdrop-blur-md shadow-sm">
+      {/* Logo */}
+      <Logo />
 
-        {/* --- Desktop Menu --- */}
-        <NavigationMenu className='max-md:hidden'>
-          <NavigationMenuList className='flex-wrap justify-start gap-0'>
-            {navigationData.map(navItem => (
-              <NavigationMenuItem key={navItem.title}>
-                <NavigationMenuLink
-                  href={navItem.href}
-                  onClick={(e) => handleScroll(e, navItem.href)}
-                  className='text-muted-foreground hover:text-primary px-3 py-1.5 font-medium hover:bg-transparent transition-colors'
-                >
-                  {navItem.title}
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-
-        <ModeToggle />
-
-        {/* --- Mobile Menu --- */}
-        <div className='flex gap-4 md:hidden'>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='outline' size='icon'>
-                <MenuIcon />
-                <span className='sr-only'>Menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent className='w-56' align='end'>
-              {navigationData.map((item, index) => (
-                <DropdownMenuItem key={index}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => handleScroll(e, item.href)} 
-                    className='w-full block'
-                  >
-                    {item.title}
-                  </a>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+      {/* Botão de troca de tema */}
+      <ModeToggle />
     </header>
-  )
-}
-
-export default Header
+  );
+};
