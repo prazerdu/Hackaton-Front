@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { IconBulb, IconNetwork, IconRocket } from "@tabler/icons-react";
 
-export function AdminKPICards({ kpis }: { kpis: { totalIdeas: number; totalStartupsConnected: number; totalPocs: number; } }) {
+export function EvaluatorKPICards({ kpis }: { kpis: { totalIdeas: number; totalStartupsConnected: number; totalPocs: number; } }) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {[

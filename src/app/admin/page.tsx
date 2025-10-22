@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
 
-import { KPICards } from "@/components/admin/dashboard/kpi"
+import { AdminKPICards } from "@/components/admin/dashboard/kpi"
 import { QuickActions } from "@/components/admin/dashboard/quick-actions"
 
 type JwtPayload = {
@@ -122,7 +122,7 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      <KPICards kpis={kpis} />
+      <AdminKPICards kpis={kpis} />
       <QuickActions />
     </div>
   )
