@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar } from "recharts"
 
-export function FunnelStageChart({ data }: { data: { etapa: string; qtd: number }[] }) {
+export function FunnelStageChart({ data }: { data: { etapa: string; total: number }[] }) {
   return (
     <Card>
       <CardHeader>
@@ -16,7 +16,7 @@ export function FunnelStageChart({ data }: { data: { etapa: string; qtd: number 
             <XAxis dataKey="etapa" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="qtd" fill="#8884d8" />
+            <Bar dataKey="total" fill="#8884d8" />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
