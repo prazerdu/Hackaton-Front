@@ -5,11 +5,9 @@ import { ModeToggle } from '@/components/theme-toggle';
 
 export const SimpleHeader = () => {
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-4 bg-background/90 backdrop-blur-md shadow-sm">
-      {/* Logo */}
+    <header className="sticky top-0 z-30 flex items-center justify-between px-4 lg:px-40 py-4 bg-background/90 backdrop-blur-md shadow-sm">
       <Logo />
 
-      {/* Botão de troca de tema */}
       <ModeToggle />
     </header>
   );
