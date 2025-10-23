@@ -25,7 +25,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <script src='https://www.noupe.com/embed/019a0dadfeca7be39f9b8a6460010c08e808.js'> </script>
+          <GoogleOAuthProvider clientId="508255138569-ts5q61ksnrijq1idtiondlbn4rccec3s.apps.googleusercontent.com">
+            {children}
+          </GoogleOAuthProvider>
+          <script src='https://www.noupe.com/embed/019a0dadfeca7be39f9b8a6460010c08e808.js'></script>
         </ThemeProvider>
       </body>
     </html>
