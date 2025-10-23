@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { getCurrentUser } from "@/utils/get-current-user"
 import { useRouter } from "next/navigation"
 
@@ -58,8 +59,6 @@ export default function AddChallengePage() {
       )
 
       console.log("Desafio criado com sucesso!")
-
-      // ✅ Recarrega o conteúdo da página
       window.location.reload()
     } catch (error) {
       console.error("Erro ao criar desafio:", error)
@@ -68,138 +67,146 @@ export default function AddChallengePage() {
 
   return (
     <div className="container max-w-2xl mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">Criar Novo Desafio</h1>
+      <Card>
+        <CardHeader>
+          <CardTitle>Criar Novo Desafio</CardTitle>
+          <CardDescription>Preencha as informações abaixo para cadastrar um novo desafio</CardDescription>
+        </CardHeader>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Criador */}
-        <div>
-          <Label>Criado por</Label>
-          <Input value={userName} readOnly disabled className="bg-muted cursor-not-allowed" />
-        </div>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Criador */}
+            <div>
+              <Label>Criado por</Label>
+              <Input value={userName} readOnly disabled className="bg-muted cursor-not-allowed" />
+            </div>
 
-        {/* Título */}
-        <div>
-          <Label htmlFor="title">Título *</Label>
-          <Input
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Desafio Sustentabilidade 2025"
-            required
-          />
-        </div>
+            {/* Título */}
+            <div>
+              <Label htmlFor="title">Título *</Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Desafio Sustentabilidade 2025"
+                required
+              />
+            </div>
 
-        {/* Descrição */}
-        <div>
-          <Label htmlFor="description">Descrição *</Label>
-          <Textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Explique o desafio..."
-            className="min-h-[100px]"
-            required
-          />
-        </div>
+            {/* Descrição */}
+            <div>
+              <Label htmlFor="description">Descrição *</Label>
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Explique o desafio..."
+                className="min-h-[100px]"
+                required
+              />
+            </div>
 
-        {/* Objetivos */}
-        <div>
-          <Label htmlFor="objectives">Objetivos *</Label>
-          <Textarea
-            id="objectives"
-            value={objectives}
-            onChange={(e) => setObjectives(e.target.value)}
-            placeholder="Resolver problema X..."
-            className="min-h-[80px]"
-            required
-          />
-        </div>
+            {/* Objetivos */}
+            <div>
+              <Label htmlFor="objectives">Objetivos *</Label>
+              <Textarea
+                id="objectives"
+                value={objectives}
+                onChange={(e) => setObjectives(e.target.value)}
+                placeholder="Resolver problema X..."
+                className="min-h-[80px]"
+                required
+              />
+            </div>
 
-        {/* Área e Benefícios */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="area">Área *</Label>
-            <Input
-              id="area"
-              value={area}
-              onChange={(e) => setArea(e.target.value)}
-              placeholder="Sustentabilidade, Tecnologia..."
-              required
-            />
-          </div>
+            {/* Área e Benefícios */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="area">Área *</Label>
+                <Input
+                  id="area"
+                  value={area}
+                  onChange={(e) => setArea(e.target.value)}
+                  placeholder="Sustentabilidade, Tecnologia..."
+                  required
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="benefits">Benefícios *</Label>
-            <Input
-              id="benefits"
-              value={benefits}
-              onChange={(e) => setBenefits(e.target.value)}
-              placeholder="Ex: 1000 R$ ANUAL"
-              required
-            />
-          </div>
-        </div>
+              <div>
+                <Label htmlFor="benefits">Benefícios *</Label>
+                <Input
+                  id="benefits"
+                  value={benefits}
+                  onChange={(e) => setBenefits(e.target.value)}
+                  placeholder="Ex: 1000 R$ ANUAL"
+                  required
+                />
+              </div>
+            </div>
 
-        {/* Datas */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="startDate">Data de Início *</Label>
-            <Input
-              id="startDate"
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              required
-            />
-          </div>
+            {/* Datas */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="startDate">Data de Início *</Label>
+                <Input
+                  id="startDate"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  required
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="endDate">Data de Encerramento *</Label>
-            <Input
-              id="endDate"
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              required
-            />
-          </div>
-        </div>
+              <div>
+                <Label htmlFor="endDate">Data de Encerramento *</Label>
+                <Input
+                  id="endDate"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
 
-        {/* Status */}
-        <div>
-          <Label htmlFor="status">Status</Label>
-          <select
-            id="status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-full border rounded-md p-2"
-          >
-            <option value="DRAFT">Rascunho</option>
-            <option value="OPEN">Aberto</option>
-            <option value="CLOSED">Fechado</option>
-            <option value="ARCHIVED">Arquivado</option>
-          </select>
-        </div>
+            {/* Status */}
+            <div>
+              <Label htmlFor="status">Status</Label>
+              <select
+                id="status"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full border rounded-md p-2"
+              >
+                <option value="DRAFT">Rascunho</option>
+                <option value="OPEN">Aberto</option>
+                <option value="CLOSED">Fechado</option>
+                <option value="ARCHIVED">Arquivado</option>
+              </select>
+            </div>
 
-        {/* Público */}
-        <div className="flex items-center gap-2">
-          <input
-            id="isPublic"
-            type="checkbox"
-            checked={isPublic}
-            onChange={(e) => setIsPublic(e.target.checked)}
-          />
-          <Label htmlFor="isPublic">Tornar público</Label>
-        </div>
+            {/* Público */}
+            <div className="flex items-center gap-2">
+              <input
+                id="isPublic"
+                type="checkbox"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+              />
+              <Label htmlFor="isPublic">Tornar público</Label>
+            </div>
+          </form>
+        </CardContent>
 
-        {/* Botões */}
-        <div className="flex justify-end gap-2 pt-4">
+        <CardFooter className="flex justify-end gap-2 pt-4">
           <Button type="button" variant="outline" onClick={() => router.back()}>
             Cancelar
           </Button>
-          <Button type="submit">Criar Desafio</Button>
-        </div>
-      </form>
+          <Button type="submit" form="addChallengeForm">
+            Criar Desafio
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
