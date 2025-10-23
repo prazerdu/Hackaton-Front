@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import HeroSection from "@/components/shadcn-studio/blocks/hero-section01/hero-section-01";
 import CardsSection from "../components/cardHorizontal";
 import { SimpleHeader } from "@/components/shadcn-studio/blocks/hero-section01/header";
+import IconHeader from "@/components/navbottom";
+import Footer from "@/components/navbottom";
 
 const HeroSectionPage = () => {
   return (
@@ -24,6 +26,7 @@ const HeroSectionPage = () => {
       {/* Cards Section */}
       <div className="">
         <CardsSection />
+        <Footer />
       </div>
     </motion.div>
   );

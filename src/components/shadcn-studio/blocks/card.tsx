@@ -57,7 +57,7 @@ const TiltShineCard = ({
         y.set(0);
       }}
     >
-      <Card className="relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-white/10">
+      <Card className="relative overflow-hidden hidden md:block rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-white/10">
         {/* Overlay de cor e brilho */}
         <div className="absolute inset-0 z-10 bg-transparent rounded-3xl pointer-events-none"></div>
         <div className="absolute inset-0 z-20 pointer-events-none">
