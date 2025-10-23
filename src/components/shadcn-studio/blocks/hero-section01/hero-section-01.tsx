@@ -8,7 +8,7 @@ import TiltShineCard from "./../card";
 
 const HeroSection = () => {
   return (
-    <section className="relative  flex flex-col items-center justify-center min-h-[90dvh] pt-6 md:pt-16 lg:pt-10 overflow-hidden">
+    <section className="relative flex flex-col items-center justify-center min-h-[90dvh] pt-6 md:pt-16 lg:pt-10 overflow-hidden">
       {/* Fundo animado */}
       <div className="absolute inset-0 -z-10 flex justify-center items-center">
         <div className="absolute w-96 h-96 bg-purple-950/30 rounded-full blur-3xl animate-blob"></div>
@@ -38,8 +38,7 @@ const HeroSection = () => {
             transition={{ duration: 0.8 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-foreground leading-tight drop-shadow-lg"
           >
-            Transforme sua empresa <br className="hidden sm:block" /> com
-            soluções digitais
+            Transforme sua empresa <br className="hidden sm:block" /> com soluções digitais
           </motion.h1>
 
           <motion.p
@@ -58,7 +57,6 @@ const HeroSection = () => {
             transition={{ delay: 0.6, duration: 0.5 }}
             className="flex flex-wrap justify-center lg:justify-start gap-6 mt-6"
           >
-            {/* Botão Visualizar Desafios */}
             <a href="/home" className="w-max">
               <Button className="relative inline-flex items-center justify-center px-6 py-3 rounded-xl cursor-pointer text-white font-semibold shadow-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
                 <span className="relative z-10 flex items-center gap-2">
@@ -69,7 +67,6 @@ const HeroSection = () => {
               </Button>
             </a>
 
-            {/* Botão Login */}
             <a href="/login" className="w-max">
               <Button className="relative inline-flex items-center justify-center px-6 py-3 rounded-xl cursor-pointer text-white font-semibold shadow-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
                 <span className="relative z-10 flex items-center gap-2">
@@ -81,7 +78,10 @@ const HeroSection = () => {
             </a>
           </motion.div>
         </div>
-        <TiltShineCard />
+
+        {/* Card apenas em telas md+ */}
+       
+          <TiltShineCard />
       </div>
     </section>
   );

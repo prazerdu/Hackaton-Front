@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { Maximize2, X } from 'lucide-react'
-
+import Footer from './navbottom'
 const sections = [
   {
     id: 'usuario-comum',
@@ -111,7 +110,6 @@ const sections = [
 ]
 
 export default function CardsSection() {
-  const [fullscreen, setFullscreen] = useState<string | null>(null)
 
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id)
@@ -129,11 +127,6 @@ export default function CardsSection() {
 
   return (
     <section className="relative w-full py-16 sm:py-24 overflow-x-hidden">
-       <div className="absolute inset-0 -z-10 flex justify-center items-center">
-        <div className="absolute w-96 h-96 bg-purple-950/30 rounded-full blur-3xl animate-blob"></div>
-        <div className="absolute w-[28rem] h-[28rem] bg-purple-500/20 rounded-full blur-2xl animate-blob animation-delay-2000 translate-x-32 translate-y-20"></div>
-      </div>
-
       {/* Título */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -157,6 +150,7 @@ export default function CardsSection() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 1 }}
       >
+        
         {sections.map((section, index) => (
           <motion.div
             key={section.id}
@@ -210,22 +204,22 @@ export default function CardsSection() {
             index % 2 === 1 ? 'lg:flex-row-reverse' : ''
           }`}
         >
-          <motion.div
-            className="relative w-full sm:w-[350px] h-[300px] sm:h-[400px] flex-shrink-0 rounded-3xl overflow-hidden shadow-2xl"
-            initial={{ x: index % 2 === 1 ? 30 : -30, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.8 }}
-          >
-            <Image
-              src={section.image}
-              alt={section.title}
-              fill
-              className="object-cover dark:invert rounded-3xl"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent rounded-3xl" />
-            
-          </motion.div>
+         <motion.div
+  className="relative w-full sm:w-[280px] h-[250px] sm:h-[300px] flex-shrink-0 rounded-3xl overflow-hidden shadow-2xl"
+  initial={{ x: index % 2 === 1 ? 30 : -30, opacity: 0 }}
+  whileInView={{ x: 0, opacity: 1 }}
+  whileHover={{ scale: 1.03 }}
+  transition={{ duration: 0.8 }}
+>
+  <Image
+    src={section.image}
+    alt={section.title}
+    fill
+    className="object-cover dark:invert rounded-3xl"
+  />
+  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent rounded-3xl" />
+</motion.div>
+
 
           <motion.div
             className="flex-1 min-w-0 text-left space-y-4"
