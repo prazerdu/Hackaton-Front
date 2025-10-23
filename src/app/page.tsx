@@ -2,15 +2,8 @@
 
 import { motion } from "framer-motion";
 import HeroSection from "@/components/shadcn-studio/blocks/hero-section01/hero-section-01";
-import Header from "@/components/shadcn-studio/blocks/hero-section01/header";
-import type { NavigationSection } from "@/components/shadcn-studio/blocks/hero-section01/header";
 import CardsSection from "../components/cardHorizontal";
-
-const navigationData: NavigationSection[] = [
-  { title: "Home", href: "#home" },
-  { title: "Sobre", href: "#sobre" },
-  { title: "About Us", href: "#about" },
-];
+import { SimpleHeader } from "@/components/shadcn-studio/blocks/hero-section01/header";
 
 const HeroSectionPage = () => {
   return (
@@ -20,13 +13,15 @@ const HeroSectionPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <Header navigationData={navigationData} />
+      {/* Header minimalista */}
+      <SimpleHeader />
 
       {/* Main Content */}
       <main className="flex flex-col">
         <HeroSection />
       </main>
 
+      {/* Cards Section */}
       <div className="">
         <CardsSection />
       </div>

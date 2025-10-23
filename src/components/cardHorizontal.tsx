@@ -8,26 +8,105 @@ import { Maximize2, X } from 'lucide-react'
 const sections = [
   {
     id: 'usuario-comum',
-    title: 'Usuário Comum',
+    title: 'Usuário Comum (Colaborador ou Parceiro)',
     description:
-      'Trabalhe com sua equipe em harmonia, com feedback instantâneo e comunicação integrada.',
-    image: '/homepage.png',
+      'Submeter ideias e participar de processos colaborativos. Área restrita da empresa à qual pertence.',
+    image: '/6d24ad5616ddd4dc783fa9972be7c746-removebg-preview.png',
+    detalhes: {
+      pode: [
+        'Acessar a área da sua empresa (não visualiza dados de outras empresas).',
+        'Submeter ideias e sugestões de desafios na etapa Geração/Captura de Ideias.',
+        'Visualizar e comentar ideias públicas ou internas, conforme permissão da empresa.',
+        'Acompanhar o status de suas ideias ao longo do funil.',
+        'Acessar desafios públicos (caso a empresa publique algum).',
+      ],
+      naoPode: [
+        'Editar desafios já cadastrados.',
+        'Avaliar ou aprovar ideias.',
+        'Visualizar relatórios, dashboards ou métricas empresariais.',
+      ],
+    },
   },
   {
-    id: 'gestor-avaliador',
-    title: 'Gestor e Avaliador',
+    id: 'avaliador',
+    title: 'Avaliador (Especialista ou Comitê Técnico)',
     description:
-      'Acompanhe métricas, progresso e resultados de forma inteligente e visual.',
+      'Realizar a triagem e avaliação das ideias e desafios submetidos.',
     image:
-      'https://i.pinimg.com/1200x/e2/c9/18/e2c918fddd4fc517665b3ce9c73bb5f6.jpg',
+      '/fb528f44ff535b55f3f04a09aaaffd25-removebg-preview.png',
+    detalhes: {
+      pode: [
+        'Acessar o funil completo de inovação (todas as etapas).',
+        'Realizar a pré-triagem automática ou manual de ideias com base nos critérios definidos.',
+        'Pontuar e comentar ideias nas etapas de Pré-Triagem e Triagem Detalhada.',
+        'Participar da ideação junto aos usuários comuns.',
+        'Selecionar ideias para avanço às próximas etapas.',
+        'Visualizar relatórios resumidos das ideias avaliadas (mas não métricas corporativas amplas).',
+      ],
+      naoPode: [
+        'Criar ou editar desafios.',
+        'Cadastrar startups ou gerenciar conexões com elas.',
+        'Gerar relatórios administrativos de alto nível.',
+      ],
+    },
   },
   {
-    id: 'super-admin',
-    title: 'Super Admin Ninna',
+    id: 'gestor',
+    title: 'Gestor de Inovação (Administrador da Empresa)',
     description:
-      'Descubra oportunidades e tendências que impulsionam o crescimento do seu projeto.',
+      'Gerenciar o funil de inovação, acompanhar métricas e conectar desafios a startups.',
     image:
-      'https://i.pinimg.com/736x/16/ef/40/16ef40bf188f4227650a664637ee30ab.jpg',
+      '/6a28f676992e60611e29a75f35cfbd76-removebg-preview.png',
+    detalhes: {
+      pode: [
+        'Cadastrar, editar e publicar desafios, definindo se serão internos ou abertos ao público.',
+        'Gerenciar todas as etapas do funil, do recebimento de ideias até a experimentação (POC).',
+        'Designar avaliadores e atribuir responsabilidades por etapa.',
+        'Acompanhar e aprovar POCs, definindo metas, prazos e indicadores.',
+        'Cadastrar startups ou validar startups sugeridas pelo sistema.',
+        'Gerenciar conexões com startups (matchs, convites, histórico de interação).',
+        'Gerar relatórios e dashboards personalizados.',
+        'Filtrar dados por áreas ou temas dentro da sua empresa.',
+        'Gerenciar usuários da empresa (criar, desativar, alterar permissões).',
+      ],
+      naoPode: [
+        'Acessar dados de outras empresas (cada empresa possui ambiente isolado).',
+      ],
+    },
+  },
+  {
+    id: 'startup',
+    title: 'Startup (Usuário Externo)',
+    description: 'Conectar-se a desafios corporativos e propor soluções.',
+    image:
+      '/6c5410b9a4f6d7a869cd726b33d8a362-removebg-preview.png',
+    detalhes: {
+      pode: [
+        'Cadastrar perfil da startup, com informações de tecnologia, estágio, pitch, etc.',
+        'Visualizar desafios públicos disponíveis.',
+        'Candidatar-se a desafios compatíveis.',
+        'Participar de processos de match e convites para POC.',
+        'Acompanhar histórico de interações com empresas.',
+      ],
+      naoPode: [
+        'Acessar dados internos de empresas.',
+        'Visualizar ideias restritas ou desafios internos.',
+      ],
+    },
+  },
+  {
+    id: 'visitante',
+    title: 'Visitante (Público Geral)',
+    description: 'Explorar a vitrine de inovação pública.',
+    image: '/6d24ad5616ddd4dc783fa9972be7c746-removebg-preview.png',
+    detalhes: {
+      pode: [
+        'Visualizar desafios públicos publicados por empresas.',
+        'Visualizar startups públicas cadastradas.',
+        'Criar conta (como colaborador ou startup).',
+      ],
+      naoPode: [],
+    },
   },
 ]
 
@@ -37,174 +116,159 @@ export default function CardsSection() {
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id)
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth' })
+      const rect = section.getBoundingClientRect()
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const offset = 80
+      const offsetTop = rect.top + scrollTop - offset
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth',
+      })
     }
   }
 
   return (
-    <section className="relative text-center w-full py-24 overflow-hidden">
-      <div className="absolute inset-0 -z-10">
-        <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-purple-800/30 rounded-full blur-3xl"
-          animate={{ y: [0, 40, 0] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-20 w-[28rem] h-[28rem] bg-purple-500/20 rounded-full blur-3xl"
-          animate={{ x: [0, 60, 0] }}
-          transition={{ duration: 12, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-[20rem] h-[20rem] bg-purple-500/20 rounded-full blur-2xl"
-          animate={{ y: [0, -40, 0] }}
-          transition={{ duration: 14, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute top-[40%] right-[25%] w-[26rem] h-[26rem] bg-purple-900/20 rounded-full blur-3xl"
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.div
-          className="absolute bottom-[15%] left-[30%] w-[18rem] h-[18rem] bg-fuchsia-600/20 rounded-full blur-2xl"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
+    <section className="relative w-full py-16 sm:py-24 overflow-x-hidden">
+       <div className="absolute inset-0 -z-10 flex justify-center items-center">
+        <div className="absolute w-96 h-96 bg-purple-950/30 rounded-full blur-3xl animate-blob"></div>
+        <div className="absolute w-[28rem] h-[28rem] bg-purple-500/20 rounded-full blur-2xl animate-blob animation-delay-2000 translate-x-32 translate-y-20"></div>
       </div>
 
+      {/* Título */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="max-w-3xl mx-auto mb-16 relative z-10"
+        className="sticky top-0 z-20 py-4 max-w-3xl mx-auto mb-10 text-center"
       >
-        <h2 className="text-4xl font-bold mb-4">Perfis de Usuário</h2>
-        <p className="text-lg">
+        <h2 className="text-3xl  text-purple-600 sm:text-4xl font-bold mb-2">
+          Perfis de Usuário
+        </h2>
+        <p className="text-base sm:text-lg text-muted-foreground">
           Explore os diferentes níveis de acesso e funcionalidades da plataforma.
         </p>
+        
       </motion.div>
 
-      {/* --- cards 3D interativos --- */}
+      {/* CARROSSEL SIMPLES */}
       <motion.div
-        className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto perspective-[1000px] relative z-10"
+        className="flex gap-6 md:gap-8 pl-4 p-12 pr-8 sm:px-6 md:px-12 overflow-x-auto lg:justify-center perspective-[1100px] snap-x snap-mandatory scrollbar-hide"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
+        transition={{ delay: 0.2, duration: 1 }}
       >
         {sections.map((section, index) => (
           <motion.div
             key={section.id}
-            whileHover={{ scale: 1.05, rotateY: 0 }}
-            initial={{ rotateY: index === 0 ? 15 : index === 2 ? -15 : 0 }}
-            className="group relative w-[300px] cursor-pointer overflow-hidden rounded-2xl shadow-lg bg-card/80 hover:shadow-xl transition-all duration-500 [transform-style:preserve-3d] backdrop-blur-md"
             onClick={() => scrollToSection(section.id)}
+            whileHover={{
+              scale: 1.08,
+              boxShadow: '0px 10px 25px rgba(0,0,0,0.35)',
+            }}
+            transition={{ type: 'spring', stiffness: 120, damping: 15 }}
+            className="relative w-[140px] sm:w-[160px] md:w-[180px] lg:w-[180px] h-[220px] sm:h-[260px] md:h-[300px] lg:h-[270px] cursor-pointer overflow-hidden rounded-3xl shadow-xl bg-card/80 transition-all duration-700 flex-shrink-0 snap-center"
           >
-            <div className="relative w-full h-[360px] [transform:translateZ(50px)]">
+            <div className="relative w-full h-full">
               <Image
                 src={section.image}
                 alt={section.title}
                 fill
-                className="object-cover transition-all duration-500 rounded-2xl"
+                className="object-contain dark:invert rounded-3xl transition-transform duration-700 hover:scale-110"
               />
             </div>
-            <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-background/90 via-background/20 to-transparent [transform:translateZ(60px)]">
-              <h3 className="text-xl font-semibold mb-2">{section.title}</h3>
-              <p className="text-sm">{section.description}</p>
+            <div className="absolute inset-0 flex flex-col justify-end p-2 sm:p-3 bg-gradient-to-t from-background/90 via-background/30 to-transparent">
+              <h3 className="text-xs sm:text-sm md:text-base font-semibold mb-1">
+                {section.title}
+              </h3>
             </div>
+            
           </motion.div>
+          
         ))}
+
+        <style jsx global>{`
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
       </motion.div>
 
-      {/* --- seções individuais --- */}
+      {/* SESSÕES INDIVIDUAIS */}
       {sections.map((section, index) => (
         <motion.section
           key={section.id}
           id={section.id}
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: index * 0.2 }}
           viewport={{ once: true }}
-          className={`relative flex flex-col lg:flex-row items-center justify-center gap-12 my-24 z-10 ${
+          className={`relative flex flex-col lg:flex-row items-start gap-8 sm:gap-12 my-16 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-24 ${
             index % 2 === 1 ? 'lg:flex-row-reverse' : ''
           }`}
         >
           <motion.div
-            className="relative w-full lg:w-[300px] h-[400px] rounded-3xl overflow-hidden shadow-2xl"
-            initial={{ x: index % 2 === 1 ? 50 : -50, opacity: 0 }}
+            className="relative w-full sm:w-[350px] h-[300px] sm:h-[400px] flex-shrink-0 rounded-3xl overflow-hidden shadow-2xl"
+            initial={{ x: index % 2 === 1 ? 30 : -30, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.03 }}
             transition={{ duration: 0.8 }}
           >
             <Image
               src={section.image}
               alt={section.title}
               fill
-              className="object-cover rounded-3xl"
+              className="object-cover dark:invert rounded-3xl"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent rounded-3xl" />
-
-            <button
-              onClick={() => setFullscreen(section.id)}
-              className="absolute top-3 right-3 text-white bg-black/60 hover:bg-black/80 p-2 rounded-full transition z-10"
-            >
-              <Maximize2 size={20} />
-            </button>
+            
           </motion.div>
 
           <motion.div
-            className="max-w-xl text-center lg:text-left"
-            initial={{ x: index % 2 === 1 ? -50 : 50, opacity: 0 }}
+            className="flex-1 min-w-0 text-left space-y-4"
+            initial={{ x: index % 2 === 1 ? -30 : 30, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl text-purple-600 font-extrabold mb-4">{section.title}</h2>
-            <p className="text-lg mb-6 leading-relaxed">
-              {section.description}
-            </p>
+            <h2 className="text-2xl sm:text-4xl text-purple-600 font-extrabold mb-4">
+              {section.title}
+            </h2>
+            <p className="text-base sm:text-lg mb-2">{section.description}</p>
+
+            {section.detalhes && (
+              <div className="flex flex-col sm:flex-row gap-8 mt-4">
+                {section.detalhes.pode && (
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-green-600 mb-2">Pode:</h3>
+                    <ul className="list-disc list-inside ml-4 space-y-1 text-sm sm:text-base">
+                      {section.detalhes.pode.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {section.detalhes.naoPode &&
+                  section.detalhes.naoPode.length > 0 && (
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-red-600 mb-2">
+                        Não pode:
+                      </h3>
+                      <ul className="list-disc list-inside ml-4 space-y-1 text-sm sm:text-base">
+                        {section.detalhes.naoPode.map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+              </div>
+            )}
           </motion.div>
         </motion.section>
       ))}
-
-      {/* --- modal expandido --- */}
-      <AnimatePresence>
-        {fullscreen && (
-          <motion.div
-            className="fixed inset-0 z-50 flex w-full items-center justify-center bg-black/90 backdrop-blur-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {sections
-              .filter((s) => s.id === fullscreen)
-              .map((s) => (
-                <motion.div
-                  key={s.id}
-                  className="relative w-[90%] max-w-5xl h-[80vh] bg-background rounded-3xl overflow-hidden shadow-2xl"
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <button
-                    onClick={() => setFullscreen(null)}
-                    className="absolute top-4 right-4 z-50 bg-black/60 text-white hover:bg-black/20 p-2 rounded-full transition"
-                  >
-                    <X size={22} />
-                  </button>
-                  <Image
-                    src={s.image}
-                    alt={s.title}
-                    fill
-                    className="object-cover rounded-3xl brightness-75"
-                  />
-                  <div className="absolute inset-0 flex flex-col justify-end p-10 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
-                    <h2 className="text-4xl font-bold mb-4">{s.title}</h2>
-                    <p className="text-lg max-w-2xl mx-auto">{s.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   )
 }

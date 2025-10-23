@@ -81,7 +81,6 @@ const HeroSection = () => {
             </a>
           </motion.div>
         </div>
-
         <TiltShineCard />
       </div>
     </section>
