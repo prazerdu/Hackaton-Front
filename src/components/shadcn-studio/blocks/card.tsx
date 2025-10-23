@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle } from "lucide-react";
-import Image from "next/image";
 
 interface Feature {
   icon?: React.ReactNode;
@@ -23,7 +22,6 @@ interface TiltCardProps {
 }
 
 const TiltShineCard = ({
-  imageSrc,
   title = "Plataforma de Inovação Aberta ",
   description = "Uma plataforma completa para transformar seu negócio digitalmente, com soluções inovadoras e design de alto padrão.",
   badges = ["Destaque"],
