@@ -8,35 +8,34 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner"
 import { QuickActions } from "@/components/admin/dashboard/quick-actions"
 import { FunnelEvolutionChart } from "@/components/admin/dashboard/funil-evoluation"
 import { FunnelStageChart } from "@/components/admin/dashboard/funil-stage"
-import { RecentActivities } from "@/components/admin/dashboard/recent-activies"
 
 type JwtPayload = {
   exp: number
   role?: string
 }
 
+type FunilItem = {
+  status: string
+  total: number
+}
 
-const mockChart = [
-  { etapa: "Captura", qtd: 128 },
-  { etapa: "Pré-Triagem", qtd: 64 },
-  { etapa: "Ideação", qtd: 40 },
-  { etapa: "Triagem Detalhada", qtd: 18 },
-  { etapa: "POCs", qtd: 5 },
-]
+type DashboardResponse = {
+  funil: FunilItem[]
+}
 
-const mockAtividades = [
-  { id: 1, titulo: "Novo desafio publicado", detalhe: "Sustentabilidade na cadeia de suprimentos", data: "15/09" },
-  { id: 2, titulo: "Startup conectada", detalhe: "GreenTech Solutions", data: "14/09" },
-  { id: 3, titulo: "POC iniciada", detalhe: "Automação de processos internos", data: "13/09" },
+const Etapas = [
+  { key: "GENERATION", label: "Geração" },
+  { key: "TRIAGE", label: "Triagem" },
+  { key: "IDEATION", label: "Ideação" },
+  { key: "IMPLEMENTATION", label: "Implementação" },
+  { key: "COMPLETED", label: "Concluído" },
 ]
 
 export default function DashboardPage() {
   const router = useRouter()
   const [authorized, setAuthorized] = useState(false)
   const [loading, setLoading] = useState(true)
-
-  const [data, setData] = useState(mockChart)
-  const [atividadesRecentes, setAtividadesRecentes] = useState(mockAtividades)
+  const [funilData, setFunilData] = useState<{ etapa: string; total: number }[]>([])
 
   useEffect(() => {
     const checkAuth = () => {
@@ -46,8 +45,7 @@ export default function DashboardPage() {
       try {
         const decoded = jwtDecode<JwtPayload>(token)
         const now = Date.now() / 1000
-
-        if (decoded.exp < now || decoded.role !== "MANAGER" ) {
+        if (decoded.exp < now || decoded.role !== "MANAGER") {
           localStorage.removeItem("access_token")
           router.push("/login")
           return
@@ -70,17 +68,31 @@ export default function DashboardPage() {
 
     const fetchData = async () => {
       try {
+        const token = localStorage.getItem("access_token")
         const adminURL = process.env.NEXT_PUBLIC_API_URL
-        const [ chartRes, atividadesRes] = await Promise.all([
-          axios.get(`${adminURL}/dashboard`),
-          axios.get(`${adminURL}/dashboard`),
-          axios.get(`${adminURL}/dashboard`),
-        ])
 
-        setData(chartRes.data)
-        setAtividadesRecentes(atividadesRes.data)
+        const res = await axios.get<DashboardResponse>(`${adminURL}/dashboard`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+
+        const dashboardData = res.data.funil || []
+        const chartData = Etapas.map(etapa => {
+          const apiItens = dashboardData.find(i => i.status === etapa.key)
+          return {
+            etapa: etapa.label,
+            total: apiItens ? apiItens.total : 0,
+          }
+        })
+
+        setFunilData(chartData)
       } catch (error) {
-        console.warn("⚠️ Usando mocks, API não encontrada:", error)
+        console.warn("⚠️ Erro ao buscar dados do dashboard, usando mock:", error)
+        setFunilData(
+          Etapas.map(e => ({
+            etapa: e.label,
+            total: Math.floor(Math.random() * 5),
+          }))
+        )
       }
     }
 
@@ -104,10 +116,10 @@ export default function DashboardPage() {
           Acompanhe o desempenho e engajamento geral da sua corporação na plataforma.
         </p>
       </div>
+
       <QuickActions />
-      <FunnelEvolutionChart data={data} />
-      <FunnelStageChart data={data} />
-      <RecentActivities atividades={atividadesRecentes} />
+      <FunnelEvolutionChart data={funilData} />
+      <FunnelStageChart data={funilData} />
     </div>
   )
 }
