@@ -1,124 +1,183 @@
 "use client"
 
-import * as React from "react"
+import type * as React from "react"
 import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
-import { Users, BarChart3, Network, Rocket } from "lucide-react"
+import {
+  IconClipboardData,
+  IconClipboardListFilled,
+  IconClipboardPlus,
+  IconDashboard,
+  IconInnerShadowTop,
+  IconLayoutKanban,
+  IconNetwork,
+  IconRocket,
+} from "@tabler/icons-react"
 
 import { NavMain } from "./nav-main"
 import { NavProjects } from "@/components/evaluator/nav-projects"
 import { NavUser } from "@/components/evaluator/nav-user"
 import { TeamSwitcher } from "@/components/evaluator/team-switcher"
+
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-interface DecodedToken {
-  name: string
-  email: string
+import { challengesService } from "@/lib/kanban/services/challenges"
+import type { Challenge } from "@/lib/kanban/types"
+
+interface currentUser {
+  name?: string
+  username?: string
+  email?: string
+  sub?: string
   avatar?: string
-  role: "MANAGER" | "EVALUATOR" | "COMMON"
-  companyId?: string
+  role?: string
+  companyName?: string
   exp?: number
 }
 
-const evaluatorNav = [
-  {
-    title: "Dashboard",
-    url: "/avaliador/dashboard",
-    icon: BarChart3,
-    roles: ["EVALUATOR"],
-    items: [{ title: "Visão Geral", url: "/avaliador/dashboard" }],
-  },
-  {
-    title: "Funil de Inovação",
-    url: "/avaliador/funil",
-    icon: Users,
-    roles: ["EVALUATOR"],
-    items: [
-      { title: "Kanbam", url: "/avaliador/funil/kanbam" },
-      { title: "Pré-Triagem", url: "/avaliador/funil/pre-triagem" },
-      { title: "Ideação", url: "/avaliador/funil/ideacao" },
-      { title: "Triagem Detalhada", url: "/avaliador/funil/triagem" },
-      { title: "Experimentação (POCs)", url: "/avaliador/funil/pocs" },
-    ],
-  },
-  {
-    title: "Startups",
-    url: "/evaluator/startups",
-    icon: Rocket,
-    roles: ["EVALUATOR"],
-    items: [
-      { title: "Base de Startups", url: "/evaluator/startups" },
-      { title: "Recomendações", url: "/evaluator/startups/recomendacoes" },
-      { title: "Matches", url: "/evaluator/startups/matches" },
-    ],
-  },
-  {
-    title: "Conexões",
-    url: "/evaluator/conexoes",
-    icon: Network,
-    roles: ["EVALUATOR"],
-    items: [
-      { title: "Histórico de Interações", url: "/avaliador/conexoes/historico" },
-      { title: "POCs em Andamento", url: "/avaliador/conexoes/pocs" },
-    ],
-  },
-]
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [currentUser, setCurrentUser] = useState<DecodedToken | null>(null)
+  const [currentUser, setCurrentUser] = useState<currentUser | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [challenges, setChallenges] = useState<Challenge[]>([])
 
   useEffect(() => {
-    try {
-      const token = localStorage.getItem("access_token")
-      if (!token) {
-        console.warn("Token de autenticação não encontrado")
-        return
-      }
+    const token = localStorage.getItem("access_token")
+    if (token) {
+      try {
+        const decoded = jwtDecode<currentUser>(token)
+        console.log("Token decodificado:", decoded)
 
-      const decoded = jwtDecode<DecodedToken>(token)
-      setCurrentUser(decoded)
-    } catch (err) {
-      console.error("Erro ao decodificar JWT:", err)
+        setCurrentUser({
+          name: decoded.name || decoded.username || "Usuário",
+          email: decoded.email || decoded.sub || "sem-email@exemplo.com",
+          role: decoded.role || "user",
+          avatar: decoded.avatar || "/avatars/default.jpg",
+          companyName: decoded.companyName || "Corporação",
+        })
+      } catch (err) {
+        console.error("Erro ao decodificar JWT:", err)
+      }
+    } else {
+      console.warn("Nenhum token encontrado no localStorage")
     }
+
+    setLoading(false)
   }, [])
 
-  if (!currentUser) {
-    return null // spinner ou redirect opcional
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const data = await challengesService.getAll()
+        setChallenges(data)
+      } catch (err) {
+        console.error("Erro ao carregar desafios:", err)
+      }
+    }
+
+    fetchChallenges()
+  }, [])
+
+  if (loading) {
+    return <div className="p-4 text-sm text-muted-foreground">Carregando...</div>
   }
 
-  // filtra menus de acordo com o role vindo do token
-  const filteredNav = evaluatorNav
+  if (!currentUser) {
+    return <div className="p-4 text-sm text-red-500">Usuário não autenticado</div>
+  }
+
+  const challengeItems = challenges.map((challenge) => ({
+    name: challenge.title,
+    url: `/evaluator/funil/kanban/${challenge.id}`,
+    icon: IconLayoutKanban,
+  }))
+
+  const navMain = [
+    {
+      title: "Dashboard",
+      url: "/evaluator/dashboard",
+      icon: IconDashboard,
+      roles: ["EVALUATOR"],
+    },
+    {
+      title: "Criar desafio",
+      url: "/evaluator/challenges/create",
+      icon: IconClipboardPlus,
+      roles: ["EVALUATOR"],
+    },
+    {
+      title: "Meus desafios",
+      url: "/evaluator/challenges/my-challenges",
+      icon: IconClipboardData,
+      roles: ["EVALUATOR"],
+    },
+    {
+      title: "Desafios públicos",
+      url: "/evaluator/challenges/public-challengers",
+      icon: IconClipboardListFilled,
+      roles: ["EVALUATOR"],
+    },
+    {
+      title: "Startups",
+      url: "/evaluator/startups",
+      icon: IconRocket,
+      roles: ["EVALUATOR"],
+    },
+    {
+      title: "POCs",
+      url: "/evaluator/pocs",
+      icon: IconNetwork,
+      roles: ["EVALUATOR"],
+    },
+  ]
+
+  const filteredNav = navMain
     .map((item) => {
-      if (!item.roles.includes(currentUser.role)) return null
-      return { ...item, items: item.items?.filter(Boolean) }
+      if (!item.roles.includes(currentUser.role!)) return null
+      return { ...item }
     })
-    .filter(Boolean) as typeof evaluatorNav
+    .filter(Boolean) as typeof navMain
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={[]} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+              <a href="#">
+                <IconInnerShadowTop className="!size-6 fill-primary text-xs" />
+                <span className="text-[1.5rem] font-semibold">{currentUser.companyName}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
         <NavMain items={filteredNav} />
-        <NavProjects projects={[]} />
+        <NavProjects projects={challengeItems} />
       </SidebarContent>
+
       <SidebarFooter>
         <NavUser
           user={{
-            name: currentUser.name,
-            email: currentUser.email,
-            avatar: currentUser.avatar ?? "/avatars/default.jpg",
-            role: currentUser.role,
+            name: currentUser.name!,
+            email: currentUser.email!,
+            avatar: currentUser.avatar!,
+            role: "Avaliador",
           }}
         />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   )

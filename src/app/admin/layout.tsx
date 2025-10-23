@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
 import { AppSidebar } from "@/components/admin/app-sidebar" 
-import { LogoutButton } from "@/components/log-out"
 import { ModeToggle } from "@/components/theme-toggle"
 import {
   SidebarProvider,
@@ -70,7 +69,7 @@ export default function DashboardLayout({
   }
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider>
       <div className="flex min-h-screen w-screen">
         <AppSidebar />
 
@@ -79,7 +78,6 @@ export default function DashboardLayout({
             <SidebarTrigger />
             <div className="space-x-2">
               <ModeToggle />
-              <LogoutButton />
             </div>
           </div>
           <div className="p-4">{children}</div>

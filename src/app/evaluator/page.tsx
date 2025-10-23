@@ -1,109 +1,129 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from "recharts"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { useRouter } from "next/navigation"
+import { jwtDecode } from "jwt-decode"
+import { Spinner } from "@/components/ui/shadcn-io/spinner"
 
-export default function EvaluatorHomePage() {
-  const [pocsData] = useState([
-    { name: "Em andamento", value: 42 },
-    { name: "Concluídas", value: 18 },
-    { name: "Canceladas", value: 7 },
-  ])
+import { EvaluatorKPICards } from "@/components/evaluator/dashboard/kpi"
+import { EvaluatorQuickActions } from "@/components/evaluator/dashboard/quick-actions"
 
-  const [sectorsData] = useState([
-    { name: "Energia", startups: 25 },
-    { name: "Saúde", startups: 18 },
-    { name: "Educação", startups: 12 },
-    { name: "Financeiro", startups: 20 },
-  ])
+type JwtPayload = {
+  exp: number
+  role?: string
+  name?: string
+}
 
-  const COLORS = ["#2563eb", "#22c55e", "#ef4444"]
+export interface Kpis {
+  totalIdeas: number
+  totalStartupsConnected: number
+  totalPocs: number
+}
+
+export default function DashboardPage() {
+  const router = useRouter()
+  const [authorized, setAuthorized] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [kpis, setKpis] = useState<Kpis | null>(null)
+  const [userName, setUserName] = useState<string>("")
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem("access_token")
+      if (!token) return router.push("/login")
+
+      try {
+        const decoded = jwtDecode<JwtPayload>(token)
+        const now = Date.now() / 1000
+
+        if (decoded.exp < now || decoded.role !== "EVALUATOR") {
+          localStorage.removeItem("access_token")
+          router.push("/login")
+          return
+        }
+
+        const fullName = decoded.name || "Usuário"
+        const firstName = fullName.split(" ")[0]
+        setUserName(firstName)
+
+        setAuthorized(true)
+      } catch (err) {
+        console.error("Erro ao decodificar token:", err)
+        router.push("/login")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkAuth()
+  }, [router])
+
+  useEffect(() => {
+    if (!authorized) return
+
+    const fetchData = async () => {
+      try {
+        const adminURL = process.env.NEXT_PUBLIC_API_URL
+        const token = localStorage.getItem("access_token")
+
+        if (!token) {
+          router.push("/login")
+          return
+        }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+
+        const [kpiRes] = await Promise.all([
+          axios.get(`${adminURL}/dashboard`, config),
+        ])
+
+        setKpis(kpiRes.data)
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401) {
+            console.warn("Sessão expirada. Redirecionando para login.")
+            localStorage.removeItem("access_token")
+            router.push("/login")
+          } else {
+            console.error("Erro ao buscar dados do dashboard:", error)
+          }
+        } else {
+          console.error("Erro inesperado:", error)
+        }
+      }
+    }
+
+    fetchData()
+  }, [authorized, router])
+
+  if (loading || !kpis)
+    return (
+      <div className="flex justify-center items-center mt-80">
+        <Spinner className="text-[#8884d8]" variant="bars" />
+      </div>
+    )
+
+  if (!authorized) return null
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <header className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Painel do Avaliador</h1>
-      </header>
-
-      {/* Cards principais */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Startups Cadastradas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">75</p>
-            <p className="text-sm text-muted-foreground">+12 este mês</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>POCs em Andamento</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">42</p>
-            <p className="text-sm text-muted-foreground">Taxa de conclusão: 65%</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Avaliações Pendentes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">15</p>
-            <p className="text-sm text-muted-foreground">3 críticas urgentes</p>
-          </CardContent>
-        </Card>
+    <div className="p-6 space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Bem-vindo(a), {userName}, 
+          à Plataforma de Inovação do Ninna Hub!
+        </h1>
+        <p className="text-muted-foreground">
+          Acompanhe o desempenho e engajamento geral da sua corporação na plataforma
+        </p>
       </div>
 
-      {/* Gráficos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Distribuição das POCs */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Status das POCs</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={pocsData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={90}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {pocsData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Startups por setor */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Startups por Setor</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={sectorsData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="startups" fill="#2563eb" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
+      <EvaluatorKPICards kpis={kpis} />
+      <EvaluatorQuickActions />
     </div>
   )
 }
