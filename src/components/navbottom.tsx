@@ -1,6 +1,6 @@
 'use client'
 
-import { Facebook, Instagram, Linkedin, Phone, MapPin, Mail, Globe } from 'lucide-react'
+import { Facebook, Instagram, Linkedin, Phone, MapPin, Globe } from 'lucide-react'
 import { FaWhatsapp } from 'react-icons/fa'
 import Link from 'next/link'
 import Logo from '@/components/shadcn-studio/logo'

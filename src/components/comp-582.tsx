@@ -7,8 +7,7 @@ import {
   UsersIcon,
 } from "lucide-react"
 
-import Logo from "@/components/logo"
-import ThemeToggle from "@/components/theme-toggle"
+import Logo from "../app/assets/svg/logo"
 import UserMenu from "@/components/user-menu"
 import { Button } from "@/components/ui/button"
 import {
@@ -35,6 +34,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { ModeToggle } from "./theme-toggle"
 
 // Navigation links with icons for desktop icon-only navigation
 const navigationLinks = [
@@ -160,7 +160,7 @@ export default function Component() {
         {/* Right side */}
         <div className="flex items-center gap-2">
           {/* Theme toggle */}
-          <ThemeToggle />
+          <ModeToggle/>
           {/* Language selector */}
           <Select defaultValue="en">
             <SelectTrigger
