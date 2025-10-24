@@ -33,7 +33,7 @@ export function ModeToggle() {
         <Button
           variant="outline"
           size="icon"
-          className="relative overflow-hidden"
+          className="relative text-foreground overflow-hidden"
         >
           <AnimatePresence mode="wait" initial={false}>
             {theme === "light" && (

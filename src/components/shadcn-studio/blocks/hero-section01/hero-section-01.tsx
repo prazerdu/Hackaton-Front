@@ -78,9 +78,6 @@ const HeroSection = () => {
             </a>
           </motion.div>
         </div>
-
-        {/* Card apenas em telas md+ */}
-       
           <TiltShineCard />
       </div>
     </section>

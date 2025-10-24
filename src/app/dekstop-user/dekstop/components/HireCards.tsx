@@ -27,6 +27,7 @@ import Drop from "@/components/drop";
 import Alert from "@/components/alert";
 import { cn } from "@/lib/utils";
 import NavDropDown from "@/components/navDrop";
+import { ModeToggle } from "@/components/theme-toggle";
 
 type Challenge = {
   id: string;
@@ -261,7 +262,7 @@ const ChallengesList = () => {
   return (
     <div className="space-y-4 w-full min-h-[70vh] flex flex-col">
       <div className="flex items-center justify-center mt-3 gap-2 max-w-[700px] mx-auto">
-        <div className="relative p-1 flex-1 min-w-[250px] sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px]">
+        <div className="relative p-1 flex-1 min-w-[190px] sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px]">
           <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
             placeholder="Buscar desafios..."
@@ -273,7 +274,8 @@ const ChallengesList = () => {
             <Drop categories={categories} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
           </div>
         </div>
-        <NavDropDown />
+        {/* <NavDropDown /> */}
+        <ModeToggle />
       </div>
 
       {filteredChallenges.length > 0 ? (
