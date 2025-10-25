@@ -58,7 +58,7 @@ const HeroSection = () => {
             className="flex flex-wrap justify-center lg:justify-start gap-6 mt-6"
           >
             <a href="/home" className="w-max">
-              <Button className="relative inline-flex items-center justify-center px-6 py-3 rounded-xl cursor-pointer text-white font-semibold shadow-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
+              <Button className="relative inline-flex items-center justify-center px-6 py-3 rounded cursor-pointer text-white font-semibold shadow-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
                 <span className="relative z-10 flex items-center gap-2">
                   Visualizar Desafios
                   <ArrowRightIcon className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
@@ -68,7 +68,7 @@ const HeroSection = () => {
             </a>
 
             <a href="/login" className="w-max">
-              <Button className="relative inline-flex items-center justify-center px-6 py-3 rounded-xl cursor-pointer text-white font-semibold shadow-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
+              <Button className="relative inline-flex items-center justify-center px-6 py-3 rounded cursor-pointer text-white font-semibold shadow-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
                 <span className="relative z-10 flex items-center gap-2">
                   Login
                   <ArrowRightIcon className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
@@ -78,9 +78,6 @@ const HeroSection = () => {
             </a>
           </motion.div>
         </div>
-
-        {/* Card apenas em telas md+ */}
-       
           <TiltShineCard />
       </div>
     </section>

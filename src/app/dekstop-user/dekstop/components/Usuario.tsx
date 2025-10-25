@@ -13,7 +13,7 @@ export default function Usuario() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          className="flex  items-center bg-foreground gap-3 sm:gap-4 focus:outline-none cursor-pointer px-4 py-2 rounded-lg shadow-2xl transition-all"
+          className="flex bg-foreground items-center gap-3 sm:gap-4 cursor-pointer px-4 py-2 rounded-lg shadow-2xl transition-all"
         >
           <div className="flex-col text-right">Login</div>
           <span className="sm:hidde n">
@@ -21,7 +21,6 @@ export default function Usuario() {
           </span>
         </Button>
       </DialogTrigger>
-
       <LoginModal onCloseAction={() => setOpen(false)} />
     </Dialog>
   );

@@ -29,8 +29,7 @@ export default function NavDropDown() {
                 <div className="py-1">
                     <Usuario />
                 </div>
-                <div className="py-1">
-                    <ModeToggle />
+                <div className="py-1 ">
                 </div>
             </DropdownMenuContent>
         </DropdownMenu>
