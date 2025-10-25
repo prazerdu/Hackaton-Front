@@ -1,6 +1,13 @@
 'use client'
 
-import { Facebook, Instagram, Linkedin, Phone, MapPin, Mail, Globe } from 'lucide-react'
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Phone,
+  MapPin,
+  Globe,
+} from 'lucide-react'
 import { FaWhatsapp } from 'react-icons/fa'
 import Link from 'next/link'
 import Logo from '@/components/shadcn-studio/logo'
@@ -16,7 +23,7 @@ const data = {
     phone: '+55 85 3211-4201',
     address: 'Av. Dom Manuel, 1020 - Centro, Fortaleza - CE',
     mapLink:
-      'https://www.google.com/maps/dir//NINNA+Hub+Av.+Dom+Manuel,+1020+-+Centro+Fortaleza+-+CE+60060-090/@-3.7329715,-38.5227375,16z/data=!4m5!4m4!1m0!1m2!1m1!1s0x7c74960777bcbad:0xfe9c6b7989ba92a3',
+      'https://www.google.com/maps/dir//NINNA+Hub+Av.+Dom+Manuel,+1020+-+Centro+Fortaleza+-+CE+60060-090/',
   },
 }
 
@@ -35,43 +42,56 @@ const contactInfo = [
 
 export default function Footer() {
   return (
-    <footer className="bg-secondary dark:bg-secondary/20 w-full rounded-t-xl">
-      <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8 sm:py-8">
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-4 sm:gap-8 items-center sm:items-start">
+    <footer className="bg-secondary dark:bg-secondary/20 w-full rounded-t-2xl shadow-inner border-t border-border/20">
+      <div className="mx-auto max-w-screen-xl px-6 py-8 sm:px-8 sm:py-10">
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-8 items-center sm:items-start text-center sm:text-left">
 
-          {/* Coluna esquerda: Logo e social links */}
-          <div className="flex flex-col items-center sm:items-start gap-2 w-full sm:w-auto">
+          {/* Coluna Esquerda */}
+          <div className="flex flex-col items-center sm:items-start gap-3 w-full sm:w-auto">
             <Logo className="text-sm" />
 
-            {/* Social Links: sempre visíveis, mas em linha no mobile */}
-            <ul className="mt-2 flex flex-row flex-wrap justify-center sm:justify-start gap-2 sm:gap-3 text-violet-400 text-lg sm:text-xl">
+            {/* Social Links */}
+            <ul className="mt-3 flex flex-wrap justify-center sm:justify-start gap-4 text-muted-foreground">
               {socialLinks.map(({ icon: Icon, label, href }) => (
                 <li key={label}>
-                  <Link href={href} target="_blank" className="hover:text-primary transition">
+                  <Link
+                    href={href}
+                    target="_blank"
+                    className="group inline-flex items-center justify-center transition-transform duration-300"
+                  >
                     <span className="sr-only">{label}</span>
-                    <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <Icon
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-foreground/70 group-hover:text-primary transition-colors duration-300 group-hover:scale-110"
+                    />
                   </Link>
                 </li>
               ))}
             </ul>
 
-            {/* Descrição só em telas maiores */}
-            <p className="text-foreground/60 mt-2 text-center sm:text-left text-sm sm:text-base max-w-xs sm:max-w-md leading-relaxed hidden sm:block">
-              Conectamos tecnologia e negócios com soluções inovadoras, entregando resultados estratégicos para empresas de todos os tamanhos.
+
+            {/* Descrição */}
+            <p className="text-foreground/60 mt-3 text-sm sm:text-base max-w-sm leading-relaxed">
+              Conectamos tecnologia e negócios com soluções inovadoras,
+              entregando resultados estratégicos para empresas de todos os
+              tamanhos.
             </p>
           </div>
 
-          <div className="flex flex-col  items-center sm:items-start gap-2 w-full sm:w-auto">
-            <p className="text-base sm:text-lg font-medium mb-4 text-violet-400 hidden sm:block">Contatos</p>
+          {/* Coluna Direita (Contatos) */}
+          <div className="flex flex-col items-center sm:items-start gap-4 w-full sm:w-auto">
+            <p className="text-base sm:text-lg font-semibold text-primary">
+              Contatos
+            </p>
 
-            {/* Lista de contatos */}
-            <ul className="flex justify-center text-violet-400 sm:flex-col sm:items-start gap-3  w-full sm:w-auto">
+            <ul className="flex flex-col items-center sm:items-start gap-3 text-muted-foreground">
               {contactInfo.map(({ icon: Icon, text, href }) => (
-                <li key={text} className="flex items-center justify-center sm:justify-start gap-2 w-auto">
-                  <Link href={href} target="_blank" className="flex items-center gap-1 hover:underline">
-                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                    {/* Texto do contato só em desktop */}
-                    <span className="hidden sm:inline text-sm">{text}</span>
+                <li
+                  key={text}
+                  className="flex items-center gap-2 hover:text-primary transition-colors"
+                >
+                  <Link href={href} target="_blank" className="flex items-center gap-2">
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                    <span className="text-sm sm:text-base">{text}</span>
                   </Link>
                 </li>
               ))}
@@ -80,9 +100,13 @@ export default function Footer() {
         </div>
 
         {/* Rodapé inferior */}
-        <div className="mt-4 border-t border-border-subtle pt-2 text-center text-xs sm:text-sm text-muted-foreground">
+        <div className="mt-8 border-t border-border/30 pt-4 text-center text-xs sm:text-sm text-muted-foreground">
           © {new Date().getFullYear()} Ninna Hub.{' '}
-          <Link href={data.siteLink} target="_blank" className="hover:underline">
+          <Link
+            href={data.siteLink}
+            target="_blank"
+            className="hover:underline hover:text-primary transition-colors"
+          >
             ninnahub.com.br
           </Link>
         </div>
