@@ -1,119 +1,107 @@
-"use client";
+"use client"
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle } from "lucide-react";
-import Image from "next/image";
-
+import { motion, useMotionValue, useTransform } from "framer-motion"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { CheckCircle } from "lucide-react"
 interface Feature {
-  icon?: React.ReactNode;
-  label: string;
+  icon?: React.ReactNode
+  label: string
+}
+interface SimpleTiltCardProps {
+  title?: string
+  description?: string
+  badges?: string[]
+  features?: Feature[]
 }
 
-interface TiltCardProps {
-  imageSrc?: string;
-  title?: string;
-  description?: string;
-  badges?: string[];
-  features?: Feature[];
-  primaryButton?: { text: string; link: string };
-  secondaryButton?: { text: string; link: string };
-}
-
-const TiltShineCard = ({
-  imageSrc,
-  title = "Plataforma de Inovação Aberta ",
+export default function SimpleTiltCard({
+  title = "Plataforma de Inovação Aberta",
   description = "Uma plataforma completa para transformar seu negócio digitalmente, com soluções inovadoras e design de alto padrão.",
   badges = ["Destaque"],
   features = [
-    { icon: <CheckCircle className="w-4 h-4" />, label: "Seguro" },
-    { icon: <CheckCircle className="w-4 h-4" />, label: "Rápido" },
-    { icon: <CheckCircle className="w-4 h-4" />, label: "Acessível" },
+    { icon: <CheckCircle className="w-4 h-4 text-primary" />, label: "Seguro" },
+    { icon: <CheckCircle className="w-4 h-4 text-primary" />, label: "Rápido" },
+    { icon: <CheckCircle className="w-4 h-4 text-primary" />, label: "Acessível" },
   ],
-  primaryButton = { text: "Saiba Mais", link: "/corporate" },
-  secondaryButton = { text: "Contato", link: "/contact" },
-}: TiltCardProps) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-50, 50], [8, -8]);
-  const rotateY = useTransform(x, [-50, 50], [-8, 8]);
-  const scale = useTransform(x, [-50, 50], [1, 1.03]);
+}: SimpleTiltCardProps) {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const rotateX = useTransform(y, [-50, 50], [10, -10])
+  const rotateY = useTransform(x, [-50, 50], [-10, 10])
+  const scale = useTransform(x, [-50, 50], [1, 1.07])
 
   return (
     <motion.div
       style={{ rotateX, rotateY, x, y, scale }}
-      className="w-full max-w-xs sm:max-w-sm cursor-pointer"
+      className="group w-full max-w-sm cursor-pointer transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)]"
       onMouseMove={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const posX = e.clientX - rect.left - rect.width / 2;
-        const posY = e.clientY - rect.top - rect.height / 2;
-        x.set(posX / 20);
-        y.set(posY / 20);
+        const rect = e.currentTarget.getBoundingClientRect()
+        const posX = e.clientX - rect.left - rect.width / 2
+        const posY = e.clientY - rect.top - rect.height / 2
+        x.set(posX / 15)
+        y.set(posY / 15)
       }}
       onMouseLeave={() => {
-        x.set(0);
-        y.set(0);
+        x.set(0)
+        y.set(0)
       }}
     >
-      <Card className="relative overflow-hidden hidden md:block rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-white/10">
-        {/* Overlay de cor e brilho */}
-        <div className="absolute inset-0 z-10 bg-transparent rounded-3xl pointer-events-none"></div>
-        <div className="absolute inset-0 z-20 pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-full bg-white/10 opacity-0 group-hover:opacity-30 transition-opacity duration-500 blur-xl rotate-45 animate-shine"></div>
+      <Card className="relative ml-10 overflow-hidden hidden md:block rounded-3xl border border-border/20 shadow-2xl bg-gradient-to-br from-background/80 to-background/50 backdrop-blur-xl transition-all duration-700 hover:shadow-[0_8px_40px_rgba(0,0,0,0.25)] hover:border-primary/40">
+        <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl pointer-events-none" />
+        {/* Brilho animado suave */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full bg-white/5 opacity-0 group-hover:opacity-30 transition-opacity duration-700 blur-xl rotate-45 animate-shine"></div>
         </div>
-
-        {/* Conteúdo */}
-        <CardContent className="relative z-30 flex flex-col justify-between h-full p-6 sm:p-8 text-white backdrop-blur-sm">
-          <CardHeader className="p-0">
-            <div className="flex flex-wrap gap-2 mb-2">
-              {badges.map((b) => (
-                <Badge key={b} className="bg-purple-500/90 text-white">
-                  {b}
-                </Badge>
-              ))}
-            </div>
-            <CardTitle className="text-foreground sm:text-3xl font-extrabold drop-shadow-md">{title}</CardTitle>
-            <CardDescription className="mt-2 text-foreground text-sm sm:text-base drop-shadow-sm">
-              {description}
-            </CardDescription>
-            {/* Features */}
-            <div className="flex flex-wrap gap-2 mt-3">
-              {features.map((f, i) => (
-                <div key={i} className="flex items-center gap-1 text-sm text-foreground">
-                  {f.icon} <span>{f.label}</span>
-                </div>
-              ))}
-            </div>
-          </CardHeader>
-
-          {/* Botões */}
-          <div className="mt-4 flex gap-3 flex-wrap">
-            {primaryButton && (
-              <Button
-                asChild
-                variant={"default"}
-                size="lg"
-                className="text-white font-semibold border-transparent shadow-md hover:shadow-lg flex-1 transition-all duration-300 transform hover:-translate-y-1 hover:scale-1.02"
+        <div className="absolute inset-0 bg-gradient-to-t from-black/[.05] to-transparent dark:from-white/[.05] dark:to-transparent pointer-events-none rounded-3xl" />
+        <CardHeader>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {badges.map((b) => (
+              <Badge
+                key={b}
+                className="bg-primary/80 text-white shadow-sm border border-white/20"
               >
-                <a href={primaryButton.link}>{primaryButton.text}</a>
-              </Button>
-            )}
-            {secondaryButton && (
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="text-foreground flex-1 transition-all duration-300"
+                {b}
+              </Badge>
+            ))}
+          </div>
+
+          <CardTitle className="text-foreground text-2xl sm:text-3xl font-extrabold tracking-tight drop-shadow-[0_1px_1px_rgba(0,0,0,0.1)]">
+            {title}
+          </CardTitle>
+
+          <CardDescription className="text-muted-foreground mt-2 text-sm sm:text-base leading-relaxed">
+            {description}
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="mt-3">
+          <div className="flex flex-wrap gap-3">
+            {features.map((f, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-2 text-sm text-foreground/90 hover:text-primary transition-colors duration-300"
               >
-                <a href={secondaryButton.link}>{secondaryButton.text}</a>
-              </Button>
-            )}
+                {f.icon}
+                <span>{f.label}</span>
+              </div>
+            ))}
           </div>
         </CardContent>
-      </Card>
 
+        <CardFooter className="pt-4 border-t border-border/10">
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Ninna Hub
+          </p>
+        </CardFooter>
+      </Card>
       <style jsx>{`
         @keyframes shine {
           0% {
@@ -121,7 +109,7 @@ const TiltShineCard = ({
             opacity: 0;
           }
           50% {
-            opacity: 0.25;
+            opacity: 0.2;
           }
           100% {
             transform: translateX(150%) rotate(45deg);
@@ -129,11 +117,9 @@ const TiltShineCard = ({
           }
         }
         .animate-shine {
-          animation: shine 2s infinite;
+          animation: shine 4s infinite linear;
         }
       `}</style>
     </motion.div>
-  );
-};
-
-export default TiltShineCard;
+  )
+}
