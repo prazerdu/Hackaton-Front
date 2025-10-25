@@ -71,7 +71,7 @@ export function ChallengeForm() {
         },
       })
 
-      console.log("✅ Desafio criado com sucesso!", response.data)
+      console.log("Desafio criado com sucesso!", response)
 
       setFormData({
         title: "",
@@ -85,7 +85,7 @@ export function ChallengeForm() {
         status: "DRAFT",
       })
     } catch (error) {
-      console.error("❌ Erro ao criar desafio:", error)
+      console.error("Erro ao criar desafio:", error)
 
       if (axios.isAxiosError(error)) {
         console.error("Mensagem do servidor:", error.response?.data?.message || error.message)
@@ -151,7 +151,6 @@ export function ChallengeForm() {
         </CardContent>
       </Card>
 
-      {/* Challenge Scope Section */}
       <Card className="border-2">
         <CardHeader>
           <CardTitle className="text-2xl">Escopo e Benefícios</CardTitle>
@@ -189,7 +188,6 @@ export function ChallengeForm() {
         </CardContent>
       </Card>
 
-      {/* Timeline Section */}
       <Card className="border-2">
         <CardHeader>
           <CardTitle className="text-2xl">Cronograma</CardTitle>
@@ -229,7 +227,6 @@ export function ChallengeForm() {
         </CardContent>
       </Card>
 
-      {/* Settings Section */}
       <Card className="border-2">
         <CardHeader>
           <CardTitle className="text-2xl">Configurações</CardTitle>
@@ -263,7 +260,6 @@ export function ChallengeForm() {
         </CardContent>
       </Card>
 
-      {/* Submit Button */}
       <div className="flex justify-end gap-4">
         <Button
           type="button"

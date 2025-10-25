@@ -39,7 +39,7 @@ export function NavMain({
             >
               <IconCirclePlusFilled />
               <a href="/evaluator">
-                <span>Ações rápida</span>
+                <span>Ações rápidas</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

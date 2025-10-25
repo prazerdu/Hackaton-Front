@@ -3,12 +3,29 @@
 import type * as React from "react"
 import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
-import { Users, ClipboardList, Network, Rocket, LayoutGrid } from "lucide-react"
+import {
+  IconClipboardData,
+  IconClipboardListFilled,
+  IconInnerShadowTop,
+  IconLayoutKanban,
+} from "@tabler/icons-react"
+
 import { NavMain } from "./nav-main"
-import { NavProjects } from "@/components/admin/nav-projects"
-import { NavUser } from "@/components/admin/nav-user"
-import { TeamSwitcher } from "@/components/admin/team-switcher"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
+import { NavProjects } from "./nav-projects"
+import { NavUser } from "./nav-user"
+import { TeamSwitcher } from "./team-switcher"
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@/components/ui/sidebar"
+
 import { challengesService } from "@/lib/kanban/services/challenges"
 import type { Challenge } from "@/lib/kanban/types"
 
@@ -19,6 +36,7 @@ interface currentUser {
   sub?: string
   avatar?: string
   role?: string
+  companyName?: string
   exp?: number
 }
 
@@ -39,6 +57,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           email: decoded.email || decoded.sub || "sem-email@exemplo.com",
           role: decoded.role || "user",
           avatar: decoded.avatar || "/avatars/default.jpg",
+          companyName: decoded.companyName || "Corporação",
         })
       } catch (err) {
         console.error("Erro ao decodificar JWT:", err)
@@ -52,8 +71,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   useEffect(() => {
     const fetchChallenges = async () => {
-      const data = await challengesService.getAll()
-      setChallenges(data)
+      try {
+        const data = await challengesService.getAll()
+        setChallenges(data)
+      } catch (err) {
+        console.error("Erro ao carregar desafios:", err)
+      }
     }
 
     fetchChallenges()
@@ -68,57 +91,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   const challengeItems = challenges.map((challenge) => ({
-    title: challenge.title,
-    url: `/user/funil/kanban/${challenge.id}`,
+    name: challenge.title,
+    url: `/common/funil/kanban/${challenge.id}`,
+    icon: IconLayoutKanban,
   }))
 
   const navMain = [
     {
-      title: "Desafios",
-      url: "/user/desafios",
-      icon: ClipboardList,
+      title: "Meus desafios",
+      url: "/user/challenges/my-challenges",
+      icon: IconClipboardData,
       roles: ["COMMON"],
-      items: [
-        { title: "Meus Desafios", url: "/admin/desafios/meus-desafios" },
-        { title: "Abertos ao Público", url: "/admin/desafios/publicos" },
-      ],
     },
     {
-      title: "Funil de Inovação",
-      url: "/user/funil/kanban",
-      icon: LayoutGrid,
+      title: "Desafios públicos",
+      url: "/user/challenges/public-challengers",
+      icon: IconClipboardListFilled,
       roles: ["COMMON"],
-      items: [
-        ...(challengeItems.length > 0 ? [...challengeItems] : []),
-      ],
-    },
-    {
-      title: "Startups",
-      url: "/admin/startups",
-      icon: Rocket,
-      roles: ["MANAGER"],
-      items: [
-        { title: "Base de Startups", url: "/admin/startups" },
-        { title: "Recomendações", url: "/admin/startups/recomendacoes" },
-        { title: "Matches", url: "/admin/startups/matches" },
-      ],
-    },
-    {
-      title: "Conexões",
-      url: "/admin/conexoes",
-      icon: Network,
-      roles: ["MANAGER"],
-      items: [
-        { title: "Histórico de Interações", url: "/admin/conexoes/historico" },
-        { title: "POCs em Andamento", url: "/admin/conexoes/pocs" },
-      ],
-    },
-    {
-      title: "Usuários",
-      url: "/admin/users",
-      icon: Users,
-      roles: ["MANAGER"],
-      items: [{ title: "Usuários & Permissões", url: "/admin/users" }],
     },
   ]
 
@@ -133,11 +122,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={[]} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+              <a href="#">
+                <IconInnerShadowTop className="!size-6 fill-primary text-xs" />
+                <span className="text-[1.5rem] font-semibold">{currentUser.companyName}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
 
       <SidebarContent>
         <NavMain items={filteredNav} />
-        <NavProjects projects={[]} />
+        <NavProjects projects={challengeItems} />
       </SidebarContent>
 
       <SidebarFooter>
@@ -146,10 +145,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             name: currentUser.name!,
             email: currentUser.email!,
             avatar: currentUser.avatar!,
-            role: "Gestor"
+            role: "Funcionário",
           }}
         />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   )

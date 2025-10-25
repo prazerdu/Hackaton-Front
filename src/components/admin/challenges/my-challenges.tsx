@@ -1,31 +1,30 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import axios from "axios"
 import { jwtDecode } from "jwt-decode"
 import {
   Card,
   CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
-import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react"
+import { DeleteChallengeButton } from "./delete"
+import { IconCalendar, IconCirclePlus } from "@tabler/icons-react"
+import { EmptyChallenges } from "@/components/challenges/empty"
 
 interface Challenge {
   id: string
   title: string
   createdAt: string
   status: string
+  area?: string
 }
 
 interface TokenPayload {
@@ -39,7 +38,7 @@ export default function MyChallenges() {
   const [challenges, setChallenges] = useState<Challenge[]>([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
-  const challengesPerPage = 10
+  const challengesPerPage = 6
 
   useEffect(() => {
     const fetchChallenges = async () => {
@@ -51,7 +50,6 @@ export default function MyChallenges() {
       }
 
       try {
-        // Decodifica para validar expiração e obter empresa
         const decoded: TokenPayload = jwtDecode(token)
         if (Date.now() >= decoded.exp * 1000) {
           console.warn("Token expirado")
@@ -77,26 +75,23 @@ export default function MyChallenges() {
     fetchChallenges()
   }, [])
 
-  const handleDelete = async (id: string) => {
-    const confirmed = confirm("Deseja realmente excluir este desafio?")
-    if (!confirmed) return
+  const formatDate = (dateString: string) =>
+    new Date(dateString).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })
 
-    const token = localStorage.getItem("access_token")
-    if (!token) return
-
-    try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/challenges/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      setChallenges((prev) => prev.filter((challenge) => challenge.id !== id))
-      alert("Desafio excluído com sucesso!")
-    } catch (error) {
-      console.error("Erro ao excluir desafio:", error)
-      alert("Não foi possível excluir o desafio.")
+  const getStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
+      DRAFT: "bg-muted text-muted-foreground",
+      ACTIVE: "bg-green-500 text-white",
+      CLOSED: "bg-destructive text-destructive-foreground",
+      "Em aberto": "bg-blue-500 text-white",
     }
+    return colors[status] || "bg-secondary text-secondary-foreground"
   }
 
-  // Paginação
   const totalPages = Math.ceil(challenges.length / challengesPerPage)
   const startIndex = (currentPage - 1) * challengesPerPage
   const endIndex = startIndex + challengesPerPage
@@ -106,86 +101,104 @@ export default function MyChallenges() {
   const handleNextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
 
-  return (
-    <div className="p-6">
-      <Card className="w-full shadow-md">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Meus Desafios</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="flex flex-col justify-center items-center">
-              <Spinner className="text-[#8884d8]" variant="bars" />
-              <p className="font-semibold mt-2">Carregando desafios...</p>
-            </div>
-          ) : (
-            <>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Título</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Data de Criação</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginatedChallenges.map((challenge) => (
-                    <TableRow key={challenge.id}>
-                      <TableCell className="font-medium">{challenge.title}</TableCell>
-                      <TableCell className="capitalize">
-                        {challenge.status || "Em aberto"}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(challenge.createdAt).toLocaleDateString("pt-BR", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </TableCell>
-                      <TableCell className="flex justify-end gap-2">
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleDelete(challenge.id)}
-                          className="flex items-center gap-1"
-                        >
-                          <Trash2 className="h-4 w-4" /> Excluir
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        <Spinner className="text-[#8884d8]" variant="bars" />
+      </div>
+    )
+  }
 
-              {/* Paginação */}
-              {challenges.length > challengesPerPage && (
-                <div className="flex justify-between items-center mt-3">
-                  <Button
-                    variant="outline"
-                    onClick={handlePrevPage}
-                    disabled={currentPage === 1}
-                  >
-                    <ChevronLeft /> Anterior
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+        <div>
+          <h1 className="text-4xl font-bold mb-1 text-balance">Meus Desafios</h1>
+          <p className="text-muted-foreground text-lg">
+            Gerencie e acompanhe os desafios criados pela sua organização
+          </p>
+        </div>
+        <Button asChild className="flex items-center gap-2">
+          <Link href="/admin/challenges/create">
+            <IconCirclePlus className="h-4 w-4" /> Criar desafio
+          </Link>
+        </Button>
+      </div>
+
+      {challenges.length === 0 ? (
+        <EmptyChallenges/>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedChallenges.map((challenge) => (
+              <Card
+                key={challenge.id}
+                className="flex flex-col hover:shadow-lg transition-shadow"
+              >
+                <CardHeader>
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <Badge className={getStatusColor(challenge.status)}>
+                      {challenge.status || "Em aberto"}
+                    </Badge>
+                    {challenge.area && (
+                      <Badge variant="outline">{challenge.area}</Badge>
+                    )}
+                  </div>
+                  <CardTitle className="text-xl text-balance">
+                    {challenge.title}
+                  </CardTitle>
+                  <CardDescription>
+                    Criado em {formatDate(challenge.createdAt)}
+                  </CardDescription>
+                </CardHeader>
+
+                <CardContent className="flex-1 text-sm text-muted-foreground space-y-3">
+                  <div className="flex items-center gap-2">
+                    <IconCalendar className="h-4 w-4 text-muted-foreground" />
+                    <span>Última atualização: {formatDate(challenge.createdAt)}</span>
+                  </div>
+                </CardContent>
+
+                <CardFooter className="flex gap-2">
+                  <DeleteChallengeButton
+                    id={challenge.id}
+                    onDeleted={(id) =>
+                      setChallenges((prev) => prev.filter((c) => c.id !== id))
+                    }
+                  />
+                  <Button asChild variant="default" className="flex-1">
+                    <Link href={`/admin/challenges/my-challenges/${challenge.id}`}>
+                      Ver Detalhes
+                    </Link>
                   </Button>
-                  <p className="text-sm font-medium">
-                    Página {currentPage} de {totalPages}
-                  </p>
-                  <Button
-                    variant="default"
-                    onClick={handleNextPage}
-                    disabled={currentPage === totalPages}
-                  >
-                    Próximo <ChevronRight />
-                  </Button>
-                </div>
-              )}
-            </>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+
+          {challenges.length > challengesPerPage && (
+            <div className="flex justify-between items-center mt-6">
+              <Button
+                variant="outline"
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+              >
+                Anterior
+              </Button>
+              <p className="text-sm font-medium">
+                Página {currentPage} de {totalPages}
+              </p>
+              <Button
+                variant="default"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+              >
+                Próximo
+              </Button>
+            </div>
           )}
-        </CardContent>
-      </Card>
+        </>
+      )}
     </div>
   )
 }

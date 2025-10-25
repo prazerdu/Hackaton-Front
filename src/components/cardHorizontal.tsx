@@ -1,9 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
-import Footer from './navbottom'
 const sections = [
   {
     id: 'usuario-comum',
@@ -151,7 +149,7 @@ export default function CardsSection() {
         transition={{ delay: 0.2, duration: 1 }}
       >
         
-        {sections.map((section, index) => (
+        {sections.map((section) => (
           <motion.div
             key={section.id}
             onClick={() => scrollToSection(section.id)}
