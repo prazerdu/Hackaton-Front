@@ -51,7 +51,7 @@ export default function Footer() {
             <Logo className="text-sm" />
 
             {/* Social Links */}
-            <ul className="mt-3 flex flex-wrap justify-center sm:justify-start gap-4 text-muted-foreground">
+            <ul className="mt-3 flex flex-wrap justify-center sm:justify-start gap-4">
               {socialLinks.map(({ icon: Icon, label, href }) => (
                 <li key={label}>
                   <Link
@@ -61,16 +61,15 @@ export default function Footer() {
                   >
                     <span className="sr-only">{label}</span>
                     <Icon
-                      className="w-5 h-5 sm:w-6 sm:h-6 text-foreground/70 group-hover:text-primary transition-colors duration-300 group-hover:scale-110"
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-black dark:text-violet-400 group-hover:text-primary transition-colors duration-300 group-hover:scale-110"
                     />
                   </Link>
                 </li>
               ))}
             </ul>
 
-
             {/* Descrição */}
-            <p className="text-foreground/60 mt-3 text-sm sm:text-base max-w-sm leading-relaxed">
+            <p className="text-gray-800 dark:text-gray-200 mt-3 text-sm sm:text-base max-w-sm leading-relaxed">
               Conectamos tecnologia e negócios com soluções inovadoras,
               entregando resultados estratégicos para empresas de todos os
               tamanhos.
@@ -79,18 +78,18 @@ export default function Footer() {
 
           {/* Coluna Direita (Contatos) */}
           <div className="flex flex-col items-center sm:items-start gap-4 w-full sm:w-auto">
-            <p className="text-base sm:text-lg font-semibold text-primary">
+            <p className="sm:text-lg font-semibold text-black dark:text-violet-400">
               Contatos
             </p>
 
-            <ul className="flex flex-col items-center sm:items-start gap-3 text-muted-foreground">
+            <ul className="flex flex-col items-center sm:items-start gap-3">
               {contactInfo.map(({ icon: Icon, text, href }) => (
                 <li
                   key={text}
-                  className="flex items-center gap-2 hover:text-primary transition-colors"
+                  className="flex items-center gap-2 hover:text-primary transition-colors text-gray-800 dark:text-gray-300"
                 >
                   <Link href={href} target="_blank" className="flex items-center gap-2">
-                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 dark:text-violet-400 text-black/80" />
                     <span className="text-sm sm:text-base">{text}</span>
                   </Link>
                 </li>
@@ -100,7 +99,7 @@ export default function Footer() {
         </div>
 
         {/* Rodapé inferior */}
-        <div className="mt-8 border-t border-border/30 pt-4 text-center text-xs sm:text-sm text-muted-foreground">
+        <div className="mt-8 border-t border-border/30 pt-4 text-center text-xs sm:text-sm text-gray-700 dark:text-gray-400">
           © {new Date().getFullYear()} Ninna Hub.{' '}
           <Link
             href={data.siteLink}
