@@ -1,80 +1,154 @@
 "use client"
 
-import * as React from "react"
-import { BarChart3, Network, Building, Globe } from "lucide-react"
+import type * as React from "react"
+import { useEffect, useState } from "react"
+import { jwtDecode } from "jwt-decode"
+import {
+  IconBuilding,
+  IconBuildingPlus,
+  IconClipboardListFilled,
+  IconDashboard,
+  IconInnerShadowTop,
+  IconNetwork,
+  IconRocket,
+} from "@tabler/icons-react"
 
 import { NavMain } from "./nav-main"
-import { NavProjects } from "@/components/admin/nav-projects"
-import { NavUser } from "@/components/admin/nav-user"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
+import { NavUser } from "./nav-user"
 
-const currentUser = {
-  name: "Carlos Pereira",
-  email: "carlos.pereira@corporacao.com",
-  avatar: "/avatars/carlos.jpg",
-  role: "HUB_ADMIN",
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@/components/ui/sidebar"
+
+interface currentUser {
+  name?: string
+  username?: string
+  email?: string
+  sub?: string
+  avatar?: string
+  role?: string
+  companyName?: string
+  exp?: number
 }
 
-const HubAdminSupremeNav = [
-  {
-    title: "Dashboard",
-    url: "/hub/dashboard",
-    icon: BarChart3,
-    roles: ["HUB_ADMIN"],
-    items: [{ title: "Visão Geral", url: "/hub/dashboard" }],
-  },
-  {
-    title: "Gestão de Corporações",
-    url: "/hub/corporations",
-    icon: Building,
-    roles: ["HUB_ADMIN"],
-    items: [
-      { title: "Todas Corporações", url: "/hub/corporations" },
-      { title: "Adicionar Nova", url: "/hub/corporations/new" },
-    ],
-  },
-  {
-    title: "Conexões Globais",
-    url: "/hub/conexoes",
-    icon: Network,
-    roles: ["HUB_ADMIN"],
-    items: [
-      { title: "Histórico de Interações", url: "/hub/conexoes/historico" },
-      { title: "POCs em Andamento", url: "/hub/conexoes/pocs" },
-    ],
-  },
-  {
-    title: "Relatórios Globais",
-    url: "/hub/analytics",
-    icon: Globe,
-    roles: ["HUB_ADMIN"],
-    items: [
-      { title: "Relatórios de Usuários", url: "/hub/analytics/users" },
-      { title: "Relatórios de Corporações", url: "/hub/analytics/corporations" },
-    ],
-  },
-]
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const filteredNav = HubAdminSupremeNav
+  const [currentUser, setCurrentUser] = useState<currentUser | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token")
+    if (token) {
+      try {
+        const decoded = jwtDecode<currentUser>(token)
+        console.log("Token decodificado:", decoded)
+
+        setCurrentUser({
+          name: decoded.name || decoded.username || "Usuário",
+          email: decoded.email || decoded.sub || "sem-email@exemplo.com",
+          role: decoded.role || "user",
+          avatar: decoded.avatar || "/avatars/default.jpg",
+          companyName: decoded.companyName || "Corporação",
+        })
+      } catch (err) {
+        console.error("Erro ao decodificar JWT:", err)
+      }
+    } else {
+      console.warn("Nenhum token encontrado no localStorage")
+    }
+
+    setLoading(false)
+  }, [])
+
+  if (loading) {
+    return <div className="p-4 text-sm text-muted-foreground">Carregando...</div>
+  }
+
+  if (!currentUser) {
+    return <div className="p-4 text-sm text-red-500">Usuário não autenticado</div>
+  }
+
+  const navMain = [
+    {
+      title: "Dashboard",
+      url: "/hub/dashboard",
+      icon: IconDashboard,
+      roles: ["HUB_ADMIN"],
+    },
+    {
+      title: "Criar corporação",
+      url: "/hub/corps/create",
+      icon: IconBuildingPlus,
+      roles: ["HUB_ADMIN"],
+    },
+    {
+      title: "Corporações",
+      url: "/hub/corps",
+      icon: IconBuilding,
+      roles: ["HUB_ADMIN"],
+    },
+    {
+      title: "Desafios públicos",
+      url: "/evaluator/challenges/public-challengers",
+      icon: IconClipboardListFilled,
+      roles: ["HUB_ADMIN"],
+    },
+    {
+      title: "Startups",
+      url: "/evaluator/startups",
+      icon: IconRocket,
+      roles: ["HUB_ADMIN"],
+    },
+    {
+      title: "POCs",
+      url: "/evaluator/pocs",
+      icon: IconNetwork,
+      roles: ["HUB_ADMIN"],
+    },
+  ]
+
+  const filteredNav = navMain
     .map((item) => {
-      if (!item.roles.includes(currentUser.role)) return null
-      const filteredItems = item.items?.filter(Boolean)
-      return { ...item, items: filteredItems }
+      if (!item.roles.includes(currentUser.role!)) return null
+      return { ...item }
     })
-    .filter(Boolean) as typeof HubAdminSupremeNav
+    .filter(Boolean) as typeof navMain
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+              <a href="#">
+                <IconInnerShadowTop className="!size-6 fill-primary text-xs" />
+                <span className="text-[1.5rem] font-semibold">{currentUser.companyName}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={filteredNav}/>
-        <NavProjects projects={[]} />
+        <NavMain items={filteredNav} />
       </SidebarContent>
+
       <SidebarFooter>
-        <NavUser user={currentUser} />
+        <NavUser
+          user={{
+            name: currentUser.name!,
+            email: currentUser.email!,
+            avatar: currentUser.avatar!,
+          }}
+        />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   )
