@@ -1,120 +1,172 @@
-"use client";
+"use client"
 
-import { useState, useId, useRef } from "react";
-import CardTweetDemo from "../dekstop-user/dekstop/components/HireCards";
-import CircularDropButton from "@/components/dropCircle";
-import { Share2, UserCheck2, CheckIcon, CopyIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import LoginModal from "../dekstop-user/dekstop/components/LoginModal";
+import { useState, useEffect } from "react"
+import axios, { AxiosResponse } from "axios"
+import { useRouter } from "next/navigation"
+import { jwtDecode } from "jwt-decode"
 
-export default function HomePage() {
-  const [showShare, setShowShare] = useState(false);
-  const [openLogin, setOpenLogin] = useState(false);
-  const id = useId();
-  const [copied, setCopied] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+import SearchBar from "@/components/home/search-bar"
+import PublicChallengeCard from "@/components/home/public-challenges"
+import { ModeToggle } from "@/components/theme-toggle"
+import { Button } from "@/components/ui/button"
+import { MailIcon } from "lucide-react"
+import { Spinner } from "@/components/ui/shadcn-io/spinner"
 
-  const handleCopy = () => {
-    if (inputRef.current) {
-      navigator.clipboard.writeText(inputRef.current.value);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+type Challenge = {
+  id: string
+  title: string
+  description: string
+  objectives: string
+  area: string
+  status: string
+  endDate: string
+  isPublic: boolean
+  createdBy: {
+    name: string
+  }
+}
+
+interface DecodedToken {
+  startupId?: string
+  exp?: number
+  iat?: number
+  [key: string]: unknown
+}
+
+export default function ChallengesPage() {
+  const [search, setSearch] = useState("")
+  const [selectedArea, setSelectedArea] = useState("")
+  const [challenges, setChallenges] = useState<Challenge[]>([])
+  const [areas, setAreas] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
+  const [, setError] = useState<string | null>(null)
+  const [startupId, setStartupId] = useState<string | null>(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token")
+    if (token) {
+      try {
+        const decoded = jwtDecode<DecodedToken>(token)
+        if (decoded.startupId) {
+          setStartupId(decoded.startupId)
+        }
+      } catch (err) {
+        console.error("Erro ao decodificar token:", err)
+      }
     }
-  };
+  }, [])
+
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        setLoading(true)
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL
+        if (!apiUrl) {
+          throw new Error("API URL não definida em NEXT_PUBLIC_API_URL")
+        }
+
+        const token = localStorage.getItem("access_token")
+        if (!token) {
+          router.push("/login")
+          return
+        }
+
+        const response: AxiosResponse<Challenge[]> = await axios.get(
+          `${apiUrl}/challenges/publics`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        
+        setChallenges(response.data)
+
+        const uniqueAreas: string[] = Array.from(
+          new Set(response.data.map((c) => c.area))
+        )
+        setAreas(uniqueAreas)
+
+        setError(null)
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          console.error("Error fetching challenges:", err.response?.status, err.response?.data)
+          if (err.response?.status === 401) {
+            localStorage.removeItem("access_token")
+            router.push("/login")
+          }
+        } else {
+          console.error("Unknown error fetching challenges:", err)
+        }
+
+        setError("Erro ao carregar desafios.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchChallenges()
+  }, [router])
+
+  const filteredChallenges = challenges.filter((c) => {
+    const searchLower = search.toLowerCase()
+    const matchesSearch =
+      c.title.toLowerCase().includes(searchLower) ||
+      c.description.toLowerCase().includes(searchLower) ||
+      c.objectives.toLowerCase().includes(searchLower)
+    const matchesArea = selectedArea === "" || c.area === selectedArea
+    return matchesSearch && matchesArea
+  })
 
   return (
-    <div className="min-h-screen text-black flex flex-col">
-      <div className="flex-1 flex flex-col lg:flex-row gap-4 overflow-hidden">
-        <div className="flex-1 flex flex-col">
-          <div className="flex-shrink-0">
-            <CardTweetDemo />
-          </div>
+    <div className="space-y-4 w-full min-h-[70vh] flex flex-col p-4">
+      <div className="flex items-center justify-center mt-3 gap-2 max-w-[700px] mx-auto">
+        <SearchBar
+          search={search}
+          setSearch={setSearch}
+          areas={areas}
+          selectedArea={selectedArea}
+          setSelectedArea={setSelectedArea}
+        />
+        <ModeToggle />
+      </div>
 
-          <CircularDropButton
-            items={[
-              {
-                id: "share",
-                icon: <Share2 className="w-4 h-4" />,
-                onClick: () => setShowShare(true),
-              },
-              {
-                id: "login",
-                icon: <UserCheck2 className="w-4 h-4" />,
-                onClick: () => setOpenLogin(true),
-              },
-            ]}
-            radius={70}
-            size={50}
-          />
-          {showShare && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-              <div className="bg-white dark:bg-slate-900 rounded-xl p-3 sm:p-6 w-full max-w-[240px] sm:max-w-[300px] shadow-lg flex flex-col gap-2">
-                <div className="text-center text-xs sm:text-sm font-medium text-black dark:text-white">
-                  Copiar Link
-                </div>
-                <div className="relative text-white w-full">
-                  <Input
-                    ref={inputRef}
-                    id={id}
-                    type="text"
-                    defaultValue="https://plataforma-inovacao-squad05-fronten.vercel.app/"
-                    aria-label="Share link"
-                    readOnly
-                    className="pr-8 text-xs sm:text-sm"
-                  />
-                  <TooltipProvider delayDuration={0}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          onClick={handleCopy}
-                          className="absolute inset-y-0 end-0 flex h-full w-7 sm:w-9 items-center justify-center rounded-e-md text-muted-foreground/80 transition-colors outline-none hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed"
-                          aria-label={copied ? "Copied" : "Copy to clipboard"}
-                          disabled={copied}
-                        >
-                          <div
-                            className={cn(
-                              "transition-all",
-                              copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
-                            )}
-                          >
-                            <CheckIcon
-                              className="stroke-emerald-500"
-                              size={12}
-                              aria-hidden="true"
-                            />
-                          </div>
-                          <div
-                            className={cn(
-                              "absolute transition-all",
-                              copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
-                            )}
-                          >
-                            <CopyIcon size={12} aria-hidden="true" />
-                          </div>
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent className="px-2 py-1 text-xs">
-                        Copy to clipboard
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-                <Button onClick={() => setShowShare(false)} className="mt-1 text-xs sm:text-sm py-1">
-                  Fechar
-                </Button>
-              </div>
-
+      {loading ? (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="flex justify-center items-center">
+              <Spinner className="text-primary" variant="bars" />
             </div>
-          )}
-          <div className="p-10">
-
-          {openLogin && <LoginModal onCloseAction={() => setOpenLogin(false)} open={openLogin} />}
+            <p className="mt-4 text-muted-foreground">Carregando desafios...</p>
           </div>
         </div>
-      </div>
+      ) : filteredChallenges.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[1300px] mx-auto">
+          {filteredChallenges.map((challenge) => (
+            <PublicChallengeCard
+              key={challenge.id}
+              challenge={challenge}
+              startupId={startupId ?? ""}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="flex-1 flex flex-col items-center justify-center gap-6 text-center text-gray-500 dark:text-gray-400 px-4">
+          <div className="text-7xl animate-bounce">🚀</div>
+          <h2 className="text-2xl md:text-3xl font-bold">Nenhum desafio encontrado</h2>
+          <p className="max-w-md text-sm md:text-base">
+            Parece que ainda não há desafios cadastrados. Você pode criar seu próprio desafio ou entrar em contato para
+            começar.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 mt-4">
+            <Button className="flex items-center gap-2 border border-gray-400 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-zinc-800">
+              <MailIcon className="w-5 h-5" />
+              Entrar em contato
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
-  );
+  )
 }
