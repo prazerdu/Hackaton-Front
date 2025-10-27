@@ -26,7 +26,6 @@ import { Badge } from "@/components/ui/badge";
 import Drop from "@/components/drop";
 import Alert from "@/components/alert";
 import { cn } from "@/lib/utils";
-import NavDropDown from "@/components/navDrop";
 import { ModeToggle } from "@/components/theme-toggle";
 
 type Challenge = {
