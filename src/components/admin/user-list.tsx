@@ -118,7 +118,7 @@ export default function UserList() {
         <CardContent>
           {loading ? (
             <div className="flex flex-col justify-center items-center">
-              <Spinner className="text-[#8884d8]" variant="bars" />
+              <Spinner className="text-primary" variant="bars" />
               <p className="font-semibold mt-2">Carregando dados...</p>
             </div>
           ) : (

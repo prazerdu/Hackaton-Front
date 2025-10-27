@@ -3,14 +3,13 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
-import { AppSidebar } from "@/components/hubadmin/app-sidebar" 
-import { LogoutButton } from "@/components/log-out"
 import { ModeToggle } from "@/components/theme-toggle"
 import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
+import { AppSidebar } from "@/components/hubadmin/app-sidebar"
 
 type JwtPayload = {
   exp: number
@@ -39,7 +38,7 @@ export default function DashboardLayout({
         const now = Date.now() / 1000
 
         if (decoded.exp < now || decoded.role !== "HUB_ADMIN") {
-          localStorage.removeItem("access_token")
+          localStorage.removeItem("access_token") 
           router.push("/login")
           return
         }
@@ -58,8 +57,8 @@ export default function DashboardLayout({
 
   if (loading) {
     return(
-      <div className="flex justify-center items-center mt-80">
-        <Spinner className="text-[#8884d8]" variant="bars"/>
+      <div className="flex justify-center items-center h-screen">
+        <Spinner className="text-primary" variant="bars"/>
       </div>
     )
     
@@ -77,8 +76,9 @@ export default function DashboardLayout({
         <main className="flex-1 overflow-y-auto">
           <div className="p-2 flex justify-between gap-16">
             <SidebarTrigger />
-            <ModeToggle />
-            <LogoutButton />
+            <div className="space-x-2">
+              <ModeToggle />
+            </div>
           </div>
           <div className="p-4">{children}</div>
         </main>
