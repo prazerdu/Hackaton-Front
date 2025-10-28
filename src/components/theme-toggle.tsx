@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { Moon, Sun, Settings } from "lucide-react"
 import { useTheme } from "next-themes"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -14,6 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
+import { IconMoon, IconSettings, IconSun } from "@tabler/icons-react"
 
 export function ModeToggle() {
   const { setTheme, theme } = useTheme()
@@ -44,7 +44,7 @@ export function ModeToggle() {
                 exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
                 transition={{ duration: 0.25 }}
               >
-                <Sun className="h-[1.2rem] w-[1.2rem]" />
+                <IconSun className="h-[1.2rem] w-[1.2rem]" />
               </motion.div>
             )}
             {theme === "dark" && (
@@ -55,7 +55,7 @@ export function ModeToggle() {
                 exit={{ opacity: 0, rotate: -90, scale: 0.8 }}
                 transition={{ duration: 0.25 }}
               >
-                <Moon className="h-[1.2rem] w-[1.2rem]" />
+                <IconMoon className="h-[1.2rem] w-[1.2rem]" />
               </motion.div>
             )}
             {theme === "system" && (
@@ -66,7 +66,7 @@ export function ModeToggle() {
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.25 }}
               >
-                <Settings className="h-[1.2rem] w-[1.2rem]" />
+                <IconSettings className="h-[1.2rem] w-[1.2rem]" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -81,19 +81,19 @@ export function ModeToggle() {
           onClick={() => setTheme("light")}
           className={theme === "light" ? "bg-muted" : ""}
         >
-          <Sun className="mr-2 h-4 w-4" /> Light
+          <IconSun className="mr-2 h-4 w-4" /> Claro
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("dark")}
           className={theme === "dark" ? "bg-muted" : ""}
         >
-          <Moon className="mr-2 h-4 w-4" /> Dark
+          <IconMoon className="mr-2 h-4 w-4" /> Escuro
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("system")}
           className={theme === "system" ? "bg-muted" : ""}
         >
-          <Settings className="mr-2 h-4 w-4" /> System
+          <IconSettings className="mr-2 h-4 w-4" /> Sistema
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

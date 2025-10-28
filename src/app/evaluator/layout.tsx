@@ -30,7 +30,7 @@ export default function DashboardLayout({
     const checkAuth = () => {
       const token = localStorage.getItem("access_token")
       if (!token) {
-        router.push("/login")
+        router.push("/auth/login")
         return
       }
 
@@ -40,14 +40,14 @@ export default function DashboardLayout({
 
         if (decoded.exp < now || decoded.role !== "EVALUATOR") {
           localStorage.removeItem("access_token")
-          router.push("/login")
+          router.push("/auth/login")
           return
         }
 
         setAuthorized(true)
       } catch (err) {
         console.error("Erro ao decodificar token:", err)
-        router.push("/login")
+        router.push("/auth/login")
       } finally {
         setLoading(false)
       }
