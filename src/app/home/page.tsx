@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react"
 import axios, { AxiosResponse } from "axios"
-import { useRouter } from "next/navigation"
-import { jwtDecode } from "jwt-decode"
 
 import SearchBar from "@/components/home/search-bar"
 import PublicChallengeCard from "@/components/home/public-challenges"
@@ -26,13 +24,6 @@ type Challenge = {
   }
 }
 
-interface DecodedToken {
-  startupId?: string
-  exp?: number
-  iat?: number
-  [key: string]: unknown
-}
-
 export default function ChallengesPage() {
   const [search, setSearch] = useState("")
   const [selectedArea, setSelectedArea] = useState("")
@@ -40,47 +31,18 @@ export default function ChallengesPage() {
   const [areas, setAreas] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [, setError] = useState<string | null>(null)
-  const [startupId, setStartupId] = useState<string | null>(null)
-  const router = useRouter()
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token")
-    if (token) {
-      try {
-        const decoded = jwtDecode<DecodedToken>(token)
-        if (decoded.startupId) {
-          setStartupId(decoded.startupId)
-        }
-      } catch (err) {
-        console.error("Erro ao decodificar token:", err)
-      }
-    }
-  }, [])
 
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
         setLoading(true)
         const apiUrl = process.env.NEXT_PUBLIC_API_URL
-        if (!apiUrl) {
-          throw new Error("API URL não definida em NEXT_PUBLIC_API_URL")
-        }
-
-        const token = localStorage.getItem("access_token")
-        if (!token) {
-          router.push("/login")
-          return
-        }
+        if (!apiUrl) throw new Error("API URL não definida em NEXT_PUBLIC_API_URL")
 
         const response: AxiosResponse<Challenge[]> = await axios.get(
-          `${apiUrl}/challenges/publics`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          `${apiUrl}/challenges/publics`
         )
-        
+
         setChallenges(response.data)
 
         const uniqueAreas: string[] = Array.from(
@@ -90,16 +52,7 @@ export default function ChallengesPage() {
 
         setError(null)
       } catch (err) {
-        if (axios.isAxiosError(err)) {
-          console.error("Error fetching challenges:", err.response?.status, err.response?.data)
-          if (err.response?.status === 401) {
-            localStorage.removeItem("access_token")
-            router.push("/login")
-          }
-        } else {
-          console.error("Unknown error fetching challenges:", err)
-        }
-
+        console.error("Erro ao carregar desafios:", err)
         setError("Erro ao carregar desafios.")
       } finally {
         setLoading(false)
@@ -107,7 +60,7 @@ export default function ChallengesPage() {
     }
 
     fetchChallenges()
-  }, [router])
+  }, [])
 
   const filteredChallenges = challenges.filter((c) => {
     const searchLower = search.toLowerCase()
@@ -147,7 +100,7 @@ export default function ChallengesPage() {
             <PublicChallengeCard
               key={challenge.id}
               challenge={challenge}
-              startupId={startupId ?? ""}
+              startupId={""}
             />
           ))}
         </div>
