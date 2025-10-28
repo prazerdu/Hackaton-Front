@@ -5,14 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import axios from "axios"
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 
 type JwtPayload = {
   exp: number
-  role?: "STARTUP" | "COMMON" | "EVALUATOR" | "MANAGER" | "HUB_ADMIN"
 }
 
 export function StartupLoginForm({
@@ -26,19 +25,6 @@ export function StartupLoginForm({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const redirectByRole = useCallback(
-    (role?: JwtPayload["role"]) => {
-      switch (role) {
-        case "STARTUP":
-          router.push("/startup")
-          break
-        default:
-          router.push("/")
-      }
-    },
-    [router]
-  )
-
   useEffect(() => {
     setIsClient(true)
     const token = localStorage.getItem("access_token")
@@ -47,7 +33,7 @@ export function StartupLoginForm({
         const decoded = jwtDecode<JwtPayload>(token)
         const now = Date.now() / 1000
         if (decoded.exp > now) {
-          redirectByRole(decoded.role)
+          router.push("/auth/startup")
         } else {
           localStorage.removeItem("access_token")
         }
@@ -55,29 +41,34 @@ export function StartupLoginForm({
         localStorage.removeItem("access_token")
       }
     }
-  }, [redirectByRole])
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError("")
     setLoading(true)
+
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/loginStartup`,
         { name, cnpj },
         { headers: { "Content-Type": "application/json" } }
       )
 
       const token = res.data.access_token
+      const startupData = res.data.startup
+
       if (token) {
         localStorage.setItem("access_token", token)
-        const decoded = jwtDecode<JwtPayload>(token)
-        redirectByRole(decoded.role)
+        if (startupData) {
+          localStorage.setItem("startup_data", JSON.stringify(startupData))
+        }
+        router.push("/home")
       } else {
         setError("Token não retornado pela API")
       }
     } catch (err) {
-      console.error("Erro no login:", err)
+      console.error("Erro no login da startup:", err)
       setError("Nome ou CNPJ inválidos")
     } finally {
       setLoading(false)
@@ -125,6 +116,7 @@ export function StartupLoginForm({
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
+              placeholder="TechNova"
             />
           </div>
 
@@ -136,6 +128,7 @@ export function StartupLoginForm({
               required
               value={cnpj}
               onChange={(e) => setCnpj(e.target.value)}
+              placeholder="12345678000101"
             />
           </div>
 
