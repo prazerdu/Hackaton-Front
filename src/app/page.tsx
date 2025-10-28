@@ -1,10 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import CardsSection from "../components/cardHorizontal";
 import Footer from "@/components/navbottom";
 import AppHero from "@/components/mvpblocks/app-hero";
-import OnboardingFlow from "@/components/OnboardingFlow";
+import {SimpleHeader} from "@/components/shadcn-studio/blocks/hero-section01/header";
 
 const HeroSectionPage = () => {
   return (
@@ -15,17 +14,15 @@ const HeroSectionPage = () => {
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       {/* Header minimalista */}
-      {/* <SimpleHeader /> */}
+      <SimpleHeader />
 
       {/* Main Content */}
-      <main className="flex flex-col">
+      <main className="flex flex-co l">
         <AppHero/>
       </main>
 
       {/* Cards Section */}
       <div className="">
-        <CardsSection />
-        <OnboardingFlow />        
         <Footer />
       </div>
     </motion.div>
