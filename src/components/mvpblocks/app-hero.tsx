@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { easeInOut, motion, spring } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
@@ -9,41 +8,9 @@ import HeroAnimatedText from './hero-animated-text'
 import Link from 'next/link'
 import { GridPattern } from '../ui/shadcn-io/grid-pattern'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 
 export default function AppHero() {
-  const [stats, setStats] = useState({
-    users: 0,
-    transactions: 0,
-    networks: 0,
-  })
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStats((prev) => {
-        const newUsers = prev.users >= 20000 ? 20000 : prev.users + 500
-        const newTransactions =
-          prev.transactions >= 1500000 ? 1500000 : prev.transactions + 37500
-        const newNetworks = prev.networks >= 40 ? 40 : prev.networks + 1
-
-        if (
-          newUsers === 20000 &&
-          newTransactions === 1500000 &&
-          newNetworks === 40
-        ) {
-          clearInterval(interval)
-        }
-
-        return {
-          users: newUsers,
-          transactions: newTransactions,
-          networks: newNetworks,
-        }
-      })
-    }, 50)
-
-    return () => clearInterval(interval)
-  }, [])
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -75,7 +42,7 @@ export default function AppHero() {
   }
 
   return (
-    <section className="relative flex h-[100dvh] w-full flex-col items-center justify-center overflow-hidden sm:px-6 lg:px-8">
+    <section className="relative flex h-[100dvh] w-full flex-col items-center justify-center overflow-hidden sm:px-6">
       {/* Fundo */}
       <div className="absolute inset-0 z-0">
         <GridPattern
@@ -107,9 +74,9 @@ export default function AppHero() {
       </div>
 
       {/* Globo */}
-      <div className="fadein-blur absolute top-0 right-1/2 z-0 h-[350px] w-[350px] translate-x-1/2 lg:h-[500px] lg:w-[500px]">
+      <div className="fadein-blur absolute top-10 z-0 h-[350px] w-[350px] translate-x-1/2 lg:h-[500px] lg:w-[500px]">
         <HeroEarth
-          scale={1}
+          scale={1.1}
           baseColor={[0.62, 0.2, 0.8]}
           markerColor={[0.62, 0.2, 0.8]}
           glowColor={[0.62, 0.2, 0.8]}
@@ -121,10 +88,10 @@ export default function AppHero() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 flex w-full max-w-[1250px] flex-col items-center justify-center gap-10 px-4 text-center sm:px-8 lg:flex-row lg:justify-between lg:text-left"
+        className="relative z-10 flex w-full max-w-[1250px] flex-col items-center justify-center text-center sm:px-8 lg:flex-row lg:justify-between lg:text-left"
       >
         {/* Texto e estatísticas */}
-        <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start">
+        <div className="w-full flex flex-col items-center lg:items-start">
           <motion.div
             variants={itemVariants}
             className="mb-4 inline-flex items-center rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-sm"
@@ -137,48 +104,65 @@ export default function AppHero() {
 
           <HeroAnimatedText />
 
-          <motion.div
+          {/* <motion.div
             variants={itemVariants}
             className="mt-4 mb-6 flex flex-wrap justify-center gap-4 md:gap-6 lg:justify-start"
           >
             <div className="rounded-lg border border-purple-500/20 px-4 py-2 backdrop-blur-sm">
               <p className="text-2xl font-bold">
-                {stats.users.toLocaleString()}+
+                Next JS
               </p>
               <p className="text-xs">Active Users</p>
             </div>
             <div className="rounded-lg border border-blue-500/20 px-4 py-2 backdrop-blur-sm">
               <p className="text-2xl font-bold">
-                {stats.transactions.toLocaleString()}+
+
               </p>
               <p className="text-xs">Transactions</p>
             </div>
             <div className="rounded-lg border border-indigo-500/20 px-4 py-2 backdrop-blur-sm">
-              <p className="text-2xl font-bold">{stats.networks}+</p>
+              <p className="text-2xl font-bold"></p>
               <p className="text-xs">Networks</p>
             </div>
-          </motion.div>
-        </div>
+          </motion.div> */}
 
-        {/* Botões alinhados à direita */}
+          {/* Logos de parceiros */}
+          <motion.div
+            variants={itemVariants}
+            className="mb-6 flex flex-wrap justify-center gap-8 lg:justify-start"
+          >
+              <motion.div
+                className="invert grayscale-0 dark:grayscale-100 dark:invert-0 relative h-24 w-80 transition"
+              >
+                <Image
+                  src={"/logos/ninna-valley.png"}
+                  alt={"Parceiro Ninna Hub"}
+                  fill
+                />
+              </motion.div>
+          </motion.div>
+
+          {/* Botões alinhados à direita */}
         <motion.div
           variants={itemVariants}
           className="items-center gap-4 lg:items-end"
         >
-          <div className="gap-4 sm:flex-row lg:flex-col">
-            <Button
-              variant="outline"
-              className="bg-primary rounded-full text-white border-purple-500/30 hover:bg-purple-500/10 hover:text-white"
-              size="lg"
-            >
-              Ver desafios
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Button>
-
-            <Link href="/admin">
+          <div className="flex gap-4 flex-row">
+            <Link href={"/home"}>
               <Button
                 variant="outline"
-                className="rounded-full border-purple-500/30 bg-transparent text-white hover:bg-purple-500/10 hover:text-white"
+                className="bg-primary rounded-full text-white border-purple-500/30 hover:bg-purple-500/10 hover:text-white"
+                size="lg"
+                >
+                Ver desafios
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Button>
+            </Link>
+
+            <Link href="/login">
+              <Button
+                variant="outline"
+                className="rounded-full border-purple-500/30 bg-transparent hover:bg-purple-500/10"
                 size="lg"
               >
                 Login
@@ -186,6 +170,7 @@ export default function AppHero() {
             </Link>
           </div>
         </motion.div>
+        </div>
       </motion.main>
     </section>
   )

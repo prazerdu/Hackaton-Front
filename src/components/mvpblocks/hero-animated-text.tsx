@@ -19,10 +19,11 @@ export default function HeroAnimatedText() {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, ease: "easeOut" }}
-      className="text-3xl relative z-20 font-semibold tracking-tighter"
-    >
-      A inovação acontece quando{" "}
-      <br />
+      className="text-6xl relative z-20 font-semibold tracking-tighter"
+    > 
+      A inovação acontece
+      <br /> 
+      quando{" "}
       <motion.span
         key={words[index]}
         initial={{ opacity: 0, y: 10 }}
@@ -33,6 +34,7 @@ export default function HeroAnimatedText() {
       >
         {words[index]}
       </motion.span>{" "}
+      <br />
       se conectam
     </motion.h1>
   )
