@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
-import { AppSidebar } from "@/components/hubadmin/app-sidebar" 
+import { AppSidebar } from "@/components/evaluator/app-sidebar" 
 import { LogoutButton } from "@/components/log-out"
 import { ModeToggle } from "@/components/theme-toggle"
 import {
