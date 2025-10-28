@@ -159,7 +159,7 @@ export default function AppHero() {
               </Button>
             </Link>
 
-            <Link href="/login">
+            <Link href="auth/login">
               <Button
                 variant="outline"
                 className="rounded-full border-purple-500/30 bg-transparent hover:bg-purple-500/10"
