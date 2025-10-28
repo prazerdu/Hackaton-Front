@@ -16,11 +16,8 @@ export function useIdeas(challengeId: string) {
       setLoading(true)
       setError(null)
       try {
-        // usa o service já existente
         const data = await ideasService.getIdeasByChallenge(challengeId)
 
-        // transforma o objeto retornado ({ IDEATION: [...], IMPLEMENTATION: [...] })
-        // em um array de colunas do tipo Column[]
         const mappedColumns: Column[] = Object.entries(data).map(([key, ideas]) => {
         const status = key as IDEA_STATUSES
 
@@ -46,7 +43,6 @@ export function useIdeas(challengeId: string) {
   return { columns, loading, error }
 }
 
-// Helpers --------------------------
 
 function formatColumnTitle(status: IDEA_STATUSES): string {
   const map: Record<IDEA_STATUSES, string> = {
