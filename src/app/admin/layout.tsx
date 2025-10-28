@@ -58,7 +58,7 @@ export default function DashboardLayout({
   if (loading) {
     return(
       <div className="flex justify-center items-center h-screen">
-        <Spinner className="text-[#8884d8]" variant="bars"/>
+        <Spinner className="text-primary" variant="bars"/>
       </div>
     )
     
