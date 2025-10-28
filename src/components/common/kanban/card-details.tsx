@@ -33,26 +33,20 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
   const currentStatusIndex = currentIdea ? statusOrder.indexOf(currentIdea.status) : -1
   const ideationIndex = statusOrder.indexOf("IDEATION")
 
-  // Show voting and commenting only in IDEATION
   const canInteract = currentIdea?.status === "IDEATION"
-  // Show comments list in IDEATION and after (IMPLEMENTATION, COMPLETED)
   const showComments = currentStatusIndex >= ideationIndex
-  // </CHANGE>
 
   useEffect(() => {
     const fetchData = async () => {
       if (!idea?.id) return
 
       console.log("[v0] Fetching idea data from API for idea:", idea.id)
-      const freshIdea = await ideasService.getIdeaById(idea.id)
-
+      const freshIdea = await ideasService.getIdeaById(idea.id, idea.challengeId)
       if (freshIdea) {
         console.log("[v0] Fresh idea status from API:", freshIdea.status)
         setCurrentIdea(freshIdea)
         setComments(freshIdea.comments || [])
         setVotes(freshIdea.votes?.length || 0)
-        // TODO: Check if current user has voted
-        // setHasVoted(freshIdea.votes?.some(v => v.userId === currentUserId))
       }
     }
 
@@ -61,7 +55,7 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
     } else {
       setAlert(null)
     }
-  }, [idea?.id, open])
+  }, [idea?.id, idea?.challengeId, open]);
 
   if (!idea || !currentIdea) return null
 
