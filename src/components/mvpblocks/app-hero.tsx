@@ -74,7 +74,7 @@ export default function AppHero() {
       </div>
 
       {/* Globo */}
-      <div className="fadein-blur absolute top-10 z-0 h-[350px] w-[350px] translate-x-1/2 lg:h-[500px] lg:w-[500px]">
+      <div className="fadein-blur absolute lg:right-1/3 sm:right-1/2 top-10 z-0 h-[350px] w-[350px] translate-x-1/2 lg:h-[500px] lg:w-[500px]">
         <HeroEarth
           scale={1.1}
           baseColor={[0.62, 0.2, 0.8]}
