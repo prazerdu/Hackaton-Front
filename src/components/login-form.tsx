@@ -9,6 +9,7 @@ import { useEffect, useState, useCallback } from "react"
 import { jwtDecode } from "jwt-decode"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
+import Link from "next/link"
 
 type JwtPayload = {
   exp: number
@@ -153,6 +154,23 @@ export function LoginForm({
           </Button>
         </motion.div>
       </form>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8, duration: 0.5 }}
+        className="mt-6 text-center text-sm text-muted-foreground"
+      >
+        <p>
+          Deseja acessar desafios?{" "}
+          <Link
+            href="/auth/startup"
+            className="text-primary hover:underline font-medium"
+          >
+            Startup
+          </Link>
+        </p>
+      </motion.div>
     </motion.div>
   )
 }

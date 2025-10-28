@@ -20,6 +20,7 @@ type Challenge = {
   status: string
   endDate: string
   isPublic: boolean
+  company:{ name: string }
   createdBy: { name: string }
 }
 
@@ -43,7 +44,7 @@ export const ChallengeDetailsModal = ({
             {challenge.title}
           </DialogTitle>
           <DialogDescription>
-            Criado por <strong>{challenge.createdBy?.name}</strong>
+            Criado por <strong>{challenge.createdBy?.name} de {challenge.company.name}</strong>
           </DialogDescription>
         </DialogHeader>
 

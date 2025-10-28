@@ -50,17 +50,9 @@ export function KanbanColumn({ column, onCardClick, onAddCard }: KanbanColumnPro
       {/* Cards */}
       <div className="space-y-3">
         {column.ideas.length > 0 ? (
-          column.ideas.map((idea) => (
-            <KanbanCard
-              key={idea.id}
-              idea={idea}
-              onClick={() => onCardClick(idea)}
-            />
-          ))
+          column.ideas.map((idea) => <KanbanCard key={idea.id} idea={idea} onClick={() => onCardClick(idea)} />)
         ) : (
-          <div className="text-xs text-muted-foreground italic text-center py-4">
-            Nenhuma ideia aqui ainda
-          </div>
+          <div className="text-xs text-muted-foreground italic text-center py-4">Nenhuma ideia aqui ainda</div>
         )}
       </div>
     </div>
