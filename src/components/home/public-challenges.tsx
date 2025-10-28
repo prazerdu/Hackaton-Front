@@ -24,6 +24,9 @@ type Challenge = {
   status: string
   endDate: string
   isPublic: boolean
+  company: {
+    name: string
+  }
   createdBy: {
     name: string
   }
@@ -58,7 +61,7 @@ export const PublicChallengeCard = ({ challenge, startupId }: PublicChallengeCar
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <CardTitle className="text-sm font-medium">Corporação</CardTitle>
+              <CardTitle className="text-sm font-medium">{challenge.company.name}</CardTitle>
               <CardDescription className="text-xs text-muted-foreground">
                 {challenge.createdBy?.name || "Jonas Fortes"}
               </CardDescription>

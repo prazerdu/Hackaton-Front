@@ -64,13 +64,14 @@ export const ideasService = {
   },
 
   // GET /ideas/{id} - Buscar ideia específica
-  async getIdeaById(ideaId: string): Promise<Idea | null> {
-    try {
-      const response = await api.get(`/ideas/${ideaId}`)
-      return response.data
-    } catch (error) {
-      console.error(`Erro ao buscar ideia ${ideaId}:`, error)
-      return null
-    }
-  },
+  async getIdeaById(ideaId: string, challengeId: string): Promise<Idea | null> {
+  try {
+    const response = await api.get(`/ideas/challenge/${challengeId}`)
+    const idea = response.data.find((item: Idea) => item.id === ideaId)
+    return idea || null
+  } catch (error) {
+    console.error(`Erro ao buscar ideia ${ideaId}:`, error)
+    return null
+  }
+}
 }

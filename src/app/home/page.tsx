@@ -20,6 +20,9 @@ type Challenge = {
   status: string
   endDate: string
   isPublic: boolean
+  company: {
+    name: string
+  }
   createdBy: {
     name: string
   }
