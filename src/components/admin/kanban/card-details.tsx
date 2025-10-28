@@ -31,26 +31,25 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
   const canInteract = idea?.status === "IDEATION"
 
   useEffect(() => {
-    const fetchData = async () => {
-  if (!idea?.challengeId) return
-  try {
-    const ideasByStatus = await ideasService.getIdeasByChallenge(idea.challengeId)
+  const fetchData = async () => {
+    if (!idea?.id) return
+    try {
+      const current = await ideasService.getIdeaById(idea.id)
+      if (current) {
+        setComments(current.comments || [])
+        setVotes(current.votes?.length || 0)
 
-    const allIdeas = Object.values(ideasByStatus).flat()
-
-    const current = allIdeas.find((i: Idea) => i.id === idea.id)
-    if (current) {
-      setComments(current.comments || [])
-      setVotes(current.votes?.length || 0)
+        const userId = localStorage.getItem("userId")
+        setHasVoted(current.votes?.some(v => v.userId === userId) || false)
+      }
+    } catch (error) {
+      console.error("Erro ao carregar comentários e votos:", error)
     }
-  } catch (error) {
-    console.error("Erro ao carregar comentários e votos:", error)
   }
-}
 
+  fetchData()
+}, [idea])
 
-    fetchData()
-  }, [idea])
 
   if (!idea) return null
 
@@ -74,24 +73,17 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
     }
   }
 
-  // 🔹 Vota na ideia
-  const handleVote = async () => {
-    if (!canInteract) {
-      setAlert("error")
-      return
-    }
-
-    if (hasVoted) {
-      setAlert("info")
-      return
-    }
+    const handleVote = async () => {
+    if (!canInteract) return setAlert("error")
+    if (hasVoted) return setAlert("info")
 
     const result = await ideasService.voteIdea(idea.id)
     if (result) {
-      setVotes((prev) => prev + 1)
       setHasVoted(true)
       setAlert("success")
       onIdeaUpdated()
+      const updated = await ideasService.getIdeaById(idea.id)
+      setVotes(updated?.votes?.length || votes)
     } else {
       setAlert("error")
     }
