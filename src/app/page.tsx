@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import CardsSection from "../components/cardHorizontal";
-import { SimpleHeader } from "@/components/shadcn-studio/blocks/hero-section01/header";
 import Footer from "@/components/navbottom";
 import AppHero from "@/components/mvpblocks/app-hero";
 
@@ -15,7 +14,7 @@ const HeroSectionPage = () => {
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       {/* Header minimalista */}
-      <SimpleHeader />
+      {/* <SimpleHeader /> */}
 
       {/* Main Content */}
       <main className="flex flex-col">
@@ -25,6 +24,7 @@ const HeroSectionPage = () => {
       {/* Cards Section */}
       <div className="">
         <CardsSection />
+        <OnboardingFlow />        
         <Footer />
       </div>
     </motion.div>
