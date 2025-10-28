@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import CardsSection from "../components/cardHorizontal";
 import Footer from "@/components/navbottom";
 import AppHero from "@/components/mvpblocks/app-hero";
+import OnboardingFlow from "@/components/OnboardingFlow";
 
 const HeroSectionPage = () => {
   return (
