@@ -9,6 +9,7 @@ import { useEffect, useState, useCallback } from "react"
 import { jwtDecode } from "jwt-decode"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
+import Link from "next/link"
 
 type JwtPayload = {
   exp: number
@@ -63,7 +64,7 @@ export function StartupLoginForm({
     setLoading(true)
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/loginStartup`,
         { name, cnpj },
         { headers: { "Content-Type": "application/json" } }
       )
@@ -146,6 +147,24 @@ export function StartupLoginForm({
           </Button>
         </motion.div>
       </form>
+
+      {/* Seção adicional abaixo do formulário */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8, duration: 0.5 }}
+        className="mt-6 text-center text-sm text-muted-foreground"
+      >
+        <p>
+          Acessar área corporativa?{" "}
+          <Link
+            href="/auth/login"
+            className="text-primary hover:underline font-medium"
+          >
+            Login
+          </Link>
+        </p>
+      </motion.div>
     </motion.div>
   )
 }

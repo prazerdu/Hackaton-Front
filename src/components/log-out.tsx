@@ -9,7 +9,7 @@ export function LogoutButton() {
 
   const handleLogout = () => {
     localStorage.removeItem("access_token")
-    router.push("/login")
+    router.push("/auth/startup")
   }
 
   return (

@@ -9,6 +9,7 @@ import { ModeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { MailIcon } from "lucide-react"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
+import { LogoutButton } from "@/components/log-out"
 
 type Challenge = {
   id: string
@@ -83,6 +84,7 @@ export default function ChallengesPage() {
           setSelectedArea={setSelectedArea}
         />
         <ModeToggle />
+        <LogoutButton/>
       </div>
 
       {loading ? (
