@@ -42,7 +42,7 @@ export default function AppHero() {
   }
 
   return (
-    <section className="relative flex h-[100dvh] w-full flex-col items-center justify-center overflow-hidden sm:px-6">
+    <section className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 md:px-10">
       {/* Fundo */}
       <div className="absolute inset-0 z-0">
         <GridPattern
@@ -65,16 +65,16 @@ export default function AppHero() {
         />
         <motion.div
           animate={glowAnimation}
-          className="absolute top-1/3 left-1/4 h-40 w-40 rounded-full"
+          className="absolute top-1/3 left-1/4 h-32 w-32 rounded-full bg-purple-400/10 blur-[60px] md:h-40 md:w-40"
         />
         <motion.div
           animate={glowAnimation}
-          className="absolute right-1/4 bottom-1/3 h-40 w-40 rounded-full bg-purple-500/10 blur-[80px]"
+          className="absolute right-1/4 bottom-1/3 h-32 w-32 rounded-full bg-purple-500/10 blur-[70px] md:h-40 md:w-40"
         />
       </div>
 
-      {/* Globo */}
-      <div className="fadein-blur absolute lg:right-1/3 sm:right-1/2 top-10 z-0 h-[350px] w-[350px] translate-x-1/2 lg:h-[500px] lg:w-[500px]">
+      {/* Globo responsivo */}
+      <div className="fadein-blur absolute top-20 z-0 h-[220px] w-[220px] translate-x-1/2 sm:right-1/2 md:right-1/3 md:h-[350px] md:w-[350px] lg:h-[500px] lg:w-[500px]">
         <HeroEarth
           scale={1.1}
           baseColor={[0.62, 0.2, 0.8]}
@@ -83,20 +83,19 @@ export default function AppHero() {
         />
       </div>
 
-      {/* Conteúdo principal centralizado verticalmente */}
+      {/* Conteúdo */}
       <motion.main
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 flex w-full max-w-[1250px] flex-col items-center justify-center text-center sm:px-8 lg:flex-row lg:justify-between lg:text-left"
+        className="relative z-10 flex w-full max-w-[1200px] flex-col items-center justify-center text-center md:px-6 lg:flex-row lg:justify-between lg:text-left"
       >
-        {/* Texto e estatísticas */}
-        <div className="w-full flex flex-col items-center lg:items-start">
+        <div className="flex w-full flex-col items-center lg:items-start">
           <motion.div
             variants={itemVariants}
-            className="mb-4 inline-flex items-center rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-sm"
+            className="mb-4 inline-flex items-center rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs sm:text-sm"
           >
-            <span className="mr-2 rounded-full bg-purple-500 px-2 py-0.5 text-xs font-semibold text-white">
+            <span className="mr-2 rounded-full bg-purple-500 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-white">
               MVP
             </span>
             Plataforma de Inovação Corporativa
@@ -104,72 +103,48 @@ export default function AppHero() {
 
           <HeroAnimatedText />
 
-          {/* <motion.div
-            variants={itemVariants}
-            className="mt-4 mb-6 flex flex-wrap justify-center gap-4 md:gap-6 lg:justify-start"
-          >
-            <div className="rounded-lg border border-purple-500/20 px-4 py-2 backdrop-blur-sm">
-              <p className="text-2xl font-bold">
-                Next JS
-              </p>
-              <p className="text-xs">Active Users</p>
-            </div>
-            <div className="rounded-lg border border-blue-500/20 px-4 py-2 backdrop-blur-sm">
-              <p className="text-2xl font-bold">
-
-              </p>
-              <p className="text-xs">Transactions</p>
-            </div>
-            <div className="rounded-lg border border-indigo-500/20 px-4 py-2 backdrop-blur-sm">
-              <p className="text-2xl font-bold"></p>
-              <p className="text-xs">Networks</p>
-            </div>
-          </motion.div> */}
-
-          {/* Logos de parceiros */}
+          {/* Logo parceiro */}
           <motion.div
             variants={itemVariants}
-            className="mb-6 flex flex-wrap justify-center gap-8 lg:justify-start"
+            className="my-6 flex flex-wrap justify-center gap-6 sm:gap-8 lg:justify-start"
           >
-              <motion.div
-                className="invert grayscale-0 dark:grayscale-100 dark:invert-0 relative h-24 w-80 transition"
-              >
-                <Image
-                  src={"/logos/ninna-valley.png"}
-                  alt={"Parceiro Ninna Hub"}
-                  fill
-                />
-              </motion.div>
+            <motion.div className="relative h-16 w-48 sm:h-20 sm:w-60 md:h-24 md:w-80 invert grayscale-0 dark:grayscale-100 dark:invert-0 transition">
+              <Image
+                src="/logos/ninna-valley.png"
+                alt="Parceiro Ninna Hub"
+                fill
+                sizes="(max-width: 768px) 180px, (max-width: 1024px) 240px, 320px"
+                className="object-contain"
+              />
+            </motion.div>
           </motion.div>
 
-          {/* Botões alinhados à direita */}
-        <motion.div
-          variants={itemVariants}
-          className="items-center gap-4 lg:items-end"
-        >
-          <div className="flex gap-4 flex-row">
-            <Link href={"/home"}>
+          {/* Botões */}
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start"
+          >
+            <Link href="/home">
               <Button
                 variant="outline"
-                className="bg-primary rounded-full text-white border-purple-500/30 hover:bg-purple-500/10 hover:text-white"
                 size="lg"
-                >
+                className="w-full sm:w-auto rounded-full bg-primary text-white border-purple-500/30 hover:bg-purple-500/10 hover:text-white transition-all"
+              >
                 Ver desafios
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
 
-            <Link href="auth/login">
+            <Link href="/auth/login">
               <Button
                 variant="outline"
-                className="rounded-full border-purple-500/30 bg-transparent hover:bg-purple-500/10"
                 size="lg"
+                className="w-full sm:w-auto rounded-full border-purple-500/30 bg-transparent hover:bg-purple-500/10 transition-all"
               >
                 Login
               </Button>
             </Link>
-          </div>
-        </motion.div>
+          </motion.div>
         </div>
       </motion.main>
     </section>
