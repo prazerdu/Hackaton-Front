@@ -1,13 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Loader2 } from "lucide-react"
+import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CreatePOCModal } from "@/components/admin/poc/create-poc"
 import { POCCard } from "@/components/admin/poc/poc-card"
 import api from "@/lib/kanban/api"
 import type { POC, Challenge, Startup } from "@/types/poc"
+import { Spinner } from "@/components/ui/shadcn-io/spinner"
 
 export default function POCsPage() {
   const [pocs, setPocs] = useState<POC[]>([])
@@ -47,7 +48,7 @@ export default function POCsPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-muted-foreground" />
+        <Spinner variant="bars" className="size-8 text-primary" />
       </div>
     )
   }

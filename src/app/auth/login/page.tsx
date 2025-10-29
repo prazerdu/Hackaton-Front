@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { motion } from "framer-motion"
 import { LoginForm } from "@/components/login-form"
@@ -6,10 +6,16 @@ import Globe2 from "@/components/mvpblocks/globe2"
 import { ModeToggle } from "@/components/theme-toggle"
 import { GridPattern } from "@/components/ui/shadcn-io/grid-pattern"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { IconHome } from "@tabler/icons-react"
 
 export default function LoginPage() {
+  const router = useRouter()
+
   return (
     <div className="relative grid min-h-screen lg:grid-cols-2 overflow-hidden bg-background">
+      {/* Animação de fundo */}
       <motion.div
         className="absolute inset-0 z-0"
         animate={{
@@ -35,16 +41,24 @@ export default function LoginPage() {
             [5, 5],
           ]}
           className={cn(
-            "absolute inset-0 opacity-40  ",
+            "absolute inset-0 opacity-40",
             "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
             "skew-y-12 scale-125"
           )}
         />
       </motion.div>
 
-      {/* Botão modo escuro/claro */}
-      <div className="fixed top-4 left-4 z-50">
+      {/* Botão modo escuro + redirecionar home */}
+      <div className="fixed top-4 left-4 z-50 flex items-center gap-2">
         <ModeToggle />
+        <Button
+          onClick={() => router.push("/home")}
+          variant="outline"
+          size="icon"
+          className="text-sm"
+        >
+          <IconHome className="w-4 h-4" />
+        </Button>
       </div>
 
       {/* Coluna do formulário */}

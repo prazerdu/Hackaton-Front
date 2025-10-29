@@ -8,6 +8,9 @@ import PublicChallengeCard from "@/components/home/public-challenges"
 import { ModeToggle } from "@/components/theme-toggle"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
 import { LogoutButton } from "@/components/log-out"
+import { BackButton } from "@/components/back-button"
+import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 type Challenge = {
   id: string
@@ -33,6 +36,14 @@ export default function ChallengesPage() {
   const [areas, setAreas] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [, setError] = useState<string | null>(null)
+  const [hasToken, setHasToken] = useState(false)
+
+  const router = useRouter()
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token")
+    setHasToken(!!token)
+  }, [])
 
   useEffect(() => {
     const fetchChallenges = async () => {
@@ -74,9 +85,17 @@ export default function ChallengesPage() {
     return matchesSearch && matchesArea
   })
 
+  const handleLogin = () => {
+    router.push("/auth/login")
+  }
+
   return (
-    <div className="space-y-4 w-full min-h-[70vh] flex flex-col p-4">
-      <div className="flex items-center justify-center mt-3 gap-2 max-w-[700px] mx-auto">
+    <div className="space-y-4 w-full min-h-[70vh] flex flex-col p-4 relative">
+      <div className="absolute left-4 top-4">
+        <BackButton />
+      </div>
+
+      <div className="flex items-center justify-center mt-10 gap-2 max-w-[700px] mx-auto">
         <SearchBar
           search={search}
           setSearch={setSearch}
@@ -85,7 +104,13 @@ export default function ChallengesPage() {
           setSelectedArea={setSelectedArea}
         />
         <ModeToggle />
-        <LogoutButton/>
+        {hasToken ? (
+          <LogoutButton />
+        ) : (
+          <Button onClick={handleLogin} variant="outline">
+            Login
+          </Button>
+        )}
       </div>
 
       {loading ? (
