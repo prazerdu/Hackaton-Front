@@ -42,9 +42,10 @@ const contactInfo = [
 
 export default function Footer() {
   return (
-    <footer className="bg-secondary dark:bg-secondary/10 w-full rounded-t-2xl shadow-inner border-t-2 border-border/20">
+    <footer className="bg-secondary dark:bg-secondary/20 w-full rounded-t-2xl shadow-inner border-t border-border/20">
       <div className="mx-auto max-w-screen-xl px-6 py-8 sm:px-8 sm:py-10">
         <div className="flex flex-col sm:flex-row sm:justify-between gap-8 items-center sm:items-start text-center sm:text-left">
+
           {/* Coluna Esquerda */}
           <div className="flex flex-col items-center sm:items-start gap-3 w-full sm:w-auto">
             <Logo className="text-sm" />
@@ -66,6 +67,7 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+
             {/* Descrição */}
             <p className="text-gray-800 dark:text-gray-200 mt-3 text-sm sm:text-base max-w-sm leading-relaxed">
               Conectamos tecnologia e negócios com soluções inovadoras,
@@ -73,18 +75,20 @@ export default function Footer() {
               tamanhos.
             </p>
           </div>
+
           {/* Coluna Direita (Contatos) */}
           <div className="flex flex-col items-center sm:items-start gap-4 w-full sm:w-auto">
             <p className="sm:text-lg font-semibold text-black dark:text-violet-400">
               Contatos
             </p>
+
             <ul className="flex flex-col items-center sm:items-start gap-3">
               {contactInfo.map(({ icon: Icon, text, href }) => (
                 <li
                   key={text}
                   className="flex items-center gap-2 hover:text-primary transition-colors text-gray-800 dark:text-gray-300"
                 >
-                  <Link href={href} target="_blank" className="flex hover:text-violet-400 items-center gap-2">
+                  <Link href={href} target="_blank" className="flex items-center gap-2">
                     <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 dark:text-violet-400 text-black/80" />
                     <span className="text-sm sm:text-base">{text}</span>
                   </Link>
@@ -93,6 +97,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
+
         {/* Rodapé inferior */}
         <div className="mt-8 border-t border-border/30 pt-4 text-center text-xs sm:text-sm text-gray-700 dark:text-gray-400">
           © {new Date().getFullYear()} Ninna Hub.{' '}
