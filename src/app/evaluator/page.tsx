@@ -31,7 +31,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("access_token")
-      if (!token) return router.push("/login")
+      if (!token) return router.push("/auth/login")
 
       try {
         const decoded = jwtDecode<JwtPayload>(token)
@@ -39,7 +39,7 @@ export default function DashboardPage() {
 
         if (decoded.exp < now || decoded.role !== "EVALUATOR") {
           localStorage.removeItem("access_token")
-          router.push("/login")
+          router.push("/auth/login")
           return
         }
 
@@ -50,7 +50,7 @@ export default function DashboardPage() {
         setAuthorized(true)
       } catch (err) {
         console.error("Erro ao decodificar token:", err)
-        router.push("/login")
+        router.push("/auth/login")
       } finally {
         setLoading(false)
       }
@@ -68,7 +68,7 @@ export default function DashboardPage() {
         const token = localStorage.getItem("access_token")
 
         if (!token) {
-          router.push("/login")
+          router.push("/auth/login")
           return
         }
 
@@ -88,7 +88,7 @@ export default function DashboardPage() {
           if (error.response?.status === 401) {
             console.warn("Sessão expirada. Redirecionando para login.")
             localStorage.removeItem("access_token")
-            router.push("/login")
+            router.push("/auth/login")
           } else {
             console.error("Erro ao buscar dados do dashboard:", error)
           }
