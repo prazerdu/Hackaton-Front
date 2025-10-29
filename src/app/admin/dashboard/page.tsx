@@ -8,6 +8,8 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner"
 import { QuickActions } from "@/components/admin/dashboard/quick-actions"
 import { FunnelEvolutionChart } from "@/components/admin/dashboard/funil-evoluation"
 import { FunnelStageChart } from "@/components/admin/dashboard/funil-stage"
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import { DashboardReport } from "@/components/admin/dashboard/dashboard-report"
 
 type JwtPayload = {
   exp: number
@@ -40,21 +42,21 @@ export default function DashboardPage() {
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("access_token")
-      if (!token) return router.push("/login")
+      if (!token) return router.push("auth/login")
 
       try {
         const decoded = jwtDecode<JwtPayload>(token)
         const now = Date.now() / 1000
         if (decoded.exp < now || decoded.role !== "MANAGER") {
           localStorage.removeItem("access_token")
-          router.push("/login")
+          router.push("auth/login")
           return
         }
 
         setAuthorized(true)
       } catch (err) {
         console.error("Erro ao decodificar token:", err)
-        router.push("/login")
+        router.push("auth/login")
       } finally {
         setLoading(false)
       }
@@ -102,7 +104,7 @@ export default function DashboardPage() {
   if (loading)
     return (
       <div className="flex justify-center items-center mt-80">
-        <Spinner className="text-[#8884d8]" variant="bars" />
+        <Spinner className="text-primary" variant="bars" />
       </div>
     )
 
@@ -120,6 +122,22 @@ export default function DashboardPage() {
       <QuickActions />
       <FunnelEvolutionChart data={funilData} />
       <FunnelStageChart data={funilData} />
+
+      <div className="flex justify-end">
+        <PDFDownloadLink
+          document={<DashboardReport data={funilData} />}
+          fileName="relatorio-funil.pdf"
+        >
+          {({ loading }) => (
+            <button
+              className="px-4 py-2 rounded bg-primary text-white hover:bg-primary/80"
+              disabled={loading}
+            >
+              {loading ? "Gerando PDF..." : "Baixar Relatório (PDF)"}
+            </button>
+          )}
+        </PDFDownloadLink>
+      </div>
     </div>
   )
 }
