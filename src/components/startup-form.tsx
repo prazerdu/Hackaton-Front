@@ -117,7 +117,6 @@ export function StartupLoginForm({
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="TechNova"
             />
           </div>
 
@@ -129,7 +128,6 @@ export function StartupLoginForm({
               required
               value={cnpj}
               onChange={(e) => setCnpj(e.target.value)}
-              placeholder="12345678000101"
             />
           </div>
 
@@ -141,7 +139,6 @@ export function StartupLoginForm({
         </motion.div>
       </form>
 
-      {/* Seção adicional abaixo do formulário */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

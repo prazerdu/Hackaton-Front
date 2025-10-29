@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { motion } from "framer-motion"
 import Globe2 from "@/components/mvpblocks/globe2"
@@ -6,8 +6,13 @@ import { ModeToggle } from "@/components/theme-toggle"
 import { GridPattern } from "@/components/ui/shadcn-io/grid-pattern"
 import { cn } from "@/lib/utils"
 import { StartupLoginForm } from "@/components/startup-form"
+import { Button } from "@/components/ui/button"
+import { IconHome } from "@tabler/icons-react"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
+  const router = useRouter()
+
   return (
     <div className="relative grid min-h-screen lg:grid-cols-2 overflow-hidden bg-background">
       <motion.div
@@ -35,19 +40,25 @@ export default function LoginPage() {
             [5, 5],
           ]}
           className={cn(
-            "absolute inset-0 opacity-40  ",
+            "absolute inset-0 opacity-40",
             "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
             "skew-y-12 scale-125"
           )}
         />
       </motion.div>
 
-      {/* Botão modo escuro/claro */}
-      <div className="fixed top-4 left-4 z-50">
+      <div className="fixed top-4 left-4 z-50 flex items-center gap-2">
         <ModeToggle />
+        <Button
+          onClick={() => router.push("/home")}
+          variant="outline"
+          size="icon"
+          className="text-sm"
+        >
+          <IconHome className="w-4 h-4" />
+        </Button>
       </div>
 
-      {/* Coluna do formulário */}
       <div className="flex flex-col gap-4 px-6 py-9 md:p-10 relative z-10">
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
@@ -56,7 +67,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Coluna do globo */}
       <div className="relative hidden lg:block z-10">
         <Globe2 />
       </div>

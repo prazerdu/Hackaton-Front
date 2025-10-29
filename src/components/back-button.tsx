@@ -9,12 +9,13 @@ export function BackButton() {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       onClick={() => router.back()}
       className="flex items-center gap-2"
     >
-      <ArrowLeft className="h-4 w-4" />
-      Voltar
+      <ArrowLeft
+      size={'icon'}
+      />
     </Button>
   )
 }
