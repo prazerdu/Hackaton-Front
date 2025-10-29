@@ -30,7 +30,7 @@ export function NavUser({ user }: NavUserProps) {
 
   const handleLogout = () => {
     localStorage.removeItem("access_token")
-    router.push("/login")
+    router.push("/auth/login")
   }
 
   const getInitials = (name?: string) => {

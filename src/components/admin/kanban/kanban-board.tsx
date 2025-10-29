@@ -110,7 +110,6 @@ export function KanbanBoard({ challengeId }: { challengeId: string }) {
       }),
     )
 
-    // 🔹 Atualiza no backend
     if (canUpdateStatus && accessToken) {
       try {
         await ideasService.updateIdeaStatus(ideaId, newStatus)

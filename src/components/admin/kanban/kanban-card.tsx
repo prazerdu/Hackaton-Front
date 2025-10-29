@@ -1,3 +1,5 @@
+"use client"
+
 import { useDraggable } from "@dnd-kit/core"
 import type { Idea } from "@/lib/kanban/types"
 
@@ -27,11 +29,7 @@ export function KanbanCard({ idea, onClick }: KanbanCardProps) {
       className="p-3 bg-card rounded-lg shadow-sm cursor-grab active:cursor-grabbing border border-border transition"
     >
       <h4 className="font-medium text-sm">{idea.title}</h4>
-      {idea.description && (
-        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-          {idea.description}
-        </p>
-      )}
+      {idea.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{idea.description}</p>}
     </div>
   )
 }

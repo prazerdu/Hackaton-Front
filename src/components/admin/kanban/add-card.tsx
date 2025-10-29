@@ -50,26 +50,25 @@ export function AddCardModal({ challengeId, open, onOpenChange, onIdeaCreated }:
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="">
         <DialogHeader>
           <DialogTitle>Submeter Nova Ideia</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="title">Título da Ideia *</Label>
+            <Label htmlFor="title">Título da Ideia</Label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Ex: Automação de processos com IA"
               required
               disabled={isSubmitting}
             />
           </div>
 
           <div>
-            <Label htmlFor="description">Descrição *</Label>
+            <Label htmlFor="description">Descrição</Label>
             <Textarea
               id="description"
               value={description}

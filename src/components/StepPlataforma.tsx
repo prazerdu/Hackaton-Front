@@ -10,7 +10,7 @@ const FeatureCard = ({
   description,
   color = "text-white/90", 
 }: {
-  icon: any;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   title: string;
   description: string;
   color?: string;

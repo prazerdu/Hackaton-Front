@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { jwtDecode } from "jwt-decode"
-import { AppSidebar } from "@/components/hubadmin/app-sidebar" 
+import { AppSidebar } from "@/components/evaluator/app-sidebar" 
 import { LogoutButton } from "@/components/log-out"
 import { ModeToggle } from "@/components/theme-toggle"
 import {
@@ -30,7 +30,7 @@ export default function DashboardLayout({
     const checkAuth = () => {
       const token = localStorage.getItem("access_token")
       if (!token) {
-        router.push("/login")
+        router.push("/auth/login")
         return
       }
 
@@ -40,14 +40,14 @@ export default function DashboardLayout({
 
         if (decoded.exp < now || decoded.role !== "EVALUATOR") {
           localStorage.removeItem("access_token")
-          router.push("/login")
+          router.push("/auth/login")
           return
         }
 
         setAuthorized(true)
       } catch (err) {
         console.error("Erro ao decodificar token:", err)
-        router.push("/login")
+        router.push("/auth/login")
       } finally {
         setLoading(false)
       }

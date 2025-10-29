@@ -8,9 +8,9 @@ import { MessageSquare, ThumbsUp, Calendar, User } from "lucide-react"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { ideasService } from "@/lib/kanban/services/ideas"
 import { Badge } from "@/components/ui/badge"
-import AlertError from "../../alert-error"
-import AlertSuccess from "../../alert-success"
-import AlertInfo from "../../alert-info"
+import AlertError from "./alert-error"
+import AlertSuccess from "./alert-success"
+import AlertInfo from "./alert-info"
 import type { Idea, Comment } from "@/lib/kanban/types"
 
 interface CardDetailModalProps {
@@ -21,6 +21,7 @@ interface CardDetailModalProps {
 }
 
 export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: CardDetailModalProps) {
+  const [currentIdea, setCurrentIdea] = useState<Idea | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [votes, setVotes] = useState(0)
   const [newComment, setNewComment] = useState("")
@@ -28,29 +29,37 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [alert, setAlert] = useState<"success" | "error" | "info" | null>(null)
 
-  const canInteract = idea?.status === "IDEATION"
+  const canInteract = currentIdea?.status === "IDEATION"
 
   useEffect(() => {
-    const fetchData = async () => {
-  if (!idea?.challengeId) return
-  try {
-    const ideasByStatus = await ideasService.getIdeasByChallenge(idea.challengeId)
+  const fetchData = async () => {
+    if (!idea?.id || !idea?.challengeId || !open) return
 
-    const allIdeas = Object.values(ideasByStatus).flat()
+    try {
+      const current = await ideasService.getIdeaById(idea.id, idea.challengeId)
+      if (current) {
+        setCurrentIdea(current)
+        setComments(current.comments || [])
+        setVotes(current.votes?.length || 0)
 
-    const current = allIdeas.find((i: Idea) => i.id === idea.id)
-    if (current) {
-      setComments(current.comments || [])
-      setVotes(current.votes?.length || 0)
+        const userId = localStorage.getItem("userId")
+        setHasVoted(current.votes?.some((v) => v.userId === userId) || false)
+      }
+    } catch (error) {
+      console.error("Erro ao carregar comentários e votos:", error)
     }
-  } catch (error) {
-    console.error("Erro ao carregar comentários e votos:", error)
   }
-}
+
+  fetchData()
+}, [idea?.id, idea?.challengeId, open])
 
 
-    fetchData()
-  }, [idea])
+  useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => setAlert(null), 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [alert])
 
   if (!idea) return null
 
@@ -74,22 +83,14 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
     }
   }
 
-  // 🔹 Vota na ideia
   const handleVote = async () => {
-    if (!canInteract) {
-      setAlert("error")
-      return
-    }
-
-    if (hasVoted) {
-      setAlert("info")
-      return
-    }
+    if (!canInteract) return setAlert("error")
+    if (hasVoted) return setAlert("info")
 
     const result = await ideasService.voteIdea(idea.id)
     if (result) {
-      setVotes((prev) => prev + 1)
       setHasVoted(true)
+      setVotes((prev) => prev + 1)
       setAlert("success")
       onIdeaUpdated()
     } else {
@@ -108,38 +109,36 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
     return colors[status] || "bg-gray-500"
   }
 
+  const displayIdea = currentIdea || idea
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="min-w-4xl w-[90vw] overflow-hidden p-0 gap-0">
         <DialogTitle />
         <div className="flex items-center justify-between p-4 border-b">
-          <Badge className={`${getStatusBadgeColor(idea.status)} text-white`}>
-            {idea.status}
-          </Badge>
+          <Badge className={`${getStatusBadgeColor(displayIdea.status)} text-white`}>{displayIdea.status}</Badge>
         </div>
 
         <div className="flex overflow-hidden h-[calc(95vh-73px)]">
           {/* Esquerda */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6">
             <div>
-              <h2 className="text-2xl font-semibold mb-2">{idea.title}</h2>
+              <h2 className="text-2xl font-semibold mb-2">{displayIdea.title}</h2>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <User className="w-4 h-4" />
-                  <span>{String(idea.createdById)}</span>
+                  <span>{String(displayIdea.createdById)}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  <span>{new Date(idea.createdAt).toLocaleDateString("pt-BR")}</span>
+                  <span>{new Date(displayIdea.createdAt).toLocaleDateString("pt-BR")}</span>
                 </div>
               </div>
             </div>
 
             <div>
               <h3 className="text-sm font-semibold mb-2">Descrição</h3>
-              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                {idea.description}
-              </p>
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap">{displayIdea.description}</p>
             </div>
 
             {/* Botão de voto */}
@@ -196,9 +195,7 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
             {/* Lista de comentários */}
             <div className="space-y-4">
               {comments.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-8">
-                  Nenhum comentário ainda
-                </p>
+                <p className="text-sm text-muted-foreground text-center py-8">Nenhum comentário ainda</p>
               ) : (
                 comments.map((comment) => (
                   <div key={comment.id} className="flex flex-col border-b pb-2">
