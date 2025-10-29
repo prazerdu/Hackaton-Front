@@ -6,8 +6,6 @@ import axios, { AxiosResponse } from "axios"
 import SearchBar from "@/components/home/search-bar"
 import PublicChallengeCard from "@/components/home/public-challenges"
 import { ModeToggle } from "@/components/theme-toggle"
-import { Button } from "@/components/ui/button"
-import { MailIcon } from "lucide-react"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
 import { LogoutButton } from "@/components/log-out"
 
@@ -114,15 +112,8 @@ export default function ChallengesPage() {
           <div className="text-7xl animate-bounce">🚀</div>
           <h2 className="text-2xl md:text-3xl font-bold">Nenhum desafio encontrado</h2>
           <p className="max-w-md text-sm md:text-base">
-            Parece que ainda não há desafios cadastrados. Você pode criar seu próprio desafio ou entrar em contato para
-            começar.
+            Parece que ainda não há desafios cadastrados.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 mt-4">
-            <Button className="flex items-center gap-2 border border-gray-400 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-zinc-800">
-              <MailIcon className="w-5 h-5" />
-              Entrar em contato
-            </Button>
-          </div>
         </div>
       )}
     </div>
