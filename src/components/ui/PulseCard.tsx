@@ -22,7 +22,7 @@ export const VARIANTS = {
     shine:
       '205deg, transparent 0deg, hsl(160deg 95% 39%) 20deg, hsl(160deg 100% 85% / 0.3) 280deg',
     border: 'rose-500/20',
-    color: 'rgb(244 63 94)',
+    color: 'purple',
   },
   blue: {
     accent: 'blue-500',
@@ -38,7 +38,7 @@ export const VARIANTS = {
     shine:
       '205deg, transparent 0deg, hsl(280deg 95% 39%) 20deg, hsl(280deg 100% 85% / 0.3) 280deg',
     border: 'purple-500/20',
-    color: 'rgb(244 63 94)',
+    color: 'oklch(0.56 0.25 302)',
   },
   amber: {
     accent: 'amber-500',
