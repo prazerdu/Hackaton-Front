@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2 } from "lucide-react"
 import axios from "axios"
@@ -34,7 +35,7 @@ export function ChallengeForm() {
     benefits: "",
     startDate: "",
     endDate: "",
-    isPublic: false, // valor padrão
+    isPublic: false,
     status: "DRAFT",
   })
 
@@ -45,6 +46,10 @@ export function ChallengeForm() {
 
   const handleSelectChange = (value: string) => {
     setFormData((prev) => ({ ...prev, status: value as ChallengeFormData["status"] }))
+  }
+
+  const handleSwitchChange = (checked: boolean) => {
+    setFormData((prev) => ({ ...prev, isPublic: checked }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -92,7 +97,6 @@ export function ChallengeForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* === DETALHES === */}
       <Card className="border-2">
         <CardHeader>
           <CardTitle className="text-2xl">Detalhes do Desafio</CardTitle>
@@ -100,7 +104,7 @@ export function ChallengeForm() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title" className="text-base font-semibold">
-              Título
+              Título *
             </Label>
             <Input
               id="title"
@@ -115,7 +119,7 @@ export function ChallengeForm() {
 
           <div className="space-y-2">
             <Label htmlFor="description" className="text-base font-semibold">
-              Descrição
+              Descrição *
             </Label>
             <Textarea
               id="description"
@@ -131,7 +135,7 @@ export function ChallengeForm() {
 
           <div className="space-y-2">
             <Label htmlFor="objectives" className="text-base font-semibold">
-              Objetivos
+              Objetivos *
             </Label>
             <Textarea
               id="objectives"
@@ -154,7 +158,7 @@ export function ChallengeForm() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="area" className="text-base font-semibold">
-              Área
+              Área *
             </Label>
             <Input
               id="area"
@@ -169,7 +173,7 @@ export function ChallengeForm() {
 
           <div className="space-y-2">
             <Label htmlFor="benefits" className="text-base font-semibold">
-              Benefícios
+              Benefícios *
             </Label>
             <Input
               id="benefits"
@@ -192,7 +196,7 @@ export function ChallengeForm() {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate" className="text-base font-semibold">
-                Data de Início
+                Data de Início *
               </Label>
               <Input
                 id="startDate"
@@ -207,7 +211,7 @@ export function ChallengeForm() {
 
             <div className="space-y-2">
               <Label htmlFor="endDate" className="text-base font-semibold">
-                Data de Término
+                Data de Término *
               </Label>
               <Input
                 id="endDate"
@@ -227,10 +231,20 @@ export function ChallengeForm() {
         <CardHeader>
           <CardTitle className="text-2xl">Configurações</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="isPublic" className="text-base font-semibold">
+                Desafio Público
+              </Label>
+              <p className="text-sm text-muted-foreground">Tornar este desafio visível publicamente</p>
+            </div>
+            <Switch id="isPublic" checked={formData.isPublic} onCheckedChange={handleSwitchChange} />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="status" className="text-base font-semibold">
-              Status
+              Status *
             </Label>
             <Select value={formData.status} onValueChange={handleSelectChange}>
               <SelectTrigger className="border-2">
@@ -250,7 +264,7 @@ export function ChallengeForm() {
         <Button
           type="button"
           variant="outline"
-          onClick={() =>
+          onClick={() => {
             setFormData({
               title: "",
               description: "",
@@ -262,13 +276,12 @@ export function ChallengeForm() {
               isPublic: false,
               status: "DRAFT",
             })
-          }
+          }}
           disabled={isLoading}
           className="border-2"
         >
           Limpar
         </Button>
-
         <Button
           type="submit"
           disabled={isLoading}
