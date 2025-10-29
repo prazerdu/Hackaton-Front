@@ -20,6 +20,7 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, ExternalLink} from "lucide-react"
 import { IconLayout, IconTable } from "@tabler/icons-react"
+import { Badge } from "@/components/ui/badge"
 
 interface Startup {
   id: string
@@ -141,9 +142,9 @@ export default function StartupsPage() {
                         <TableCell>
                           <div className="flex flex-wrap gap-1">
                             {startup.technologies.map((tech, i) => (
-                              <p key={i} className="px-2 py-1 text-white text-xs font-medium">
+                              <Badge key={i} className="px-2 py-1 text-xs font-medium">
                                 {tech}
-                              </p>
+                              </Badge>
                             ))}
                           </div>
                         </TableCell>
