@@ -1,266 +1,261 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-const sections = [
-  {
-    id: 'usuario-comum',
-    title: 'Usuário Comum (Colaborador ou Parceiro)',
-    description:
-      'Submeter ideias e participar de processos colaborativos. Área restrita da empresa à qual pertence.',
-    image: '/6d24ad5616ddd4dc783fa9972be7c746-removebg-preview.png',
-    detalhes: {
-      pode: [
-        'Acessar a área da sua empresa (não visualiza dados de outras empresas).',
-        'Submeter ideias e sugestões de desafios na etapa Geração/Captura de Ideias.',
-        'Visualizar e comentar ideias públicas ou internas, conforme permissão da empresa.',
-        'Acompanhar o status de suas ideias ao longo do funil.',
-        'Acessar desafios públicos (caso a empresa publique algum).',
-      ],
-      naoPode: [
-        'Editar desafios já cadastrados.',
-        'Avaliar ou aprovar ideias.',
-        'Visualizar relatórios, dashboards ou métricas empresariais.',
-      ],
-    },
-  },
-  {
-    id: 'avaliador',
-    title: 'Avaliador (Especialista ou Comitê Técnico)',
-    description:
-      'Realizar a triagem e avaliação das ideias e desafios submetidos.',
-    image:
-      '/fb528f44ff535b55f3f04a09aaaffd25-removebg-preview.png',
-    detalhes: {
-      pode: [
-        'Acessar o funil completo de inovação (todas as etapas).',
-        'Realizar a pré-triagem automática ou manual de ideias com base nos critérios definidos.',
-        'Pontuar e comentar ideias nas etapas de Pré-Triagem e Triagem Detalhada.',
-        'Participar da ideação junto aos usuários comuns.',
-        'Selecionar ideias para avanço às próximas etapas.',
-        'Visualizar relatórios resumidos das ideias avaliadas (mas não métricas corporativas amplas).',
-      ],
-      naoPode: [
-        'Criar ou editar desafios.',
-        'Cadastrar startups ou gerenciar conexões com elas.',
-        'Gerar relatórios administrativos de alto nível.',
-      ],
-    },
-  },
-  {
-    id: 'gestor',
-    title: 'Gestor de Inovação (Administrador da Empresa)',
-    description:
-      'Gerenciar o funil de inovação, acompanhar métricas e conectar desafios a startups.',
-    image:
-      '/6a28f676992e60611e29a75f35cfbd76-removebg-preview.png',
-    detalhes: {
-      pode: [
-        'Cadastrar, editar e publicar desafios, definindo se serão internos ou abertos ao público.',
-        'Gerenciar todas as etapas do funil, do recebimento de ideias até a experimentação (POC).',
-        'Designar avaliadores e atribuir responsabilidades por etapa.',
-        'Acompanhar e aprovar POCs, definindo metas, prazos e indicadores.',
-        'Cadastrar startups ou validar startups sugeridas pelo sistema.',
-        'Gerenciar conexões com startups (matchs, convites, histórico de interação).',
-        'Gerar relatórios e dashboards personalizados.',
-        'Filtrar dados por áreas ou temas dentro da sua empresa.',
-        'Gerenciar usuários da empresa (criar, desativar, alterar permissões).',
-      ],
-      naoPode: [
-        'Acessar dados de outras empresas (cada empresa possui ambiente isolado).',
-      ],
-    },
-  },
-  {
-    id: 'startup',
-    title: 'Startup (Usuário Externo)',
-    description: 'Conectar-se a desafios corporativos e propor soluções.',
-    image:
-      '/6c5410b9a4f6d7a869cd726b33d8a362-removebg-preview.png',
-    detalhes: {
-      pode: [
-        'Cadastrar perfil da startup, com informações de tecnologia, estágio, pitch, etc.',
-        'Visualizar desafios públicos disponíveis.',
-        'Candidatar-se a desafios compatíveis.',
-        'Participar de processos de match e convites para POC.',
-        'Acompanhar histórico de interações com empresas.',
-      ],
-      naoPode: [
-        'Acessar dados internos de empresas.',
-        'Visualizar ideias restritas ou desafios internos.',
-      ],
-    },
-  },
-  {
-    id: 'visitante',
-    title: 'Visitante (Público Geral)',
-    description: 'Explorar a vitrine de inovação pública.',
-    image: '/6d24ad5616ddd4dc783fa9972be7c746-removebg-preview.png',
-    detalhes: {
-      pode: [
-        'Visualizar desafios públicos publicados por empresas.',
-        'Visualizar startups públicas cadastradas.',
-        'Criar conta (como colaborador ou startup).',
-      ],
-      naoPode: [],
-    },
-  },
-]
+import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Search, HelpCircle, Info, User } from "lucide-react";
 
-export default function CardsSection() {
+export default function HeroTravel() {
+  const cards = [
+    {
+      id: 1,
+      title: "IA personalizada",
+      subtitle: "Assistente inteligente",
+      mainDescription:
+        "O site conta com a sua própria IA personalizada para ajudar usuários com dúvidas sobre o sistema, produtos e serviços oferecidos.",
+      cardDescription: "IA personalizada para ajudar usuários com dúvidas.",
+      img: "",
+      extras: (
+        <>
+          {/* Perguntas flutuantes para IA */}
+          {[
+            "Como posso participar de um desafio?",
+            "Onde posso fazer login?",
+            "Quais são os benefícios de participar?",
+            "Onde tenho acesso a listagem de desafios?",
+            "Posso mudar meu perfil de usuário?",
+          ].map((q, i) => {
+            const positions = [
+              { top: "5%", left: "20%" },
+              { top: "30%", left: "75%" },
+              { top: "80%", left: "5%" },
+              { top: "65%", left: "30%" },
+              { top: "15%", left: "45%" },
+            ];
+            const pos = positions[i % positions.length];
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 * i, type: "spring", stiffness: 100 }}
+                className="absolute flex items-center gap-2 bg-white/30 backdrop-blur-md rounded-lg px-3 py-2 shadow-lg text-sm font-medium text-white cursor-default"
+                style={{ top: pos.top, left: pos.left }}
+              >
+                <HelpCircle className="w-5 h-5 text-purple-500" />
+                {q}
+              </motion.div>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      id: 2,
+      title: "Sobre a plataforma",
+      subtitle: "Recursos públicos e privados",
+      mainDescription:
+        "Nossa plataforma oferece recursos variados, com dois estados: Público e Privado. Na parte pública, desafios são acessíveis a todos; na privada, conteúdos exclusivos para usuários autenticados.",
+      cardDescription: "Recursos públicos e privados.",
+      img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=1f1e3f7b2b9b6f3b8a9e3f7c9e2d1a4c",
+      extras: (
+        <>
+          {/* Ícones representando funcionalidades da plataforma */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="absolute top-10 left-10 flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-lg px-3 py-2 shadow-lg text-white text-sm"
+          >
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="absolute top-32 left-60 flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-lg px-3 py-2 shadow-lg text-white text-sm"
+          >
+            <Info className="w-5 h-5 text-purple-500" /> Privado
+          </motion.div>
+        </>
+      ),
+    },
+    {
+      id: 3,
+      title: "Tipos de usuários",
+      subtitle: "Perfis e permissões",
+      mainDescription:
+        "Diferentes perfis de usuários com permissões específicas permitem um controle detalhado sobre o acesso a conteúdos e funcionalidades.",
+      cardDescription: "Perfis e permissões diferentes.",
+      img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=7c2e0f9b6f1b8a4d3c5e6f7a9b0c1d2e",
+      extras: (
+        <>
+        </>
+      ),
+    },
+  ];
 
-  const scrollToSection = (id: string) => {
-    const section = document.getElementById(id)
-    if (section) {
-      const rect = section.getBoundingClientRect()
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-      const offset = 80
-      const offsetTop = rect.top + scrollTop - offset
-      window.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth',
-      })
-    }
+  const [selectedCard, setSelectedCard] = useState(cards[0]);
+  const [index, setIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: index * (el.clientWidth * 0.28 + 24), behavior: "smooth" });
+  }, [index]);
+
+  const selectCard = (i: number) => {
+    setIndex(i);
+    setSelectedCard(cards[i]);
+  };
+
+  function prev() {
+    const newIndex = Math.max(0, index - 1);
+    setIndex(newIndex);
+    setSelectedCard(cards[newIndex]);
+  }
+
+  function next() {
+    const newIndex = Math.min(cards.length - 1, index + 1);
+    setIndex(newIndex);
+    setSelectedCard(cards[newIndex]);
   }
 
   return (
-    <section className="relative w-full py-16 sm:py-24 overflow-x-hidden">
-      {/* Título */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="sticky top-0 z-20 py-4 max-w-3xl mx-auto mb-10 text-center"
-      >
-        <h2 className="text-3xl  text-purple-600 sm:text-4xl font-bold mb-2">
-          Perfis de Usuário
-        </h2>
-        <p className="text-base sm:text-lg text-muted-foreground">
-          Explore os diferentes níveis de acesso e funcionalidades da plataforma.
-        </p>
-        
-      </motion.div>
+    <section className="relative w-full min-h-[520px] lg:min-h-[720px] overflow-hidden flex items-start justify-center">
+      {/* Background */}
+      <div
+        className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105 transition-all duration-700"
+        style={{ backgroundImage: `url('${selectedCard.img}')` }}
+        aria-hidden
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-rose-50/20 to-rose-100/40 transition-all duration-700" />
+      <div className="absolute inset-0 bg-black/25 transition-all duration-700" />
 
-      {/* CARROSSEL SIMPLES */}
-      <motion.div
-        className="flex gap-6 md:gap-8 pl-4 p-12 pr-8 sm:px-6 md:px-12 overflow-x-auto lg:justify-center perspective-[1100px] snap-x snap-mandatory scrollbar-hide"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 1 }}
-      >
-        
-        {sections.map((section) => (
-          <motion.div
-            key={section.id}
-            onClick={() => scrollToSection(section.id)}
-            whileHover={{
-              scale: 1.08,
-              boxShadow: '0px 10px 25px rgba(0,0,0,0.35)',
-            }}
-            transition={{ type: 'spring', stiffness: 120, damping: 15 }}
-            className="relative w-[140px] sm:w-[160px] md:w-[180px] lg:w-[180px] h-[220px] sm:h-[260px] md:h-[300px] lg:h-[270px] cursor-pointer overflow-hidden rounded-3xl shadow-xl bg-card/80 transition-all duration-700 flex-shrink-0 snap-center"
+      {/* Texto principal */}
+      <div className="relative z-10 w-full container mx-auto lg:px-12 p-12 rounded-3xl mt-5 -ml-1.5">
+        <div className="max-w-2xl">
+          <div className="flex items-center gap-3 text-sm text-white/80 mb-4">
+            <span className="w-8 h-[2px] bg-white/60 inline-block" />
+            <span >{selectedCard.subtitle}</span>
+          </div>
+
+          <motion.h1
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] text-purple-600/70"
+            style={{ textShadow: "0 8px 30px rgba(0,0,0,0.45)" }}
           >
-            <div className="relative w-full h-full">
-              <Image
-                src={section.image}
-                alt={section.title}
-                fill
-                className="object-contain dark:invert rounded-3xl transition-transform duration-700 hover:scale-110"
-              />
-            </div>
-            <div className="absolute inset-0 flex flex-col justify-end p-2 sm:p-3 bg-gradient-to-t from-background/90 via-background/30 to-transparent">
-              <h3 className="text-xs sm:text-sm md:text-base font-semibold mb-1">
-                {section.title}
-              </h3>
-            </div>
-            
+            {selectedCard.title.toUpperCase()}
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.25, duration: 0.6 }}
+            className="mt-6 text-white/80 max-w-prose text-lg"
+          >
+            {selectedCard.mainDescription}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mt-8 flex items-center gap-4"
+          >
           </motion.div>
-          
-        ))}
+        </div>
+      </div>
 
-        <style jsx global>{`
-          .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-          }
-          .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-        `}</style>
-      </motion.div>
+      {/* Extras específicos do card */}
+      {selectedCard.extras}
 
-      {/* SESSÕES INDIVIDUAIS */}
-      {sections.map((section, index) => (
-        <motion.section
-          key={section.id}
-          id={section.id}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: index * 0.2 }}
-          viewport={{ once: true }}
-          className={`relative flex flex-col lg:flex-row items-start gap-8 sm:gap-12 my-16 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-24 ${
-            index % 2 === 1 ? 'lg:flex-row-reverse' : ''
-          }`}
-        >
-         <motion.div
-  className="relative w-full sm:w-[280px] h-[250px] sm:h-[300px] flex-shrink-0 rounded-3xl overflow-hidden shadow-2xl"
-  initial={{ x: index % 2 === 1 ? 30 : -30, opacity: 0 }}
-  whileInView={{ x: 0, opacity: 1 }}
-  whileHover={{ scale: 1.03 }}
-  transition={{ duration: 0.8 }}
->
-  <Image
-    src={section.image}
-    alt={section.title}
-    fill
-    className="object-cover dark:invert rounded-3xl"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent rounded-3xl" />
-</motion.div>
+      {/* Carrossel */}
+      <div className="absolute right-0 bottom-0 lg:bottom-12 lg:right-12 w-full lg:w-[45%] z-20">
+        <div className="relative">
+          <div className="absolute right-0 top-0 flex items-center gap-3 z-20">
+            <button
+              onClick={prev}
+              className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              onClick={next}
+              className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
 
-
-          <motion.div
-            className="flex-1 min-w-0 text-left space-y-4"
-            initial={{ x: index % 2 === 1 ? -30 : 30, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
+          <div
+            ref={containerRef}
+            className="flex gap-6 overflow-x-auto ml-8 no-scrollbar py-3 px-4 scroll-smooth"
+            style={{ scrollBehavior: "smooth" }}
           >
-            <h2 className="text-2xl sm:text-4xl text-purple-600 font-extrabold mb-4">
-              {section.title}
-            </h2>
-            <p className="text-base sm:text-lg mb-2">{section.description}</p>
-
-            {section.detalhes && (
-              <div className="flex flex-col sm:flex-row gap-8 mt-4">
-                {section.detalhes.pode && (
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-green-600 mb-2">Pode:</h3>
-                    <ul className="list-disc list-inside ml-4 space-y-1 text-sm sm:text-base">
-                      {section.detalhes.pode.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
+            {cards.map((card, i) => (
+              <motion.article
+                key={card.id}
+                layout
+                whileHover={{ scale: 1.03, y: -6 }}
+                onClick={() => selectCard(i)}
+                className={`min-w-[220px] md:min-w-[260px] lg:min-w-[300px] cursor-pointer bg-white/10 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden border ${
+                  selectedCard.id === card.id ? "border-gray-500" : "border-white/10"
+                } transition-all`}
+                style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.35)" }}
+              >
+                <div className="relative w-full h-40 md:h-48 lg:h-40">
+                  <img src={card.img} alt={card.title} className="w-full h-full object-cover" />
+                  <div className="absolute left-3 bottom-3 bg-purple-800 rounded-2xl text-white text-xs px-2 py-1">
+                    {card.subtitle}
                   </div>
-                )}
+                </div>
+                <div className="p-4">
+                  <h3 className="text-white font-semibold text-lg">{card.title}</h3>
+                  <p className="text-white/70 text-xs mt-2 line-clamp-3">{card.cardDescription}</p>
+                </div>
+              </motion.article>
+            ))}
+          </div>
 
-                {section.detalhes.naoPode &&
-                  section.detalhes.naoPode.length > 0 && (
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-red-600 mb-2">
-                        Não pode:
-                      </h3>
-                      <ul className="list-disc list-inside ml-4 space-y-1 text-sm sm:text-base">
-                        {section.detalhes.naoPode.map((item, i) => (
-                          <li key={i}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+          <div className="mt-6 ml-8 flex items-center justify-between px-6">
+            <div className="flex items-center gap-4">
+              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/90">
+                {String(index + 1).padStart(2, "0")}
               </div>
-            )}
-          </motion.div>
-        </motion.section>
-      ))}
+              <div className="text-white/70">of {String(cards.length).padStart(2, "0")}</div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-48 h-2 bg-white/10 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-purple-500"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${((index + 1) / cards.length) * 100}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+              <div className="text-white text-4xl font-bold">{String(index + 1).padStart(2, "0")}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @media (max-width: 768px) {
+          section {
+            min-height: 640px;
+          }
+        }
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
-  )
+  );
 }
+//
