@@ -86,9 +86,9 @@ export default function Footer() {
               {contactInfo.map(({ icon: Icon, text, href }) => (
                 <li
                   key={text}
-                  className="flex items-center gap-2 hover:text-primary transition-colors text-gray-800 dark:text-gray-300"
+                  className="flex items-center gap-2 hover:text-black transition-colors text-gray-800 dark:text-gray-300"
                 >
-                  <Link href={href} target="_blank" className="flex hover:text-violet-400 items-center gap-2">
+                  <Link href={href} target="_blank" className="flex dark:hover:text-violet-400 items-center gap-2">
                     <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 dark:text-violet-400 text-black/80" />
                     <span className="text-sm sm:text-base">{text}</span>
                   </Link>
