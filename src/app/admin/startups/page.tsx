@@ -18,8 +18,15 @@ import {
 } from "@/components/ui/table"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, ExternalLink} from "lucide-react"
+import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
 import { IconLayout, IconTable } from "@tabler/icons-react"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 
 interface Startup {
@@ -45,7 +52,7 @@ export default function StartupsPage() {
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [viewMode, setViewMode] = useState<"table" | "card">("table")
-  const startupsPerPage = 5
+  const startupsPerPage = viewMode === "card" ? 6 : 5 // ✅ 6 cards por página
 
   useEffect(() => {
     const fetchStartups = async () => {
@@ -85,11 +92,11 @@ export default function StartupsPage() {
   const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages))
 
   return (
-    <div className="p-8 min-h-screen">
-      <Card className="w-full shadow-md border">
+    <div className="min-h-screen">
+      <Card className="w-full shadow-md border bg-background">
         <CardHeader className="flex flex-row items-center justify-between border-b p-4">
           <CardTitle className="text-2xl font-bold">Startups no sistema</CardTitle>
-          
+
           <Button
             variant="outline"
             onClick={() => setViewMode(viewMode === "table" ? "card" : "table")}
@@ -116,92 +123,97 @@ export default function StartupsPage() {
           ) : startups.length === 0 ? (
             <p className="text-center py-10">Nenhuma startup cadastrada.</p>
           ) : viewMode === "table" ? (
-            <>
-              <div className="overflow-x-auto">
-                <Table className="min-w-full">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nome</TableHead>
-                      <TableHead>CNPJ</TableHead>
-                      <TableHead>Segmento</TableHead>
-                      <TableHead>Tecnologias</TableHead>
-                      <TableHead>Estágio</TableHead>
-                      <TableHead>Localização</TableHead>
-                      <TableHead>Fundadores</TableHead>
-                      <TableHead>Links</TableHead>
-                      <TableHead>Data Criação</TableHead>
-                    </TableRow>
-                  </TableHeader>
+            // ==== TABLE VIEW ====
+            <div className="overflow-x-auto">
+              <Table className="min-w-full">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>CNPJ</TableHead>
+                    <TableHead>Segmento</TableHead>
+                    <TableHead>Tecnologias</TableHead>
+                    <TableHead>Estágio</TableHead>
+                    <TableHead>Localização</TableHead>
+                    <TableHead>Fundadores</TableHead>
+                    <TableHead>Links</TableHead>
+                    <TableHead>Data Criação</TableHead>
+                  </TableRow>
+                </TableHeader>
 
-                  <TableBody>
-                    {paginatedStartups.map((startup) => (
-                      <TableRow key={startup.id}>
-                        <TableCell className="font-semibold">{startup.name}</TableCell>
-                        <TableCell>{startup.cnpj}</TableCell>
-                        <TableCell>{startup.segment}</TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1">
+                <TableBody>
+                  {paginatedStartups.map((startup) => (
+                    <TableRow key={startup.id}>
+                      <TableCell className="font-semibold">{startup.name}</TableCell>
+                      <TableCell>{startup.cnpj}</TableCell>
+                      <TableCell>{startup.segment}</TableCell>
+                      <TableCell>
+                        <Select>
+                          <SelectTrigger className="w-[150px] text-xs bg-background">
+                            <SelectValue placeholder={`${startup.technologies[0]}`} />
+                          </SelectTrigger>
+                          <SelectContent>
                             {startup.technologies.map((tech, i) => (
-                              <Badge key={i} className="px-2 py-1 text-xs font-medium">
+                              <SelectItem className="dark:text-white" disabled key={i} value={tech}>
                                 {tech}
-                              </Badge>
+                              </SelectItem>
                             ))}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                              startup.stage === "OPERACAO"
-                                ? "bg-green-100 text-green-700"
-                                : "bg-yellow-100 text-yellow-700"
-                            }`}
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            startup.stage === "OPERACAO"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-yellow-100 text-yellow-700"
+                          }`}
+                        >
+                          {startup.stage}
+                        </span>
+                      </TableCell>
+                      <TableCell>{startup.location}</TableCell>
+                      <TableCell>
+                        <ul className="text-sm list-disc ml-4">
+                          {startup.founders.map((f, i) => (
+                            <li key={i}>{f}</li>
+                          ))}
+                        </ul>
+                      </TableCell>
+                      <TableCell>
+                        {startup.links.site && (
+                          <a
+                            href={startup.links.site}
+                            target="_blank"
+                            className="text-primary hover:underline flex items-center gap-1 text-xs"
                           >
-                            {startup.stage}
-                          </span>
-                        </TableCell>
-                        <TableCell>{startup.location}</TableCell>
-                        <TableCell>
-                          <ul className="text-sm list-disc ml-4">
-                            {startup.founders.map((f, i) => (
-                              <li key={i}>{f}</li>
-                            ))}
-                          </ul>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-col gap-1 text-xs">
-                            {startup.links.site && (
-                              <a
-                                href={startup.links.site}
-                                target="_blank"
-                                className="text-primary hover:underline flex items-center gap-1"
-                              >
-                                <ExternalLink size={12} /> Site
-                              </a>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {new Date(startup.createdAt).toLocaleDateString("pt-BR")}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </>
+                            <ExternalLink size={12} /> Site
+                          </a>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(startup.createdAt).toLocaleDateString("pt-BR")}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {paginatedStartups.map((startup) => (
                 <Card key={startup.id} className="p-4 hover:shadow-lg transition-all">
                   <CardHeader>
                     <CardTitle className="text-lg font-bold">{startup.name}</CardTitle>
-                    <p className="text-sm text-gray-600">{startup.segment}</p>
+                    <Badge className="text-sm">
+                      {startup.segment}
+                    </Badge>
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <p className="text-sm"><strong>Estágio:</strong> {startup.stage}</p>
                     <p className="text-sm"><strong>Localização:</strong> {startup.location}</p>
                     <p className="text-sm"><strong>Tecnologias:</strong> {startup.technologies.join(", ")}</p>
                     <p className="text-sm"><strong>Fundadores:</strong> {startup.founders.join(", ")}</p>
+
                     {startup.links.site && (
                       <div className="flex gap-2 text-xs mt-2">
                         <a href={startup.links.site} target="_blank" className="text-primary hover:underline flex items-center gap-1">
@@ -215,6 +227,7 @@ export default function StartupsPage() {
             </div>
           )}
 
+          {/* ==== PAGINAÇÃO ==== */}
           {!loading && startups.length > startupsPerPage && (
             <div className="flex justify-between items-center mt-6">
               <Button variant="outline" onClick={handlePrevPage} disabled={currentPage === 1}>

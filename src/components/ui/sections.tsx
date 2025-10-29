@@ -205,6 +205,7 @@ export default function AboutUs1() {
                   whileHover={{ y: -5, scale: 1.02 }}
                 >
                   <CardHoverEffect
+                    className='cursor-pointer'
                     icon={<IconComponent className="h-6 w-6" />}
                     title={value.title}
                     description={value.description}
