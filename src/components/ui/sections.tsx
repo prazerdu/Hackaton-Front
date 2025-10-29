@@ -154,14 +154,14 @@ export default function AboutUs1() {
               <BorderBeam
                 duration={8}
                 size={300}
-                className="from-transparent via-blue-500/40 to-transparent"
+                className="from-transparent via-primary/40 to-transparent"
                 reverse
               />
-              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-500/5 backdrop-blur-sm">
-                <Target className="h-8 w-8 text-blue-500" />
+              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 backdrop-blur-sm">
+                <Target className="h-8 w-8 text-primary" />
               </div>
 
-              <h2 className="mb-4 bg-gradient-to-r from-blue-500/90 to-blue-500/70 bg-clip-text text-3xl font-bold text-transparent">
+              <h2 className="mb-4 bg-gradient-to-r from-primary/90 to-primary/70 bg-clip-text text-3xl font-bold text-transparent">
                 Visão Estratégica
               </h2>
 
@@ -205,7 +205,7 @@ export default function AboutUs1() {
                   whileHover={{ y: -5, scale: 1.02 }}
                 >
                   <CardHoverEffect
-                    className='cursor-pointer'
+                    className='cursor-auto'
                     icon={<IconComponent className="h-6 w-6" />}
                     title={value.title}
                     description={value.description}
@@ -213,10 +213,10 @@ export default function AboutUs1() {
                       index === 0
                         ? 'purple'
                         : index === 1
-                        ? 'blue'
+                        ? 'purple'
                         : index === 2
-                        ? 'amber'
-                        : 'rose'
+                        ? 'purple'
+                        : 'purple'
                     }
                     glowEffect={true}
                     size="lg"
