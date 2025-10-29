@@ -8,6 +8,7 @@ import PublicChallengeCard from "@/components/home/public-challenges"
 import { ModeToggle } from "@/components/theme-toggle"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
 import { LogoutButton } from "@/components/log-out"
+import { BackButton } from "@/components/back-button"
 
 type Challenge = {
   id: string
@@ -85,6 +86,7 @@ export default function ChallengesPage() {
           setSelectedArea={setSelectedArea}
         />
         <ModeToggle />
+        <BackButton/>
         <LogoutButton/>
       </div>
 
