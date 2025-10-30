@@ -7,9 +7,9 @@ export function AdminKPICards({ kpis }: { kpis: { totalIdeas: number; totalStart
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {[
-        { label: "Ideias Capturadas", icon: IconBulb, value: kpis.totalIdeas },
+        { label: "Ideias capturadas", icon: IconBulb, value: kpis.totalIdeas },
         { label: "Startups conectadas", icon: IconRocket, value: kpis.totalStartupsConnected },
-        { label: "POCs em andamento", icon: IconNetwork, value: kpis.totalStartupsConnected },
+        { label: "POCs concluídas", icon: IconNetwork, value: kpis.totalPocs },
       ].map((item, i) => (
         <Card key={i}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

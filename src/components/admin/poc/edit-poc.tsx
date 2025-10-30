@@ -17,51 +17,51 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import api from "@/lib/kanban/api"
-import type { POC, Challenge, Startup, CreatePOCData } from "@/types/poc"
+import type { POC, Challenge, Startup } from "@/types/poc"
 
-interface CreatePOCModalProps {
+interface EditPOCModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  poc: POC | null
   challenges: Challenge[]
   startups: Startup[]
   onSuccess: (poc: POC) => void
-  editMode?: boolean
-  initialData?: POC
 }
 
-export function CreatePOCModal({
-  open,
-  onOpenChange,
-  challenges,
-  startups,
-  onSuccess,
-  editMode = false,
-  initialData,
-}: CreatePOCModalProps) {
+export function EditPOCModal({ open, onOpenChange, poc, challenges, startups, onSuccess }: EditPOCModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [, setSelectedChallengeId] = useState<string>("")
   const [filteredStartups, setFilteredStartups] = useState<Startup[]>(startups)
+  const [selectedChallengeId, setSelectedChallengeId] = useState<string>("")
 
-  const [formData, setFormData] = useState<CreatePOCData>({
+  const [formData, setFormData] = useState({
     name: "",
     description: "",
     challengeId: "",
     startupId: "",
-    status: "IN_PROGRESS",
+    status: "IN_PROGRESS" as "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "PENDING",
   })
 
+  // ✅ Carregar dados da POC quando o modal abrir
   useEffect(() => {
-  if (editMode && initialData) {
-    setFormData({
-      name: initialData.name,
-      description: initialData.description,
-      challengeId: initialData.challenge?.id || "",
-      startupId: initialData.startup?.id || "",
-      status: initialData.status,
-    })
-  }
-}, [editMode, initialData])
+    if (poc) {
+      setFormData({
+        name: poc.name,
+        description: poc.description,
+        challengeId: poc.challengeId,
+        startupId: poc.startupId,
+        status: poc.status,
+      })
+      setSelectedChallengeId(poc.challengeId)
 
+      const selectedChallenge = challenges.find((c) => c.id === poc.challengeId)
+      if (selectedChallenge?.area) {
+        const filtered = startups.filter((s) => s.area === selectedChallenge.area)
+        setFilteredStartups(filtered.length > 0 ? filtered : startups)
+      } else {
+        setFilteredStartups(startups)
+      }
+    }
+  }, [poc, challenges, startups])
 
   const handleChallengeChange = (challengeId: string) => {
     setSelectedChallengeId(challengeId)
@@ -76,23 +76,17 @@ export function CreatePOCModal({
     }
   }
 
-  // Submissão: cria ou edita
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!poc) return
     setIsSubmitting(true)
 
     try {
-      let response
-      if (editMode && initialData) {
-        response = await api.patch<POC>(`/pocs/${initialData.id}`, formData)
-      } else {
-        response = await api.post<POC>("/pocs", formData)
-      }
-
+      const response = await api.put<POC>(`/pocs/${poc.id}`, formData)
       onSuccess(response.data)
       onOpenChange(false)
     } catch (error) {
-      console.error("[v0] Error saving POC:", error)
+      console.error("[EditPOCModal] Error updating POC:", error)
     } finally {
       setIsSubmitting(false)
     }
@@ -102,12 +96,8 @@ export function CreatePOCModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>{editMode ? "Editar POC" : "Criar Nova POC"}</DialogTitle>
-          <DialogDescription>
-            {editMode
-              ? "Atualize as informações da Prova de Conceito."
-              : "Preencha os dados para criar uma nova Prova de Conceito."}
-          </DialogDescription>
+          <DialogTitle>Editar POC</DialogTitle>
+          <DialogDescription>Atualize as informações da Prova de Conceito</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -134,12 +124,7 @@ export function CreatePOCModal({
 
           <div className="space-y-2">
             <Label htmlFor="challenge">Desafio</Label>
-            <Select
-              value={formData.challengeId}
-              onValueChange={handleChallengeChange}
-              required
-              disabled={editMode} // não deixa mudar o desafio em edição
-            >
+            <Select value={formData.challengeId} onValueChange={handleChallengeChange} required>
               <SelectTrigger id="challenge" className="w-full">
                 <SelectValue placeholder="Selecione um desafio" />
               </SelectTrigger>
@@ -148,7 +133,7 @@ export function CreatePOCModal({
                   <SelectItem key={challenge.id} value={challenge.id}>
                     <div className="flex flex-col">
                       <span className="font-medium">{challenge.name}</span>
-                      {challenge.title && (
+                      {challenge.area && (
                         <span className="text-muted-foreground text-xs">
                           {challenge.title} • Área: {challenge.area}
                         </span>
@@ -166,6 +151,7 @@ export function CreatePOCModal({
               value={formData.startupId}
               onValueChange={(value) => setFormData({ ...formData, startupId: value })}
               required
+              disabled={!selectedChallengeId}
             >
               <SelectTrigger id="startup" className="w-full">
                 <SelectValue placeholder="Selecione uma startup" />
@@ -185,28 +171,25 @@ export function CreatePOCModal({
             </Select>
           </div>
 
-          {/* Campo de status (somente em edição) */}
-          {editMode && (
-            <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
-              <Select
-                value={formData.status}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, status: value as POC["status"] })
-                }
-              >
-                <SelectTrigger id="status" className="w-full">
-                  <SelectValue placeholder="Selecione o status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="PENDING">Pendente</SelectItem>
-                  <SelectItem value="IN_PROGRESS">Em Progresso</SelectItem>
-                  <SelectItem value="COMPLETED">Concluída</SelectItem>
-                  <SelectItem value="CANCELLED">Cancelada</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+          <div className="space-y-2">
+            <Label htmlFor="status">Status</Label>
+            <Select
+              value={formData.status}
+              onValueChange={(value: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED") =>
+                setFormData({ ...formData, status: value })
+              }
+            >
+              <SelectTrigger id="status" className="w-full">
+                <SelectValue placeholder="Selecione um status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="PENDING">Pendente</SelectItem>
+                <SelectItem value="IN_PROGRESS">Em Progresso</SelectItem>
+                <SelectItem value="COMPLETED">Concluída</SelectItem>
+                <SelectItem value="CANCELLED">Cancelada</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
           <DialogFooter>
             <Button
@@ -219,7 +202,7 @@ export function CreatePOCModal({
             </Button>
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting && <Loader2 className="mr-2 size-4 animate-spin" />}
-              {editMode ? "Salvar Alterações" : "Criar POC"}
+              Salvar Alterações
             </Button>
           </DialogFooter>
         </form>

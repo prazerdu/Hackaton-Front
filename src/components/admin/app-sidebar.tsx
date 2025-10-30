@@ -50,7 +50,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [loading, setLoading] = useState(true)
   const [challenges, setChallenges] = useState<Challenge[]>([])
 
-  // 🔹 Decodifica o token e obtém o usuário atual
   useEffect(() => {
     const token = localStorage.getItem("access_token")
     if (token) {
@@ -134,6 +133,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       icon: IconRocket,
       roles: ["MANAGER"],
     },
+    // {
+    //   title: "Matches",
+    //   url: "/admin/matches",
+    //   icon: IconRocket,
+    //   roles: ["MANAGER"],
+    // },
     {
       title: "POCs",
       url: "/admin/pocs",

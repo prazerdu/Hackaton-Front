@@ -124,7 +124,7 @@ export default function AboutUs1() {
           >
             <motion.div
               whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-              className="group border-border/40 relative block overflow-hidden rounded-2xl border bg-gradient-to-br p-10 backdrop-blur-3xl"
+              className="group border-border dark:border-border/40 relative block overflow-hidden rounded-2xl dark:border border-[2px] bg-gradient-to-br p-10 backdrop-blur-3xl"
             >
               <BorderBeam
                 duration={8}
@@ -149,7 +149,7 @@ export default function AboutUs1() {
 
             <motion.div
               whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-              className="group border-border/40 relative block overflow-hidden rounded-2xl border bg-gradient-to-br p-10 backdrop-blur-3xl"
+              className="group border-border dark:border-border/40 relative block overflow-hidden rounded-2xl dark:border border-[2px] bg-gradient-to-br p-10 backdrop-blur-3xl"
             >
               <BorderBeam
                 duration={8}
