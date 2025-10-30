@@ -54,40 +54,52 @@ export default function POCsPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">POCs</h1>
-          <p className="text-muted-foreground mt-2">Gerencie as Provas de Conceito da sua empresa</p>
+    <div className="relative min-h-screen bg-[radial-gradient(circle_at_center,_#f3f3f3_1px,_transparent_1px)] [background-size:24px_24px] dark:bg-[radial-gradient(circle_at_center,_#1e1e1e_1px,_transparent_1px)]">
+      <div className="container mx-auto py-8 px-4 relative z-10">
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">POCs</h1>
+            <p className="text-muted-foreground mt-2">
+              Gerencie as Provas de Conceito da sua empresa
+            </p>
+          </div>
+          <Button onClick={() => setIsModalOpen(true)} size="lg">
+            <Plus className="mr-2 size-4" />
+            Nova POC
+          </Button>
         </div>
-        <Button onClick={() => setIsModalOpen(true)} size="lg">
-          <Plus className="mr-2 size-4" />
-          Nova POC
-        </Button>
+
+        {pocs.length === 0 ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Nenhuma POC encontrada</CardTitle>
+              <CardDescription>
+                Comece criando sua primeira Prova de Conceito
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {pocs.map((poc) => (
+              <POCCard
+                key={poc.id}
+                poc={poc}
+                onUpdate={loadData}
+                challenges={challenges}
+                startups={startups}
+              />
+            ))}
+          </div>
+        )}
+
+        <CreatePOCModal
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          challenges={challenges}
+          startups={startups}
+          onSuccess={handlePOCCreated}
+        />
       </div>
-
-      {pocs.length === 0 ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Nenhuma POC encontrada</CardTitle>
-            <CardDescription>Comece criando sua primeira Prova de Conceito</CardDescription>
-          </CardHeader>
-        </Card>
-      ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {pocs.map((poc) => (
-            <POCCard key={poc.id} poc={poc} onUpdate={loadData} />
-          ))}
-        </div>
-      )}
-
-      <CreatePOCModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        challenges={challenges}
-        startups={startups}
-        onSuccess={handlePOCCreated}
-      />
     </div>
   )
 }
