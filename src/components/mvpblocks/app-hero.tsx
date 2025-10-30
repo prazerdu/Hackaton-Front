@@ -128,7 +128,7 @@ export default function AppHero() {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto rounded-full bg-primary text-white border-purple-500/30 hover:bg-purple-500/10 hover:text-white transition-all"
+                className="w-full hover:cursor-pointer sm:w-auto rounded-full bg-primary text-white border-purple-500/30 hover:bg-purple-500/10 hover:text-white transition-all"
               >
                 Ver desafios
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -139,7 +139,7 @@ export default function AppHero() {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto rounded-full border-purple-500/30 bg-transparent hover:bg-purple-500/10 transition-all"
+                className="w-full hover:cursor-pointer sm:w-auto rounded-full border-purple-500/30 bg-transparent hover:bg-purple-500/10 transition-all"
               >
                 Login
               </Button>

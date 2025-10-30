@@ -11,6 +11,8 @@ import { LogoutButton } from "@/components/log-out"
 import { BackButton } from "@/components/back-button"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { GridPattern } from "@/components/ui/shadcn-io/grid-pattern"
+import { cn } from "@/lib/utils"
 
 type Challenge = {
   id: string
@@ -21,12 +23,8 @@ type Challenge = {
   status: string
   endDate: string
   isPublic: boolean
-  company: {
-    name: string
-  }
-  createdBy: {
-    name: string
-  }
+  company: { name: string }
+  createdBy: { name: string }
 }
 
 export default function ChallengesPage() {
@@ -85,17 +83,37 @@ export default function ChallengesPage() {
     return matchesSearch && matchesArea
   })
 
-  const handleLogin = () => {
-    router.push("/auth/login")
-  }
+  const handleLogin = () => router.push("/auth/login")
 
   return (
-    <div className="space-y-4 w-full min-h-[70vh] flex flex-col p-4 relative">
-      <div className="absolute left-4 top-4">
+    <div className="relative top-0 p-0 m-0 w-full min-h-screen flex flex-col overflow-hidden">
+      {/* === GRID PATTERN BACKGROUND === */}
+      <div className="absolute inset-0 -z-10">
+        <GridPattern
+          width={40}
+          height={40}
+          x={-1}
+          y={-1}
+          squares={[
+            [4, 4],
+            [5, 1],
+            [8, 2],
+            [5, 3],
+            [5, 5],
+          ]}
+          className={cn(
+            "opacity-30 text-primary/10",
+            "[mask-image:radial-gradient(800px_circle_at_center,white,transparent)]",
+            "scale-125"
+          )}
+        />
+      </div>
+
+      <div className="absolute left-4 top-4 z-10">
         <BackButton />
       </div>
 
-      <div className="flex items-center justify-center mt-10 gap-2 max-w-[700px] mx-auto">
+      <div className="flex items-center justify-center mt-10 gap-2 max-w-[700px] mx-auto z-10">
         <SearchBar
           search={search}
           setSearch={setSearch}
@@ -123,7 +141,7 @@ export default function ChallengesPage() {
           </div>
         </div>
       ) : filteredChallenges.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[1300px] mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[1300px] mx-auto mt-8 z-10">
           {filteredChallenges.map((challenge) => (
             <PublicChallengeCard
               key={challenge.id}
@@ -133,9 +151,11 @@ export default function ChallengesPage() {
           ))}
         </div>
       ) : (
-        <div className="flex-1 flex flex-col items-center justify-center gap-6 text-center text-gray-500 dark:text-gray-400 px-4">
+        <div className="flex-1 flex flex-col items-center justify-center gap-6 text-center text-gray-500 dark:text-gray-400 px-4 z-10">
           <div className="text-7xl animate-bounce">🚀</div>
-          <h2 className="text-2xl md:text-3xl font-bold">Nenhum desafio encontrado</h2>
+          <h2 className="text-2xl md:text-3xl font-bold">
+            Nenhum desafio encontrado
+          </h2>
           <p className="max-w-md text-sm md:text-base">
             Parece que ainda não há desafios cadastrados.
           </p>
