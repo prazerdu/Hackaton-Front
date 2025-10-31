@@ -1,5 +1,5 @@
-import MyChallengesCard from "@/components/admin/challenges/my-challenges";
+import MyChallengesUser from "@/components/common/challenges/challenges-list";
 
 export default function MyChallenges() {
-  return<MyChallengesCard/>
+  return<MyChallengesUser/>
 }

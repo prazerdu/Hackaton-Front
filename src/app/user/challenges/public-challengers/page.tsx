@@ -81,7 +81,7 @@ export default function PublicChallenges() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="flex justify-center items-center h-screen">
-            <Spinner className="mb-44 text-[#8884d8]" variant="bars"/>
+            <Spinner className="mb-44 text-primary" variant="bars"/>
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@ export default function PublicChallenges() {
 
               <CardFooter>
                 <Button asChild className="w-full">
-                  <Link href={`public-challenges/${challenge.id}`}>Ver Detalhes</Link>
+                  <Link href={`/home`}>Ver Detalhes</Link>
                 </Button>
               </CardFooter>
             </Card>
