@@ -92,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const challengeItems = challenges.map((challenge) => ({
     name: challenge.title,
-    url: `/common/funil/kanban/${challenge.id}`,
+    url: `/user/funil/kanban/${challenge.id}`,
     icon: IconLayoutKanban,
   }))
 
@@ -145,7 +145,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             name: currentUser.name!,
             email: currentUser.email!,
             avatar: currentUser.avatar!,
-            role: "Funcionário",
+            role: "Colaborador",
           }}
         />
       </SidebarFooter>

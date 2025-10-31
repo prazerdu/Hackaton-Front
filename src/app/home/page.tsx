@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { GridPattern } from "@/components/ui/shadcn-io/grid-pattern"
 import { cn } from "@/lib/utils"
+import { IconRocket, IconUser } from "@tabler/icons-react"
 
 type Challenge = {
   id: string
@@ -109,7 +110,7 @@ export default function ChallengesPage() {
         />
       </div>
 
-      <div className="absolute left-4 top-4 z-10">
+      <div className="absolute left-4 top-0 z-10">
         <BackButton />
       </div>
 
@@ -126,7 +127,7 @@ export default function ChallengesPage() {
           <LogoutButton />
         ) : (
           <Button onClick={handleLogin} variant="outline">
-            Login
+            <IconUser/>
           </Button>
         )}
       </div>
@@ -141,7 +142,7 @@ export default function ChallengesPage() {
           </div>
         </div>
       ) : filteredChallenges.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[1300px] mx-auto mt-8 z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[1300px] mt-8 z-10">
           {filteredChallenges.map((challenge) => (
             <PublicChallengeCard
               key={challenge.id}
@@ -152,7 +153,9 @@ export default function ChallengesPage() {
         </div>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-6 text-center text-gray-500 dark:text-gray-400 px-4 z-10">
-          <div className="text-7xl animate-bounce">🚀</div>
+          <div className="text-7xl animate-bounce">
+              <IconRocket className="text-primary w-8 h-8"/>
+          </div>
           <h2 className="text-2xl md:text-3xl font-bold">
             Nenhum desafio encontrado
           </h2>

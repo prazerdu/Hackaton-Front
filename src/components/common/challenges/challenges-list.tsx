@@ -15,7 +15,6 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/shadcn-io/spinner"
-import { DeleteChallengeButton } from "./delete"
 import { IconCalendar, IconCirclePlus } from "@tabler/icons-react"
 import { EmptyChallenges } from "@/components/challenges/empty"
 
@@ -126,7 +125,7 @@ export default function MyChallengesUser() {
       </div>
 
       {challenges.length === 0 ? (
-        <EmptyChallenges/>
+        <EmptyChallenges />
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -160,15 +159,14 @@ export default function MyChallengesUser() {
                 </CardContent>
 
                 <CardFooter className="flex gap-2">
-                  <DeleteChallengeButton
-                    id={challenge.id}
-                    onDeleted={(id) =>
-                      setChallenges((prev) => prev.filter((c) => c.id !== id))
-                    }
-                  />
                   <Button asChild variant="default" className="flex-1">
-                    <Link href={`/admin/challenges/my-challenges/${challenge.id}`}>
-                      Ver Detalhes
+                    <Link href={`/user/challenges/my-challenges/${challenge.id}`}>
+                      Ver detalhes
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="flex-1">
+                    <Link href={`/user/funil/kanban/${challenge.id}`}>
+                      Ver no kanban
                     </Link>
                   </Button>
                 </CardFooter>

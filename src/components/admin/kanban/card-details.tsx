@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { MessageSquare, ThumbsUp, Calendar, User } from "lucide-react"
+import { MessageSquare, ThumbsUp, Calendar } from "lucide-react"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { ideasService } from "@/lib/kanban/services/ideas"
 import { Badge } from "@/components/ui/badge"
@@ -113,22 +113,21 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="min-w-4xl w-[90vw] overflow-hidden p-0 gap-0">
+      <DialogContent className="w-[90vw] max-w-5xl p-0 overflow-hidden">
         <DialogTitle />
+
         <div className="flex items-center justify-between p-4 border-b">
-          <Badge className={`${getStatusBadgeColor(displayIdea.status)} text-white`}>{displayIdea.status}</Badge>
+          <Badge className={`${getStatusBadgeColor(displayIdea.status)} text-white`}>
+            {displayIdea.status}
+          </Badge>
         </div>
 
-        <div className="flex overflow-hidden h-[calc(95vh-73px)]">
+        <div className="flex flex-col md:flex-row h-[calc(95vh-73px)] overflow-hidden">
           {/* Esquerda */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          <div className="flex-1 p-6 overflow-y-auto space-y-6">
             <div>
               <h2 className="text-2xl font-semibold mb-2">{displayIdea.title}</h2>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <User className="w-4 h-4" />
-                  <span>{String(displayIdea.createdById)}</span>
-                </div>
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
                   <span>{new Date(displayIdea.createdAt).toLocaleDateString("pt-BR")}</span>
@@ -141,8 +140,7 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
               <p className="text-sm text-muted-foreground whitespace-pre-wrap">{displayIdea.description}</p>
             </div>
 
-            {/* Botão de voto */}
-            <div className="flex items-center gap-4 pt-4 border-t">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 pt-4 border-t">
               <Button
                 variant={hasVoted ? "secondary" : "default"}
                 size="sm"
@@ -166,7 +164,7 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
           </div>
 
           {/* Direita — Comentários */}
-          <div className="w-96 border-l overflow-y-auto p-4">
+          <div className="w-full md:w-96 border-t md:border-t-0 md:border-l p-4 overflow-y-auto">
             <div className="flex items-center gap-2 mb-4">
               <MessageSquare className="w-5 h-5" />
               <h3 className="text-sm font-semibold">Comentários ({comments.length})</h3>
@@ -192,7 +190,6 @@ export function CardDetailModal({ idea, open, onOpenChange, onIdeaUpdated }: Car
               </Button>
             </div>
 
-            {/* Lista de comentários */}
             <div className="space-y-4">
               {comments.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-8">Nenhum comentário ainda</p>

@@ -10,6 +10,7 @@ import {
   useSensor,
   useSensors,
   pointerWithin,
+  TouchSensor,
 } from "@dnd-kit/core"
 import { KanbanColumn } from "./kanban-column"
 import { KanbanCard } from "./kanban-card"
@@ -45,7 +46,10 @@ export function KanbanBoard({ challengeId }: { challengeId: string }) {
   const [userRole, setUserRole] = useState<string>("")
   const [accessToken, setAccessToken] = useState<string | null>(null)
 
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
+  const sensors = useSensors(
+  useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+  useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } }) // ajusta delay e tolerância para toque
+)
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null
